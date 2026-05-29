@@ -1,0 +1,81 @@
+body {
+  margin: 0;
+  background: #0f172a;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.canvas {
+  width: 100%;
+  height: 300px;
+}
+
+.section {
+  max-width: 900px;
+  margin: auto;
+  padding: 60px 20px;
+}
+
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skills span {
+  background: #1e293b;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  background: #111827;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input, textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #1e293b;
+  color: white;
+}
+
+button {
+  padding: 10px;
+  background: #38bdf8;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.vibe {
+  color: #38bdf8;
+  font-weight: bold;
+}
