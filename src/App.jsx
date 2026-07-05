@@ -69,9 +69,10 @@ const skills = [
 // ── Проекты ──────────────────────────────────────────────────
 const projects = [
   {
-    title: "3D Portfolio System",
-    desc: "Интерактивное портфолио с Three.js, анимациями и живым UI.",
-    tag: "Three.js",
+    title: "Quantix",
+    desc: "AI SaaS-платформа для автоматизации учета товаров и обработки накладных. Распознает накладные по фотографиям, автоматически извлекает товары и ведет удобный архив документов.",
+    tag: "Next.js • AI",
+    link: "https://quantix-five.vercel.app",
   },
   {
     title: "UI Component System",
@@ -251,22 +252,29 @@ export default function App() {
         </motion.h2>
 
         <div className="grid">
-          {projects.map((p, i) => (
-            <motion.div
-              key={p.title}
-              className="card"
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ delay: i * 0.12 }}
-            >
-              <span className="card-tag">{p.tag}</span>
-              <b>{p.title}</b>
-              <p>{p.desc}</p>
-            </motion.div>
-          ))}
-        </div>
+  {projects.map((p, i) => (
+    <motion.a
+      key={p.title}
+      href={p.link || "#"}
+      target={p.link ? "_blank" : undefined}
+      rel={p.link ? "noopener noreferrer" : undefined}
+      className="card"
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ delay: i * 0.12 }}
+      style={{
+        textDecoration: "none",
+        color: "inherit",
+      }}
+    >
+      <span className="card-tag">{p.tag}</span>
+      <b>{p.title}</b>
+      <p>{p.desc}</p>
+    </motion.a>
+  ))}
+</div>
       </section>
 
       {/* ── CONTACT ── */}
