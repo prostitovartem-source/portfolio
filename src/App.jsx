@@ -90,8 +90,8 @@ const projects = [
 const contacts = [
   {
     label: "Telegram",
-    value: "@copicks",
-    href: "https://t.me/copicks",
+    value: "@cooicks",
+    href: "https://t.me/cooicks",
     icon: (
       // простой SVG-логотип Telegram
       <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
