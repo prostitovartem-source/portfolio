@@ -1,9 +1,8 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Points, PointMaterial } from "@react-three/drei";
 import { motion } from "framer-motion";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import FadeIn from "../components/FadeIn.jsx";
-import Magnet from "../components/Magnet.jsx";
 import ContactButton from "../components/ContactButton.jsx";
 
 const NAV_LINKS = [
@@ -13,18 +12,35 @@ const NAV_LINKS = [
   { label: "Контакты", href: "#contact" },
 ];
 
-function AnimatedSphere() {
+/** Узел-тор, дрейфующий следом за курсором (плавный lerp к нормализованной позиции мыши). */
+function AnimatedShape() {
   const meshRef = useRef();
+  const pointer = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    function handlePointerMove(e) {
+      pointer.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      pointer.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    }
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    return () => window.removeEventListener("pointermove", handlePointerMove);
+  }, []);
 
   useFrame((state) => {
-    meshRef.current.rotation.x = state.clock.elapsedTime * 0.15;
-    meshRef.current.rotation.y = state.clock.elapsedTime * 0.25;
+    const mesh = meshRef.current;
+    mesh.rotation.x = state.clock.elapsedTime * 0.2;
+    mesh.rotation.y = state.clock.elapsedTime * 0.3;
+
+    const targetX = pointer.current.x * 1.8;
+    const targetY = pointer.current.y * 1.2;
+    mesh.position.x += (targetX - mesh.position.x) * 0.04;
+    mesh.position.y += (targetY - mesh.position.y) * 0.04;
   });
 
   return (
-    <Float speed={2} rotationIntensity={1} floatIntensity={2}>
+    <Float speed={2} rotationIntensity={0.6} floatIntensity={1.5}>
       <mesh ref={meshRef}>
-        <icosahedronGeometry args={[1.8, 1]} />
+        <torusKnotGeometry args={[1.2, 0.38, 220, 32]} />
         <meshStandardMaterial color="#BBCCD7" wireframe />
       </mesh>
     </Float>
@@ -57,16 +73,16 @@ function AnimatedParticles() {
 export default function HeroSection() {
   return (
     <section className="hero" style={{ overflowX: "clip" }}>
-      <Magnet padding={150} strength={20} className="hero-visual">
+      <div className="hero-visual">
         <Canvas camera={{ position: [0, 0, 6] }}>
           <color attach="background" args={["#0C0C0C"]} />
           <fog attach="fog" args={["#0C0C0C", 5, 20]} />
           <ambientLight intensity={0.7} />
           <pointLight position={[5, 5, 5]} intensity={2} color="#BBCCD7" />
-          <AnimatedSphere />
+          <AnimatedShape />
           <AnimatedParticles />
         </Canvas>
-      </Magnet>
+      </div>
 
       <FadeIn as="nav" delay={0} y={-20} className="navbar">
         {NAV_LINKS.map((link) => (
@@ -83,7 +99,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
         >
-          привет, я артём
+          hi, i&apos;m artem
         </motion.h1>
       </div>
 
