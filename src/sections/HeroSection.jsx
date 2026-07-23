@@ -1,9 +1,9 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Points, PointMaterial } from "@react-three/drei";
-import { motion } from "framer-motion";
 import { useEffect, useMemo, useRef } from "react";
 import FadeIn from "../components/FadeIn.jsx";
 import ContactButton from "../components/ContactButton.jsx";
+import TypewriterText from "../components/TypewriterText.jsx";
 
 const NAV_LINKS = [
   { label: "Обо мне", href: "#about" },
@@ -93,14 +93,12 @@ export default function HeroSection() {
       </FadeIn>
 
       <div className="hero-heading-wrap">
-        <motion.h1
+        <TypewriterText
+          as="h1"
           className="hero-heading hero-title"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15, duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-        >
-          hi, i&apos;m artem
-        </motion.h1>
+          text="hi, i'm copick"
+          startDelay={0.5}
+        />
       </div>
 
       <div className="hero-bottom">
