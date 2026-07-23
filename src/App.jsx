@@ -62,8 +62,8 @@ const fadeUp = {
 
 // ── Навыки ───────────────────────────────────────────────────
 const skills = [
-  "React", "JavaScript", "Three.js", "CSS / Tailwind",
-  "Framer Motion", "Vite", "Git", "AI-tools",
+  "TypeScript", "React", "Next.js", "Node.js",
+  "PostgreSQL", "Prisma", "AI Integration", "Three.js",
 ];
 
 // ── Проекты ──────────────────────────────────────────────────
@@ -165,7 +165,7 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          Frontend Developer
+          Full Stack Developer
         </motion.h1>
 
         <motion.p
@@ -174,8 +174,9 @@ export default function App() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          Создаю современные интерфейсы с фокусом на UX,
-          производительность и живой интерактивный UI
+          Создаю современные веб-приложения с использованием Full Stack
+          технологий, AI-инструментов и продуманного UX. Разрабатываю
+          продукты от интерфейса до серверной логики.
         </motion.p>
 
         <motion.p
@@ -184,7 +185,7 @@ export default function App() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          Vibe coder • AI-augmented development • React / Three.js
+          TypeScript • Next.js • React • Node.js • AI-powered development
         </motion.p>
 
         <motion.div
@@ -213,19 +214,20 @@ export default function App() {
         <h2>О себе</h2>
 
         <p>
-          Я frontend-разработчик, который создаёт современные
-          веб-интерфейсы с упором на UX, визуальную чистоту
-          и производительность.
+          Я Full Stack разработчик, создающий современные веб-продукты
+          с фокусом на качество, производительность и удобство
+          пользователя.
         </p>
 
         <p>
-          Использую React, Three.js и AI-инструменты
-          для ускорения разработки и улучшения качества продукта.
+          Использую TypeScript как основной язык разработки, работаю
+          с React, Next.js, Node.js и AI-инструментами для создания
+          масштабируемых приложений.
         </p>
 
         <p className="muted" style={{ marginBottom: "36px" }}>
-          Фокус: интерфейсы, которые выглядят дорого
-          и ощущаются как полноценный digital product.
+          Создаю продукты полного цикла: от идеи и интерфейса до
+          backend-логики, базы данных и интеграции AI-сервисов.
         </p>
 
         {/* Теги навыков */}
