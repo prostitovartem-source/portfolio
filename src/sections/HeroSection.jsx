@@ -13,9 +13,9 @@ const NAV_LINKS = [
   { label: "Контакты", href: "#contact" },
 ];
 
-// Слева от заголовка.
-const TESSERACT_BASE_X = -2.9;
-const TESSERACT_SCALE = 1.55;
+// Справа от заголовка, подальше от текста, чтобы не залезал на него.
+const TESSERACT_BASE_X = 3.6;
+const TESSERACT_SCALE = 1.35;
 
 // 16 вершин гиперкуба — все комбинации ±1 по 4 координатам (x,y,z,w).
 const TESSERACT_VERTICES_4D = Array.from({ length: 16 }, (_, i) => [
@@ -103,8 +103,8 @@ function Tesseract() {
     });
     dotsRef.current.instanceMatrix.needsUpdate = true;
 
-    const targetX = TESSERACT_BASE_X + pointer.current.x * 0.5;
-    const targetY = pointer.current.y * 0.5;
+    const targetX = TESSERACT_BASE_X + pointer.current.x * 0.3;
+    const targetY = pointer.current.y * 0.35;
     groupRef.current.position.x += (targetX - groupRef.current.position.x) * 0.04;
     groupRef.current.position.y += (targetY - groupRef.current.position.y) * 0.04;
   });
