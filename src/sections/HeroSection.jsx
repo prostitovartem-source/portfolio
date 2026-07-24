@@ -1,11 +1,11 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import { BackSide } from "three";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import FadeIn from "../components/FadeIn.jsx";
 import ContactButton from "../components/ContactButton.jsx";
 import TypewriterText from "../components/TypewriterText.jsx";
-import { createEarthCanvas, createCloudCanvas, createMoonCanvas } from "../components/earthTexture.js";
+import { loadImage, bakeMoscowMarker } from "../components/earthTexture.js";
 
 const NAV_LINKS = [
   { label: "Обо мне", href: "#about" },
@@ -31,9 +31,26 @@ function EarthAndMoon() {
   const dragging = useRef(false);
   const lastPointer = useRef({ x: 0, y: 0 });
 
-  const earthTexture = useMemo(() => createEarthCanvas(), []);
-  const cloudTexture = useMemo(() => createCloudCanvas(), []);
-  const moonTexture = useMemo(() => createMoonCanvas(), []);
+  const [textures, setTextures] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([
+      loadImage("/textures/earth_atmos_2048.jpg"),
+      loadImage("/textures/earth_clouds_1024.png"),
+      loadImage("/textures/moon_1024.jpg"),
+    ]).then(([earthImage, cloudsImage, moonImage]) => {
+      if (cancelled) return;
+      setTextures({
+        earth: bakeMoscowMarker(earthImage),
+        clouds: cloudsImage,
+        moon: moonImage,
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     function handlePointerMove(e) {
@@ -75,6 +92,8 @@ function EarthAndMoon() {
     systemRef.current.position.x += (targetX - systemRef.current.position.x) * 0.04;
     systemRef.current.position.y += (targetY - systemRef.current.position.y) * 0.04;
 
+    if (!textures) return;
+
     if (!dragging.current) {
       earthRef.current.rotation.y += 0.0025;
     }
@@ -84,40 +103,44 @@ function EarthAndMoon() {
 
   return (
     <group ref={systemRef} position={[EARTH_BASE_X, 0, 0]}>
-      <mesh
-        ref={earthRef}
-        onPointerDown={handlePointerDown}
-        onPointerOver={() => (document.body.style.cursor = "grab")}
-        onPointerOut={() => !dragging.current && (document.body.style.cursor = "")}
-      >
-        <sphereGeometry args={[1.3, 48, 48]} />
-        <meshStandardMaterial roughness={0.85} metalness={0.05}>
-          <canvasTexture attach="map" args={[earthTexture]} />
-        </meshStandardMaterial>
-      </mesh>
+      {textures && (
+        <>
+          <mesh
+            ref={earthRef}
+            onPointerDown={handlePointerDown}
+            onPointerOver={() => (document.body.style.cursor = "grab")}
+            onPointerOut={() => !dragging.current && (document.body.style.cursor = "")}
+          >
+            <sphereGeometry args={[1.3, 48, 48]} />
+            <meshStandardMaterial roughness={0.85} metalness={0.05}>
+              <canvasTexture attach="map" args={[textures.earth]} />
+            </meshStandardMaterial>
+          </mesh>
 
-      {/* Облака — отдельная чуть большая сфера, вращается независимо от Земли */}
-      <mesh ref={cloudsRef} scale={1.015}>
-        <sphereGeometry args={[1.3, 48, 48]} />
-        <meshStandardMaterial transparent opacity={0.55} depthWrite={false}>
-          <canvasTexture attach="map" args={[cloudTexture]} />
-        </meshStandardMaterial>
-      </mesh>
+          {/* Облака — отдельная чуть большая сфера, вращается независимо от Земли */}
+          <mesh ref={cloudsRef} scale={1.015}>
+            <sphereGeometry args={[1.3, 48, 48]} />
+            <meshStandardMaterial transparent opacity={0.6} depthWrite={false}>
+              <canvasTexture attach="map" args={[textures.clouds]} />
+            </meshStandardMaterial>
+          </mesh>
 
-      {/* Лёгкое атмосферное свечение */}
-      <mesh scale={1.08}>
-        <sphereGeometry args={[1.3, 32, 32]} />
-        <meshBasicMaterial color="#38bdf8" transparent opacity={0.12} side={BackSide} />
-      </mesh>
+          {/* Лёгкое атмосферное свечение */}
+          <mesh scale={1.08}>
+            <sphereGeometry args={[1.3, 32, 32]} />
+            <meshBasicMaterial color="#38bdf8" transparent opacity={0.12} side={BackSide} />
+          </mesh>
 
-      <group ref={moonPivotRef}>
-        <mesh position={[2.3, 0.35, 0]}>
-          <sphereGeometry args={[0.28, 24, 24]} />
-          <meshStandardMaterial roughness={1}>
-            <canvasTexture attach="map" args={[moonTexture]} />
-          </meshStandardMaterial>
-        </mesh>
-      </group>
+          <group ref={moonPivotRef}>
+            <mesh position={[2.3, 0.35, 0]}>
+              <sphereGeometry args={[0.28, 24, 24]} />
+              <meshStandardMaterial roughness={1}>
+                <canvasTexture attach="map" args={[textures.moon]} />
+              </meshStandardMaterial>
+            </mesh>
+          </group>
+        </>
+      )}
     </group>
   );
 }
