@@ -118,18 +118,18 @@ function EarthAndMoon() {
             </meshStandardMaterial>
           </mesh>
 
-          {/* Облака — отдельная чуть большая сфера, вращается независимо от Земли. Опасити невысокое, иначе весь шар выглядит выцветшим/прозрачным. */}
-          <mesh ref={cloudsRef} scale={1.012}>
+          {/* Облака — отдельная чуть большая сфера, вращается независимо от Земли. Опасити низкое намеренно, иначе весь шар выглядит выцветшим/прозрачным. */}
+          <mesh ref={cloudsRef} scale={1.01}>
             <sphereGeometry args={[EARTH_RADIUS, 64, 64]} />
-            <meshStandardMaterial transparent opacity={0.25} depthWrite={false}>
+            <meshStandardMaterial transparent opacity={0.18} depthWrite={false}>
               <canvasTexture attach="map" args={[textures.clouds]} />
             </meshStandardMaterial>
           </mesh>
 
-          {/* Лёгкое атмосферное свечение */}
-          <mesh scale={1.06}>
+          {/* Лёгкое атмосферное свечение — тонкий обод по краю, не заливает весь диск */}
+          <mesh scale={1.035}>
             <sphereGeometry args={[EARTH_RADIUS, 32, 32]} />
-            <meshBasicMaterial color="#38bdf8" transparent opacity={0.1} side={BackSide} />
+            <meshBasicMaterial color="#38bdf8" transparent opacity={0.16} side={BackSide} fog={false} />
           </mesh>
 
           <group ref={moonPivotRef}>
@@ -189,15 +189,20 @@ function useMilkyWayBand(count, length, tiltX, tiltZ) {
   }, [count, length, tiltX, tiltZ]);
 }
 
-/** Спокойный звёздный фон + полоса Млечного Пути — задник, не конкурирующий с Землёй по яркости/размеру. */
+/**
+ * Спокойный звёздный фон + полоса Млечного Пути — задник (2-й план).
+ * fog={false} у обоих материалов: сцена рисуется с fog(near:5, far:20) для
+ * Земли, и без этого флага дальние звёзды просто гасли в тумане вместо
+ * того, чтобы читаться как контрастный далёкий фон.
+ */
 function SpaceBackdrop() {
   const groupRef = useRef();
-  const stars = useScatteredStars(2600, 26, 0);
-  const band = useMilkyWayBand(2000, 22, 0.5, 0.35);
+  const stars = useScatteredStars(3200, 60, 0);
+  const band = useMilkyWayBand(2400, 50, 0.5, 0.35);
 
   useFrame((state) => {
-    groupRef.current.rotation.y = state.clock.elapsedTime * 0.006;
-    groupRef.current.rotation.x = state.clock.elapsedTime * 0.003;
+    groupRef.current.rotation.y = state.clock.elapsedTime * 0.004;
+    groupRef.current.rotation.x = state.clock.elapsedTime * 0.002;
   });
 
   return (
@@ -205,24 +210,61 @@ function SpaceBackdrop() {
       <Points positions={stars} stride={3}>
         <PointMaterial
           transparent
-          color="#dfe7ee"
-          size={0.011}
+          color="#eef3f8"
+          size={0.022}
           sizeAttenuation
           depthWrite={false}
-          opacity={0.75}
+          opacity={0.85}
+          fog={false}
         />
       </Points>
       <Points positions={band} stride={3}>
         <PointMaterial
           transparent
-          color="#9fb8d9"
-          size={0.018}
+          color="#a9c4e6"
+          size={0.038}
           sizeAttenuation
           depthWrite={false}
-          opacity={0.3}
+          opacity={0.35}
           blending={AdditiveBlending}
+          fog={false}
         />
       </Points>
+    </group>
+  );
+}
+
+// Далеко в глубине сцены — маленькая пульсирующая точка.
+const PULSAR_POSITION = [-10, 6, -34];
+
+function Pulsar() {
+  const coreRef = useRef();
+  const glowRef = useRef();
+
+  useFrame((state) => {
+    const pulse = 0.5 + 0.5 * Math.sin(state.clock.elapsedTime * 2.2);
+    const coreScale = 0.35 + pulse * 0.25;
+    coreRef.current.scale.setScalar(coreScale);
+    glowRef.current.scale.setScalar(coreScale * 3.4);
+    glowRef.current.material.opacity = 0.15 + pulse * 0.35;
+  });
+
+  return (
+    <group position={PULSAR_POSITION}>
+      <mesh ref={coreRef}>
+        <sphereGeometry args={[1, 16, 16]} />
+        <meshBasicMaterial color="#eaf7ff" fog={false} />
+      </mesh>
+      <mesh ref={glowRef}>
+        <sphereGeometry args={[1, 16, 16]} />
+        <meshBasicMaterial
+          color="#7fd4ff"
+          transparent
+          opacity={0.3}
+          depthWrite={false}
+          fog={false}
+        />
+      </mesh>
     </group>
   );
 }
@@ -234,10 +276,12 @@ export default function HeroSection() {
         <Canvas camera={{ position: [0, 0, 6] }}>
           <color attach="background" args={["#0C0C0C"]} />
           <fog attach="fog" args={["#0C0C0C", 5, 20]} />
-          <ambientLight intensity={0.7} />
-          <pointLight position={[5, 5, 5]} intensity={2} color="#BBCCD7" />
-          <EarthAndMoon />
+          <ambientLight intensity={0.2} />
+          <pointLight position={[5, 4, 6]} intensity={2.6} color="#f2f6fa" />
+          <pointLight position={[-6, -3, -5]} intensity={0.4} color="#2f5f92" />
           <SpaceBackdrop />
+          <Pulsar />
+          <EarthAndMoon />
         </Canvas>
       </div>
 
