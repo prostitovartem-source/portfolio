@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef } from "react";
 import FadeIn from "../components/FadeIn.jsx";
 import ContactButton from "../components/ContactButton.jsx";
 import TypewriterText from "../components/TypewriterText.jsx";
-import { createEarthCanvas } from "../components/earthTexture.js";
+import { createEarthCanvas, createCloudCanvas, createMoonCanvas } from "../components/earthTexture.js";
 
 const NAV_LINKS = [
   { label: "Обо мне", href: "#about" },
@@ -25,12 +25,15 @@ const EARTH_BASE_X = 2.6;
 function EarthAndMoon() {
   const systemRef = useRef();
   const earthRef = useRef();
+  const cloudsRef = useRef();
   const moonPivotRef = useRef();
   const pointer = useRef({ x: 0, y: 0 });
   const dragging = useRef(false);
   const lastPointer = useRef({ x: 0, y: 0 });
 
   const earthTexture = useMemo(() => createEarthCanvas(), []);
+  const cloudTexture = useMemo(() => createCloudCanvas(), []);
+  const moonTexture = useMemo(() => createMoonCanvas(), []);
 
   useEffect(() => {
     function handlePointerMove(e) {
@@ -75,6 +78,7 @@ function EarthAndMoon() {
     if (!dragging.current) {
       earthRef.current.rotation.y += 0.0025;
     }
+    cloudsRef.current.rotation.y += 0.0011;
     moonPivotRef.current.rotation.y = state.clock.elapsedTime * 0.35;
   });
 
@@ -92,6 +96,14 @@ function EarthAndMoon() {
         </meshStandardMaterial>
       </mesh>
 
+      {/* Облака — отдельная чуть большая сфера, вращается независимо от Земли */}
+      <mesh ref={cloudsRef} scale={1.015}>
+        <sphereGeometry args={[1.3, 48, 48]} />
+        <meshStandardMaterial transparent opacity={0.55} depthWrite={false}>
+          <canvasTexture attach="map" args={[cloudTexture]} />
+        </meshStandardMaterial>
+      </mesh>
+
       {/* Лёгкое атмосферное свечение */}
       <mesh scale={1.08}>
         <sphereGeometry args={[1.3, 32, 32]} />
@@ -101,7 +113,9 @@ function EarthAndMoon() {
       <group ref={moonPivotRef}>
         <mesh position={[2.3, 0.35, 0]}>
           <sphereGeometry args={[0.28, 24, 24]} />
-          <meshStandardMaterial color="#a3abb3" roughness={1} />
+          <meshStandardMaterial roughness={1}>
+            <canvasTexture attach="map" args={[moonTexture]} />
+          </meshStandardMaterial>
         </mesh>
       </group>
     </group>
