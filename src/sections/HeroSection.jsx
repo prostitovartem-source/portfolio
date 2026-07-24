@@ -1,6 +1,6 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
-import { BackSide, AdditiveBlending } from "three";
+import { BackSide, AdditiveBlending, SRGBColorSpace } from "three";
 import { useEffect, useMemo, useRef, useState } from "react";
 import FadeIn from "../components/FadeIn.jsx";
 import ContactButton from "../components/ContactButton.jsx";
@@ -113,16 +113,16 @@ function EarthAndMoon() {
             onPointerOut={() => !dragging.current && (document.body.style.cursor = "")}
           >
             <sphereGeometry args={[EARTH_RADIUS, 64, 64]} />
-            <meshStandardMaterial roughness={0.9} metalness={0}>
-              <canvasTexture attach="map" args={[textures.earth]} />
+            <meshStandardMaterial roughness={0.85} metalness={0}>
+              <canvasTexture attach="map" args={[textures.earth]} colorSpace={SRGBColorSpace} />
             </meshStandardMaterial>
           </mesh>
 
-          {/* Облака — отдельная чуть большая сфера, вращается независимо от Земли. Опасити низкое намеренно, иначе весь шар выглядит выцветшим/прозрачным. */}
+          {/* Облака — отдельная чуть большая сфера, вращается независимо от Земли. */}
           <mesh ref={cloudsRef} scale={1.01}>
             <sphereGeometry args={[EARTH_RADIUS, 64, 64]} />
-            <meshStandardMaterial transparent opacity={0.18} depthWrite={false}>
-              <canvasTexture attach="map" args={[textures.clouds]} />
+            <meshStandardMaterial transparent opacity={0.3} depthWrite={false}>
+              <canvasTexture attach="map" args={[textures.clouds]} colorSpace={SRGBColorSpace} />
             </meshStandardMaterial>
           </mesh>
 
@@ -136,7 +136,7 @@ function EarthAndMoon() {
             <mesh position={[EARTH_RADIUS * 1.85, EARTH_RADIUS * 0.28, 0]}>
               <sphereGeometry args={[EARTH_RADIUS * 0.2, 24, 24]} />
               <meshStandardMaterial roughness={1}>
-                <canvasTexture attach="map" args={[textures.moon]} />
+                <canvasTexture attach="map" args={[textures.moon]} colorSpace={SRGBColorSpace} />
               </meshStandardMaterial>
             </mesh>
           </group>
@@ -276,9 +276,9 @@ export default function HeroSection() {
         <Canvas camera={{ position: [0, 0, 6] }}>
           <color attach="background" args={["#0C0C0C"]} />
           <fog attach="fog" args={["#0C0C0C", 5, 20]} />
-          <ambientLight intensity={0.2} />
-          <pointLight position={[5, 4, 6]} intensity={2.6} color="#f2f6fa" />
-          <pointLight position={[-6, -3, -5]} intensity={0.4} color="#2f5f92" />
+          <ambientLight intensity={0.55} />
+          <pointLight position={[5, 4, 6]} intensity={2.2} color="#ffffff" />
+          <pointLight position={[-6, -3, -5]} intensity={0.5} color="#3a6fa8" />
           <SpaceBackdrop />
           <Pulsar />
           <EarthAndMoon />
