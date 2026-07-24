@@ -1,6 +1,6 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
-import { BackSide } from "three";
+import { BackSide, AdditiveBlending } from "three";
 import { useEffect, useMemo, useRef, useState } from "react";
 import FadeIn from "../components/FadeIn.jsx";
 import ContactButton from "../components/ContactButton.jsx";
@@ -15,7 +15,8 @@ const NAV_LINKS = [
 ];
 
 // Смещена вправо, чтобы не перекрывать заголовок.
-const EARTH_BASE_X = 2.6;
+const EARTH_BASE_X = 3;
+const EARTH_RADIUS = 1.75;
 
 /**
  * Земля с Луной: дрейфует к курсору (как раньше), но вращается сама
@@ -111,29 +112,29 @@ function EarthAndMoon() {
             onPointerOver={() => (document.body.style.cursor = "grab")}
             onPointerOut={() => !dragging.current && (document.body.style.cursor = "")}
           >
-            <sphereGeometry args={[1.3, 48, 48]} />
-            <meshStandardMaterial roughness={0.85} metalness={0.05}>
+            <sphereGeometry args={[EARTH_RADIUS, 64, 64]} />
+            <meshStandardMaterial roughness={0.9} metalness={0}>
               <canvasTexture attach="map" args={[textures.earth]} />
             </meshStandardMaterial>
           </mesh>
 
-          {/* Облака — отдельная чуть большая сфера, вращается независимо от Земли */}
-          <mesh ref={cloudsRef} scale={1.015}>
-            <sphereGeometry args={[1.3, 48, 48]} />
-            <meshStandardMaterial transparent opacity={0.6} depthWrite={false}>
+          {/* Облака — отдельная чуть большая сфера, вращается независимо от Земли. Опасити невысокое, иначе весь шар выглядит выцветшим/прозрачным. */}
+          <mesh ref={cloudsRef} scale={1.012}>
+            <sphereGeometry args={[EARTH_RADIUS, 64, 64]} />
+            <meshStandardMaterial transparent opacity={0.25} depthWrite={false}>
               <canvasTexture attach="map" args={[textures.clouds]} />
             </meshStandardMaterial>
           </mesh>
 
           {/* Лёгкое атмосферное свечение */}
-          <mesh scale={1.08}>
-            <sphereGeometry args={[1.3, 32, 32]} />
-            <meshBasicMaterial color="#38bdf8" transparent opacity={0.12} side={BackSide} />
+          <mesh scale={1.06}>
+            <sphereGeometry args={[EARTH_RADIUS, 32, 32]} />
+            <meshBasicMaterial color="#38bdf8" transparent opacity={0.1} side={BackSide} />
           </mesh>
 
           <group ref={moonPivotRef}>
-            <mesh position={[2.3, 0.35, 0]}>
-              <sphereGeometry args={[0.28, 24, 24]} />
+            <mesh position={[EARTH_RADIUS * 1.85, EARTH_RADIUS * 0.28, 0]}>
+              <sphereGeometry args={[EARTH_RADIUS * 0.2, 24, 24]} />
               <meshStandardMaterial roughness={1}>
                 <canvasTexture attach="map" args={[textures.moon]} />
               </meshStandardMaterial>
@@ -145,26 +146,84 @@ function EarthAndMoon() {
   );
 }
 
-function AnimatedParticles() {
-  const ref = useRef();
+// Дешёвый детерминированный "хэш" в [0, 1) — вместо Math.random (стабильные
+// позиции звёзд, не пересчитываются на каждый ререндер).
+function hash(n) {
+  const s = Math.sin(n * 12.9898) * 43758.5453;
+  return s - Math.floor(s);
+}
 
-  const particles = useMemo(() => {
-    const positions = new Float32Array(4000 * 3);
-    for (let i = 0; i < positions.length; i++) {
-      positions[i] = (Math.random() - 0.5) * 15;
+function useScatteredStars(count, spread, seed) {
+  return useMemo(() => {
+    const positions = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      positions[i * 3] = (hash(seed + i * 1.001) - 0.5) * spread;
+      positions[i * 3 + 1] = (hash(seed + i * 2.002 + 7) - 0.5) * spread;
+      positions[i * 3 + 2] = (hash(seed + i * 3.003 + 13) - 0.5) * spread;
     }
     return positions;
-  }, []);
+  }, [count, spread, seed]);
+}
+
+// Узкая наклонная полоса точек через всю сцену — читается как Млечный Путь.
+function useMilkyWayBand(count, length, tiltX, tiltZ) {
+  return useMemo(() => {
+    const positions = new Float32Array(count * 3);
+    const cosX = Math.cos(tiltX);
+    const sinX = Math.sin(tiltX);
+    const cosZ = Math.cos(tiltZ);
+    const sinZ = Math.sin(tiltZ);
+    for (let i = 0; i < count; i++) {
+      const u = (hash(i * 1.31 + 3) - 0.5) * length;
+      const v = (hash(i * 2.53 + 9) - 0.5) * (length * 0.1);
+      const w = (hash(i * 3.77 + 15) - 0.5) * (length * 0.1);
+      const x1 = u * cosZ - v * sinZ;
+      const y1 = u * sinZ + v * cosZ;
+      const y2 = y1 * cosX - w * sinX;
+      const z2 = y1 * sinX + w * cosX;
+      positions[i * 3] = x1;
+      positions[i * 3 + 1] = y2;
+      positions[i * 3 + 2] = z2;
+    }
+    return positions;
+  }, [count, length, tiltX, tiltZ]);
+}
+
+/** Спокойный звёздный фон + полоса Млечного Пути — задник, не конкурирующий с Землёй по яркости/размеру. */
+function SpaceBackdrop() {
+  const groupRef = useRef();
+  const stars = useScatteredStars(2600, 26, 0);
+  const band = useMilkyWayBand(2000, 22, 0.5, 0.35);
 
   useFrame((state) => {
-    ref.current.rotation.y = state.clock.elapsedTime * 0.03;
-    ref.current.rotation.x = state.clock.elapsedTime * 0.015;
+    groupRef.current.rotation.y = state.clock.elapsedTime * 0.006;
+    groupRef.current.rotation.x = state.clock.elapsedTime * 0.003;
   });
 
   return (
-    <Points ref={ref} positions={particles} stride={3}>
-      <PointMaterial transparent color="#646973" size={0.02} sizeAttenuation depthWrite={false} />
-    </Points>
+    <group ref={groupRef}>
+      <Points positions={stars} stride={3}>
+        <PointMaterial
+          transparent
+          color="#dfe7ee"
+          size={0.011}
+          sizeAttenuation
+          depthWrite={false}
+          opacity={0.75}
+        />
+      </Points>
+      <Points positions={band} stride={3}>
+        <PointMaterial
+          transparent
+          color="#9fb8d9"
+          size={0.018}
+          sizeAttenuation
+          depthWrite={false}
+          opacity={0.3}
+          blending={AdditiveBlending}
+        />
+      </Points>
+    </group>
   );
 }
 
@@ -178,7 +237,7 @@ export default function HeroSection() {
           <ambientLight intensity={0.7} />
           <pointLight position={[5, 5, 5]} intensity={2} color="#BBCCD7" />
           <EarthAndMoon />
-          <AnimatedParticles />
+          <SpaceBackdrop />
         </Canvas>
       </div>
 
