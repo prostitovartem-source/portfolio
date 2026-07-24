@@ -185,9 +185,11 @@ export default function HeroSection() {
       <div className="hero-bottom">
         <FadeIn delay={0.35} y={20} className="hero-caption">
           <p>
-            full stack разработчик, создающий продукты от интерфейса
-            до серверной логики и ai-интеграций
+            <span className="hero-caption-accent">full stack</span> разработчик,
+            создающий продукты от интерфейса до серверной логики и{" "}
+            <span className="hero-caption-accent">ai-интеграций</span>
           </p>
+          <span className="hero-caption-underline" />
         </FadeIn>
 
         <FadeIn delay={0.5} y={20}>
