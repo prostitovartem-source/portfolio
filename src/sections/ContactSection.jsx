@@ -44,8 +44,8 @@ const CONTACTS = [
   },
   {
     label: "GitHub",
-    value: "github.com",
-    href: "https://github.com/",
+    value: "prostitovartem-source",
+    href: "https://github.com/prostitovartem-source",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
         <path
