@@ -46,6 +46,28 @@ body {
   overflow: hidden;
 }
 
+.hero::before {
+  content: "";
+  position: absolute;
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent 60%);
+  filter: blur(90px);
+  animation: heroGlowMove 10s ease-in-out infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes heroGlowMove {
+  0%,
+  100% {
+    transform: translate(-100px, -100px);
+  }
+  50% {
+    transform: translate(100px, 50px);
+  }
+}
+
 .hero-visual {
   position: absolute;
   inset: 0;
@@ -91,26 +113,31 @@ body {
   align-items: center;
 }
 
-.hero-title {
-  font-size: clamp(3.2rem, 14vw, 11.5rem);
-  white-space: nowrap;
-  width: 100%;
+.hero-title-legacy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.typewriter-cursor {
-  display: inline-block;
-  margin-left: 0.02em;
-  animation: cursorBlink 0.9s step-end infinite;
+.hero-title-legacy-name,
+.hero-title-legacy-role {
+  background: linear-gradient(to bottom, #ffffff, #93c5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 10px 40px rgba(56, 189, 248, 0.3));
+  font-weight: 800;
+  line-height: 0.95;
 }
 
-@keyframes cursorBlink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
+.hero-title-legacy-name {
+  font-size: clamp(2rem, 5.5vw, 4rem);
+  letter-spacing: -0.02em;
+}
+
+.hero-title-legacy-role {
+  font-size: clamp(2.4rem, 7.5vw, 7rem);
+  letter-spacing: -0.03em;
 }
 
 /* Нижняя панель */

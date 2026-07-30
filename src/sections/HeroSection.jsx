@@ -1,10 +1,10 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Points, PointMaterial } from "@react-three/drei";
+import { motion } from "framer-motion";
 import { Object3D } from "three";
 import { useEffect, useMemo, useRef } from "react";
 import FadeIn from "../components/FadeIn.jsx";
 import ContactButton from "../components/ContactButton.jsx";
-import TypewriterText from "../components/TypewriterText.jsx";
 
 const NAV_LINKS = [
   { label: "Обо мне", href: "#about" },
@@ -116,12 +116,12 @@ function Tesseract() {
           <bufferGeometry ref={geometryRef}>
             <bufferAttribute attach="attributes-position" args={[linePositions, 3]} />
           </bufferGeometry>
-          <lineBasicMaterial color="#BBCCD7" transparent opacity={0.8} />
+          <lineBasicMaterial color="#7dd3fc" transparent opacity={0.85} />
         </lineSegments>
 
         <instancedMesh ref={dotsRef} args={[null, null, TESSERACT_VERTICES_4D.length]}>
           <sphereGeometry args={[0.05, 12, 12]} />
-          <meshStandardMaterial color="#eaf1f6" />
+          <meshStandardMaterial color="#93c5fd" />
         </instancedMesh>
       </group>
     </Float>
@@ -146,7 +146,7 @@ function AnimatedParticles() {
 
   return (
     <Points ref={ref} positions={particles} stride={3}>
-      <PointMaterial transparent color="#646973" size={0.02} sizeAttenuation depthWrite={false} />
+      <PointMaterial transparent color="#60a5fa" size={0.02} sizeAttenuation depthWrite={false} />
     </Points>
   );
 }
@@ -156,10 +156,10 @@ export default function HeroSection() {
     <section className="hero" style={{ overflowX: "clip" }}>
       <div className="hero-visual">
         <Canvas camera={{ position: [0, 0, 6] }}>
-          <color attach="background" args={["#0C0C0C"]} />
-          <fog attach="fog" args={["#0C0C0C", 5, 20]} />
+          <color attach="background" args={["#030712"]} />
+          <fog attach="fog" args={["#030712", 5, 20]} />
           <ambientLight intensity={0.7} />
-          <pointLight position={[5, 5, 5]} intensity={2} color="#BBCCD7" />
+          <pointLight position={[5, 5, 5]} intensity={2} color="#38bdf8" />
           <Tesseract />
           <AnimatedParticles />
         </Canvas>
@@ -174,12 +174,15 @@ export default function HeroSection() {
       </FadeIn>
 
       <div className="hero-heading-wrap">
-        <TypewriterText
-          as="h1"
-          className="hero-heading hero-title"
-          text="hi, i'm copick"
-          startDelay={0.5}
-        />
+        <motion.h1
+          className="hero-title-legacy"
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+        >
+          <span className="hero-title-legacy-name">copick</span>
+          <span className="hero-title-legacy-role">full stack разработчик</span>
+        </motion.h1>
       </div>
 
       <div className="hero-bottom">
