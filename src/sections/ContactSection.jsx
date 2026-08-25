@@ -72,7 +72,11 @@ export default function ContactSection() {
   return (
     <section className="contact" id="contact">
       <FadeIn delay={0} y={40}>
-        <h2 className="hero-heading contact-heading">Контакты</h2>
+        <h2 className="hero-heading contact-heading">
+          Let&apos;s Build
+          <br />
+          Something Great.
+        </h2>
       </FadeIn>
 
       <FadeIn delay={0.1} y={20}>

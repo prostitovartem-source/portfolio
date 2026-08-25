@@ -72,7 +72,7 @@ export default function ProjectsSection() {
   return (
     <section className="projects" id="projects">
       <FadeIn delay={0} y={40}>
-        <h2 className="hero-heading projects-heading">Проект</h2>
+        <h2 className="hero-heading projects-heading">Selected Projects</h2>
       </FadeIn>
 
       <div className="project-cards-wrap">

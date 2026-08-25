@@ -24,7 +24,7 @@ export default function AboutSection() {
 
       <div className="about-content">
         <FadeIn delay={0} y={40}>
-          <h2 className="hero-heading about-heading">Обо мне</h2>
+          <h2 className="hero-heading about-heading">About Me</h2>
         </FadeIn>
 
         <AnimatedText text={ABOUT_TEXT} className="about-text" />
