@@ -21,7 +21,7 @@ const PROJECTS = [
     description:
       "AI-сервис для генерации и редактирования изображений. Загрузка фото, выбор AI-стилей, система внутренней валюты 🍓, история генераций и современный интерфейс на Next.js.",
     tag: "Next.js • AI • Replicate",
-    link: "https://altime-five.vercel.app/",
+    link: "https://max.ru/se13793521_bot",
     accent: "#a78bfa",
   },
 ];
