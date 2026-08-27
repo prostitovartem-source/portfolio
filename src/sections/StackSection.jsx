@@ -9,8 +9,12 @@ const STACK_GROUPS = [
 export default function StackSection() {
   return (
     <section className="stack" id="stack">
-      <FadeIn delay={0} y={40}>
-        <h2 className="hero-heading stack-heading">Technologies</h2>
+      <FadeIn delay={0} y={20} className="section-eyebrow">
+        04 / Технологии
+      </FadeIn>
+
+      <FadeIn delay={0.05} y={40}>
+        <h2 className="hero-heading stack-heading">Технологии</h2>
       </FadeIn>
 
       <div className="stack-groups">

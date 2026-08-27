@@ -8,21 +8,26 @@ const PROJECTS = [
     number: "01",
     title: "Quantix",
     category: "SaaS-продукт",
+    featured: true,
+    featuredLabel: "Флагманский проект",
     description:
       "AI SaaS-платформа для автоматизации учёта товаров и обработки накладных. Распознаёт документы с помощью AI, извлекает данные и помогает управлять складскими операциями.",
     tag: "Next.js • AI • Prisma",
     link: "https://quantix-five.vercel.app",
+    ctaLabel: "Смотреть проект",
     accent: "#38bdf8",
   },
   {
     number: "02",
     title: "ALTME AI",
-    category: "AI-продукт",
+    category: "AI-бот для MAX",
+    featured: false,
     description:
-      "AI-сервис для генерации и редактирования изображений. Загрузка фото, выбор AI-стилей, система внутренней валюты 🍓, история генераций и современный интерфейс на Next.js.",
-    tag: "Next.js • AI • Replicate",
+      "AI-бот и мини-приложение внутри мессенджера MAX для генерации и стилизации фотографий. Загрузка фото, выбор AI-стиля или свой промпт, внутренняя валюта 🍓 и реферальная система — весь опыт целиком живёт в MAX, без отдельного сайта.",
+    tag: "Next.js • MAX Bot API • Gemini AI",
     link: "https://max.ru/se13793521_bot",
-    accent: "#a78bfa",
+    ctaLabel: "Открыть в MAX",
+    accent: "#fb2c5c",
   },
 ];
 
@@ -39,24 +44,26 @@ function ProjectCard({ project, index, total }) {
   return (
     <div ref={containerRef} className="project-card-container">
       <motion.div
-        className="project-card"
-        style={{ scale, top: `${index * 28}px` }}
+        className={`project-card ${project.featured ? "project-card-featured" : ""}`}
+        style={{ scale, top: `${index * 28}px`, "--project-accent": project.accent }}
       >
         <div className="project-card-top">
           <span className="project-number">{project.number}</span>
           <div className="project-heading">
-            <span className="project-category">{project.category}</span>
+            <span className="project-category">
+              {project.category}
+              {project.featured && <span className="project-featured-badge">{project.featuredLabel}</span>}
+            </span>
             <b className="project-name">{project.title}</b>
           </div>
-          <LiveProjectButton href={project.link} label="Live Project" />
+          <LiveProjectButton href={project.link} label={project.ctaLabel} />
         </div>
 
         <div className="project-card-bottom">
-          <div
-            className="project-poster"
-            style={{ "--project-accent": project.accent }}
-          >
-            <span className="project-poster-mark">{project.title[0]}</span>
+          <div className="project-poster">
+            <span className="project-poster-mark" aria-hidden="true">
+              {project.title[0]}
+            </span>
             <div className="project-poster-info">
               <p>{project.description}</p>
               <span className="project-poster-tag">{project.tag}</span>
@@ -71,8 +78,12 @@ function ProjectCard({ project, index, total }) {
 export default function ProjectsSection() {
   return (
     <section className="projects" id="projects">
-      <FadeIn delay={0} y={40}>
-        <h2 className="hero-heading projects-heading">Selected Projects</h2>
+      <FadeIn delay={0} y={20} className="section-eyebrow">
+        05 / Проекты
+      </FadeIn>
+
+      <FadeIn delay={0.05} y={40}>
+        <h2 className="hero-heading projects-heading">Избранные проекты</h2>
       </FadeIn>
 
       <div className="project-cards-wrap">

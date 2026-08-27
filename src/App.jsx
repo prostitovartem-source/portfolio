@@ -1,6 +1,7 @@
 import Navbar from "./components/Navbar.jsx";
 import Loader from "./components/Loader.jsx";
 import CustomCursor from "./components/CustomCursor.jsx";
+import Footer from "./components/Footer.jsx";
 import HeroSection from "./sections/HeroSection.jsx";
 import MarqueeSection from "./sections/MarqueeSection.jsx";
 import AboutSection from "./sections/AboutSection.jsx";
@@ -27,9 +28,7 @@ export default function App() {
       <ProjectsSection />
       <ContactSection />
 
-      <footer>
-        <p>© 2026 copick · Full-Stack Web Developer</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

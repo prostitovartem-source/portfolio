@@ -12,9 +12,9 @@ export default function AISection() {
 
         <FadeIn delay={0.1} y={30}>
           <h2 className="hero-heading ai-heading">
-            AI-Augmented
+            AI ускоряет
             <br />
-            Development
+            разработку
           </h2>
         </FadeIn>
 

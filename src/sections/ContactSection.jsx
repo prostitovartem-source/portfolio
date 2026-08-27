@@ -6,7 +6,7 @@ const CONTACTS = [
     value: "@cooicks",
     href: "https://t.me/cooicks",
     icon: (
-      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22" aria-hidden="true">
         <path
           d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0
           12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506
@@ -35,6 +35,7 @@ const CONTACTS = [
         strokeLinejoin="round"
         width="22"
         height="22"
+        aria-hidden="true"
       >
         <rect x="2" y="4" width="20" height="16" rx="3" />
         <path d="m2 7 10 7 10-7" />
@@ -47,7 +48,7 @@ const CONTACTS = [
     value: "prostitovartem-source",
     href: "https://github.com/prostitovartem-source",
     icon: (
-      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22" aria-hidden="true">
         <path
           d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205
           11.385.6.113.82-.258.82-.577
@@ -71,11 +72,15 @@ const CONTACTS = [
 export default function ContactSection() {
   return (
     <section className="contact" id="contact">
-      <FadeIn delay={0} y={40}>
+      <FadeIn delay={0} y={20} className="section-eyebrow">
+        06 / Контакт
+      </FadeIn>
+
+      <FadeIn delay={0.05} y={40}>
         <h2 className="hero-heading contact-heading">
-          Let&apos;s Build
+          Давайте создадим
           <br />
-          Something Great.
+          что-то классное.
         </h2>
       </FadeIn>
 

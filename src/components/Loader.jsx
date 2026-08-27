@@ -42,11 +42,22 @@ export default function Loader() {
       {!done && (
         <motion.div
           className="loader"
+          aria-hidden="true"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
         >
-          <span className="loader-count">{String(progress).padStart(2, "0")}</span>
+          <div className="loader-inner">
+            <span className="loader-brand">COPICK</span>
+            <span className="loader-count">{String(progress).padStart(2, "0")}</span>
+            <div className="loader-bar">
+              <motion.div
+                className="loader-bar-fill"
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.2, ease: "linear" }}
+              />
+            </div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

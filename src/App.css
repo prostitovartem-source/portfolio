@@ -1,9 +1,46 @@
 :root {
+  /* Цвет */
   --bg: #080808;
+  --surface: rgba(242, 245, 247, 0.03);
+  --surface-hover: rgba(242, 245, 247, 0.06);
+  --border: rgba(242, 245, 247, 0.1);
+  --border-strong: rgba(242, 245, 247, 0.22);
   --text: #f2f5f7;
   --text-secondary: #a8b0b8;
+  /* 0.5 (not 0.4) — WCAG AA for normal-size text needs ≥4.5:1; 0.4 only
+     hit ~3.5:1 against --bg. Verified via relative-luminance contrast calc. */
+  --text-tertiary: rgba(242, 245, 247, 0.5);
   --accent: #7dd3fc;
   --accent-2: #a78bfa;
+
+  /* Радиусы */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 32px;
+  /* Только для крупных "sheet"-поверхностей (верхние углы Services/Projects,
+     внешняя рамка project-card) — их масштаб (во всю ширину секции)
+     оправдывает отдельный, более крупный радиус, а не хаос произвольных
+     значений. Внутренние элементы (project-poster) используют --radius-lg. */
+  --radius-xl: 40px;
+  --radius-full: 999px;
+
+  /* Отступы */
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 40px;
+  --space-xl: 80px;
+
+  /* Переходы */
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-fast: 0.2s var(--ease);
+  --transition-base: 0.35s var(--ease);
+
+  /* Одна общая непрозрачность для "metadata" элементов (большие декоративные
+     номера, small-caps лейблы) — раньше это было 0.8/0.85/0.9 в разных
+     местах без причины, из-за чего у текста получалось 5-6 уровней
+     яркости вместо чёткой пары primary/secondary/metadata. */
+  --opacity-meta: 0.85;
 }
 
 * {
@@ -42,6 +79,24 @@ h2,
   font-family: "Space Grotesk", sans-serif;
 }
 
+/* ── Метка-нумерация секций (плотность, "digital product" ощущение) ── */
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.section-eyebrow-dark {
+  /* 0.6 (not 0.4) — same AA contrast fix as --text-tertiary above, verified against the white Services background. */
+  color: rgba(8, 8, 8, 0.6);
+}
+
 /* ── Общий градиентный текст заголовков ───────────────────── */
 .hero-heading {
   background: linear-gradient(180deg, var(--text) 0%, var(--accent) 100%);
@@ -65,7 +120,7 @@ h2,
   align-items: center;
   justify-content: space-between;
   padding: 22px 24px;
-  transition: background 0.35s ease, backdrop-filter 0.35s ease, border-color 0.35s ease;
+  transition: background var(--transition-base), backdrop-filter var(--transition-base), border-color var(--transition-base);
   border-bottom: 1px solid transparent;
 }
 
@@ -96,7 +151,7 @@ h2,
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.8rem;
-  transition: color 0.2s ease;
+  transition: color var(--transition-fast);
 }
 
 .site-nav-links a:hover {
@@ -114,6 +169,21 @@ h2,
   background: var(--bg);
 }
 
+.loader-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.loader-brand {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+}
+
 .loader-count {
   font-family: "Space Grotesk", sans-serif;
   font-size: clamp(2rem, 6vw, 4rem);
@@ -122,7 +192,24 @@ h2,
   letter-spacing: -0.02em;
 }
 
+.loader-bar {
+  width: clamp(160px, 30vw, 260px);
+  height: 2px;
+  border-radius: var(--radius-full);
+  background: var(--border);
+  overflow: hidden;
+}
+
+.loader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  border-radius: var(--radius-full);
+}
+
 /* ══════════════════════ CUSTOM CURSOR ══════════════════════ */
+/* mix-blend-mode: difference держит курсор видимым и над тёмным фоном
+   сайта, и над светлым блоком Services — без спец-случаев на секцию. */
 .custom-cursor {
   position: fixed;
   top: 0;
@@ -130,10 +217,11 @@ h2,
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--accent);
+  background: #ffffff;
+  mix-blend-mode: difference;
   pointer-events: none;
   z-index: 200;
-  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+  transition: width var(--transition-fast), height var(--transition-fast);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,15 +230,15 @@ h2,
 .custom-cursor-active {
   width: 56px;
   height: 56px;
-  background: rgba(125, 211, 252, 0.15);
-  border: 1px solid var(--accent);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid #ffffff;
 }
 
 .custom-cursor-label {
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--text);
+  color: #ffffff;
   font-weight: 600;
 }
 
@@ -213,14 +301,22 @@ body.has-custom-cursor button {
   max-width: 900px;
 }
 
+.hero-kicker {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
 .hero-status {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(242, 245, 247, 0.14);
-  background: rgba(242, 245, 247, 0.04);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -229,11 +325,15 @@ body.has-custom-cursor button {
 }
 
 .hero-status-dot {
-  width: 7px;
-  height: 7px;
+  /* Было #4ade80 (классический "online"-зелёный status-badge из SaaS-
+     дашбордов) — единственный на сайте цвет вне cyan/purple/berry-системы,
+     и самый узнаваемый "шаблонный" сигнал в hero. Теперь берёт цвет из
+     собственной палитры COPICK, не занимая у чужой визуальной конвенции. */
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: #4ade80;
-  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2);
+  background: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 .hero-title-main {
@@ -243,7 +343,11 @@ body.has-custom-cursor button {
   line-height: 0.86;
   letter-spacing: -0.06em;
   text-transform: uppercase;
-  font-size: clamp(3rem, 11vw, 9rem);
+  /* Максимум подобран так, чтобы "Web Developer" не переносился на
+     широких десктопах (см. hero-content max-width) — на 1440/1280px
+     старый максимум (9rem) был шире доступного места и ломал заголовок
+     на 3 строки вместо 2. */
+  font-size: clamp(3rem, 11vw, 7.2rem);
   color: var(--text);
 }
 
@@ -269,12 +373,58 @@ body.has-custom-cursor button {
   margin-top: 8px;
 }
 
+.hero-scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 36px;
+  z-index: 2;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero-scroll-line {
+  width: 1px;
+  height: 34px;
+  background: linear-gradient(180deg, transparent, var(--text-secondary));
+  animation: scrollCuePulse 2.2s ease-in-out infinite;
+}
+
+.hero-scroll-label {
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.65rem;
+}
+
+@keyframes scrollCuePulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scaleY(0.7);
+    transform-origin: top;
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-scroll-cue {
+    display: none;
+  }
+}
+
 /* ══════════════════════ КНОПКИ ════════════════════════════ */
 .btn-contact {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   padding: 14px 32px;
   background: linear-gradient(123deg, var(--accent-2) 0%, var(--accent) 100%);
   box-shadow: 0 10px 30px rgba(125, 211, 252, 0.2);
@@ -284,7 +434,7 @@ body.has-custom-cursor button {
   letter-spacing: 0.08em;
   text-decoration: none;
   font-size: clamp(0.75rem, 1.2vw, 1rem);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
   white-space: nowrap;
 }
 
@@ -297,7 +447,7 @@ body.has-custom-cursor button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   padding: 12px 28px;
   border: 2px solid rgba(242, 245, 247, 0.35);
   color: var(--text);
@@ -306,7 +456,7 @@ body.has-custom-cursor button {
   letter-spacing: 0.08em;
   text-decoration: none;
   font-size: clamp(0.7rem, 1vw, 0.95rem);
-  transition: background 0.3s ease, border-color 0.3s ease;
+  transition: background var(--transition-base), border-color var(--transition-base);
   white-space: nowrap;
 }
 
@@ -334,32 +484,42 @@ body.has-custom-cursor button {
   flex-shrink: 0;
   width: 200px;
   height: 110px;
-  border-radius: 20px;
-  background: linear-gradient(160deg, rgba(125, 211, 252, 0.1), rgba(8, 8, 8, 0.4));
-  border: 1px solid rgba(125, 211, 252, 0.15);
+  border-radius: var(--radius-md);
+  background: linear-gradient(160deg, rgba(125, 211, 252, 0.08), rgba(8, 8, 8, 0.4));
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 12px;
+  transition: border-color var(--transition-base), background var(--transition-base);
+}
+
+.marquee-tile:hover {
+  border-color: rgba(125, 211, 252, 0.35);
+  background: linear-gradient(160deg, rgba(125, 211, 252, 0.14), rgba(8, 8, 8, 0.4));
 }
 
 .marquee-tile span {
   color: var(--text-secondary);
-  font-weight: 500;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  font-size: 1.15rem;
 }
 
 /* ══════════════════════ ABOUT ═════════════════════════════ */
 .about {
   position: relative;
-  min-height: 100vh;
+  /* Раньше min-height:100vh растягивал секцию до полного экрана
+     независимо от контента — на большинстве экранов контент короче
+     вьюпорта, и это читалось как "пустое пространство ради минимализма"
+     (см. spacing audit). Высота теперь идёт от контента + паддингов. */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
+  padding: 120px 20px;
 }
 
 .about-deco {
@@ -419,9 +579,28 @@ body.has-custom-cursor button {
   font-size: clamp(1rem, 2vw, 1.35rem);
 }
 
+.about-markers {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 560px;
+}
+
+.about-marker {
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
 /* ══════════════════════ AI / VIBE CODING ═══════════════════ */
 .ai-section {
-  padding: 140px 24px;
+  padding: 100px 24px;
   display: flex;
   justify-content: center;
 }
@@ -438,7 +617,7 @@ body.has-custom-cursor button {
 .ai-tag {
   display: inline-flex;
   padding: 6px 16px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   border: 1px solid rgba(167, 139, 250, 0.4);
   background: rgba(167, 139, 250, 0.08);
   color: var(--accent-2);
@@ -476,7 +655,7 @@ body.has-custom-cursor button {
 .ai-flow-node span {
   display: inline-flex;
   padding: 12px 22px;
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   border: 1px solid rgba(125, 211, 252, 0.25);
   background: rgba(125, 211, 252, 0.05);
   color: var(--text);
@@ -494,7 +673,7 @@ body.has-custom-cursor button {
 /* ══════════════════════ SERVICES (WHAT I BUILD) ════════════ */
 .services {
   background: #f2f5f7;
-  border-radius: 40px 40px 0 0;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   padding: 100px 20px;
 }
 
@@ -533,7 +712,7 @@ body.has-custom-cursor button {
   font-weight: 900;
   color: #080808;
   font-size: clamp(2.5rem, 8vw, 6rem);
-  opacity: 0.9;
+  opacity: var(--opacity-meta);
   width: clamp(90px, 12vw, 160px);
 }
 
@@ -562,7 +741,7 @@ body.has-custom-cursor button {
 /* ══════════════════════ STACK ══════════════════════════════ */
 .stack {
   background: var(--bg);
-  padding: 120px 24px;
+  padding: 100px 24px;
 }
 
 .stack-heading {
@@ -601,13 +780,13 @@ body.has-custom-cursor button {
 
 .stack-chip {
   padding: 10px 20px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   border: 1px solid rgba(125, 211, 252, 0.2);
   background: rgba(125, 211, 252, 0.04);
   color: var(--text);
   font-size: 0.9rem;
   font-weight: 500;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
 }
 
 .stack-chip:hover {
@@ -620,7 +799,7 @@ body.has-custom-cursor button {
 .projects {
   position: relative;
   background: var(--bg);
-  border-radius: 40px 40px 0 0;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   margin-top: -40px;
   z-index: 10;
   padding: 100px 20px 60px;
@@ -647,10 +826,11 @@ body.has-custom-cursor button {
 }
 
 .project-card {
+  --project-accent: #7dd3fc;
   position: sticky;
   top: 96px;
   width: 100%;
-  border-radius: 40px;
+  border-radius: var(--radius-xl);
   border: 2px solid rgba(242, 245, 247, 0.25);
   background: var(--bg);
   padding: 28px;
@@ -670,7 +850,7 @@ body.has-custom-cursor button {
   font-family: "Space Grotesk", sans-serif;
   font-weight: 900;
   color: var(--text);
-  opacity: 0.85;
+  opacity: var(--opacity-meta);
   font-size: clamp(2.2rem, 7vw, 4.5rem);
 }
 
@@ -683,11 +863,40 @@ body.has-custom-cursor button {
 }
 
 .project-category {
-  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--project-accent);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.8rem;
-  opacity: 0.8;
+  opacity: var(--opacity-meta);
+}
+
+.project-featured-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  background: rgba(167, 139, 250, 0.1);
+  color: var(--accent-2);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  opacity: 1;
+}
+
+.project-card-featured {
+  border-color: var(--border-strong);
+}
+
+.project-card-featured .project-poster {
+  min-height: clamp(260px, 36vw, 420px);
+}
+
+.project-card-featured .project-poster-info {
+  max-width: 520px;
 }
 
 .project-name {
@@ -702,18 +911,17 @@ body.has-custom-cursor button {
 }
 
 .project-poster {
-  --project-accent: #7dd3fc;
   position: relative;
   width: 100%;
   min-height: clamp(220px, 32vw, 360px);
-  border-radius: 32px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   padding: 32px;
   display: flex;
   align-items: flex-end;
   background: linear-gradient(160deg, color-mix(in srgb, var(--project-accent) 25%, var(--bg)), var(--bg) 75%);
   border: 1px solid color-mix(in srgb, var(--project-accent) 35%, transparent);
-  transition: transform 0.4s ease;
+  transition: transform var(--transition-base);
 }
 
 .project-card:hover .project-poster {
@@ -785,11 +993,11 @@ body.has-custom-cursor button {
   align-items: flex-start;
   gap: 8px;
   padding: 28px;
-  border-radius: 24px;
+  border-radius: var(--radius-md);
   text-decoration: none;
-  background: rgba(242, 245, 247, 0.03);
-  border: 1px solid rgba(242, 245, 247, 0.08);
-  transition: 0.35s ease;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: var(--transition-base);
   color: var(--text);
   --accent-color: #7dd3fc;
 }
@@ -800,7 +1008,7 @@ body.has-custom-cursor button {
   box-shadow:
     0 20px 50px rgba(0, 0, 0, 0.3),
     0 0 0 1px var(--accent-color);
-  background: rgba(242, 245, 247, 0.06);
+  background: var(--surface-hover);
 }
 
 .contact-icon {
@@ -810,11 +1018,11 @@ body.has-custom-cursor button {
   justify-content: center;
   width: 44px;
   height: 44px;
-  border-radius: 12px;
-  background: rgba(242, 245, 247, 0.05);
-  border: 1px solid rgba(242, 245, 247, 0.07);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--border);
   margin-bottom: 4px;
-  transition: 0.35s ease;
+  transition: var(--transition-base);
 }
 
 .contact-card:hover .contact-icon {
@@ -828,37 +1036,128 @@ body.has-custom-cursor button {
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--accent-color);
-  opacity: 0.9;
+  opacity: var(--opacity-meta);
 }
 
 .contact-value {
   font-size: 15px;
   font-weight: 500;
-  color: rgba(242, 245, 247, 0.8);
+  color: var(--text-secondary);
   word-break: break-all;
 }
 
 /* ══════════════════════ FOOTER ════════════════════════════ */
-footer {
-  text-align: center;
-  padding: 60px 20px;
-  border-top: 1px solid rgba(242, 245, 247, 0.06);
-  font-size: 14px;
-  color: rgba(242, 245, 247, 0.35);
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+  border-top: 1px solid var(--border);
+}
+
+.site-footer-brand {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.site-footer-links {
+  display: flex;
+  gap: 24px;
+}
+
+.site-footer-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.site-footer-links a:hover {
+  color: var(--accent);
+}
+
+.site-footer-copy {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 640px) {
+  .site-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
 }
 
 /* ══════════════════════ RESPONSIVE ════════════════════════ */
-@media (max-width: 640px) {
+/* Точки проверки: 1440 / 1280 / 1024 / 768 / 480 / 375 — см. п.20 задачи. */
+
+@media (min-width: 768px) {
+  .site-nav {
+    padding: 26px 40px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .hero-content {
+    max-width: 980px;
+  }
+
+  .about-content,
+  .contact,
+  .stack-groups,
+  .services-list,
+  .project-cards-wrap {
+    max-width: 1160px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .project-card {
+    padding: 24px;
+    gap: 20px;
+  }
+
+  .project-poster {
+    padding: 24px;
+  }
+
+  .about-deco {
+    display: none;
+  }
+
+  .services {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .projects {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+}
+
+@media (max-width: 768px) {
   .site-nav-links {
     gap: 14px;
   }
 
   .site-nav-links a {
-    font-size: 0.7rem;
+    font-size: 0.72rem;
   }
 
   .hero-content {
     padding-top: 90px;
+  }
+
+  .hero-scroll-cue {
+    bottom: 24px;
   }
 
   .project-card-top {
@@ -866,14 +1165,99 @@ footer {
     align-items: flex-start;
   }
 
+  .project-card-featured .project-poster {
+    min-height: clamp(220px, 44vw, 320px);
+  }
+
   .service-item {
     gap: 16px;
   }
+
+  .marquee-tile {
+    width: 160px;
+    height: 92px;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-@media (min-width: 768px) {
+@media (max-width: 480px) {
   .site-nav {
-    padding: 26px 40px;
+    padding: 18px 16px;
+  }
+
+  .site-nav-brand {
+    font-size: 1rem;
+  }
+
+  .site-nav-links {
+    gap: 10px;
+  }
+
+  .site-nav-links a {
+    font-size: 0.65rem;
+  }
+
+  .hero-title-main {
+    letter-spacing: -0.045em;
+  }
+
+  .about,
+  .ai-section,
+  .stack,
+  .projects,
+  .contact {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .services {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .project-card {
+    border-radius: var(--radius-lg);
+    padding: 20px;
+  }
+
+  .project-poster {
+    border-radius: var(--radius-md);
+    padding: 20px;
+  }
+
+  .project-poster-mark {
+    font-size: clamp(5rem, 32vw, 8rem);
+  }
+
+  .service-number {
+    width: clamp(56px, 18vw, 90px);
+  }
+}
+
+@media (max-width: 375px) {
+  .hero-title-main {
+    font-size: clamp(2.5rem, 13vw, 9rem);
+  }
+
+  .about-heading,
+  .services-heading,
+  .stack-heading,
+  .projects-heading {
+    font-size: clamp(2.3rem, 13vw, 10rem);
+  }
+
+  .btn-contact,
+  .btn-ghost {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .about-marker {
+    font-size: 0.72rem;
+    padding: 6px 12px;
   }
 }
 

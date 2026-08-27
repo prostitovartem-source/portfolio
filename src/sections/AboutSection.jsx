@@ -6,6 +6,9 @@ import { RingDecoration, BracketsDecoration, GridDecoration, OrbitDecoration } f
 const ABOUT_TEXT =
   "Я full stack разработчик, создающий современные веб-продукты с фокусом на качество, производительность и удобство пользователя. Использую typescript, react, next.js и node.js, интегрирую ai-инструменты и создаю продукты полного цикла — от идеи и интерфейса до backend-логики и базы данных. Давайте создадим что-то классное вместе!";
 
+// Короткие маркеры — сжатая выжимка из ABOUT_TEXT, а не новая информация.
+const ABOUT_MARKERS = ["Full-Stack", "TypeScript · React · Next.js", "AI-интеграции", "Продукт под ключ"];
+
 export default function AboutSection() {
   return (
     <section className="about" id="about">
@@ -23,11 +26,23 @@ export default function AboutSection() {
       </FadeIn>
 
       <div className="about-content">
-        <FadeIn delay={0} y={40}>
-          <h2 className="hero-heading about-heading">About Me</h2>
+        <FadeIn delay={0} y={40} className="section-eyebrow">
+          01 / Обо мне
+        </FadeIn>
+
+        <FadeIn delay={0.05} y={40}>
+          <h2 className="hero-heading about-heading">Обо мне</h2>
         </FadeIn>
 
         <AnimatedText text={ABOUT_TEXT} className="about-text" />
+
+        <FadeIn delay={0.1} y={16} className="about-markers">
+          {ABOUT_MARKERS.map((m) => (
+            <span key={m} className="about-marker">
+              {m}
+            </span>
+          ))}
+        </FadeIn>
 
         <ContactButton />
       </div>

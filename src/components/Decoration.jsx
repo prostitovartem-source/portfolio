@@ -2,7 +2,7 @@
 
 export function RingDecoration({ className }) {
   return (
-    <svg viewBox="0 0 200 200" className={className} fill="none">
+    <svg viewBox="0 0 200 200" className={className} fill="none" aria-hidden="true">
       <circle cx="100" cy="100" r="90" stroke="#A8B0B8" strokeWidth="1" opacity="0.5" />
       <circle cx="100" cy="100" r="60" stroke="#7DD3FC" strokeWidth="1.5" opacity="0.7" />
       <circle cx="100" cy="30" r="6" fill="#7DD3FC" />
@@ -12,7 +12,7 @@ export function RingDecoration({ className }) {
 
 export function BracketsDecoration({ className }) {
   return (
-    <svg viewBox="0 0 200 160" className={className} fill="none">
+    <svg viewBox="0 0 200 160" className={className} fill="none" aria-hidden="true">
       <path
         d="M70 20 L20 80 L70 140"
         stroke="#A8B0B8"
@@ -50,7 +50,7 @@ export function GridDecoration({ className }) {
     }
   }
   return (
-    <svg viewBox="0 0 160 160" className={className}>
+    <svg viewBox="0 0 160 160" className={className} aria-hidden="true">
       {dots}
     </svg>
   );
@@ -58,7 +58,7 @@ export function GridDecoration({ className }) {
 
 export function OrbitDecoration({ className }) {
   return (
-    <svg viewBox="0 0 220 220" className={className} fill="none">
+    <svg viewBox="0 0 220 220" className={className} fill="none" aria-hidden="true">
       <ellipse cx="110" cy="110" rx="100" ry="45" stroke="#A8B0B8" strokeWidth="1" opacity="0.5" />
       <ellipse
         cx="110"
