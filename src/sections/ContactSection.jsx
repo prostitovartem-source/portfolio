@@ -78,9 +78,9 @@ export default function ContactSection() {
 
       <FadeIn delay={0.05} y={40}>
         <h2 className="hero-heading contact-heading">
-          Давайте создадим
+          Пиши по вопросам
           <br />
-          что-то классное.
+          сотрудничества.
         </h2>
       </FadeIn>
 
