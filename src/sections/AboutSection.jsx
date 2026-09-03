@@ -4,10 +4,10 @@ import ContactButton from "../components/ContactButton.jsx";
 import { RingDecoration, BracketsDecoration, GridDecoration, OrbitDecoration } from "../components/Decoration.jsx";
 
 const ABOUT_TEXT =
-  "Я full stack разработчик, создающий современные веб-продукты с фокусом на качество, производительность и удобство пользователя. Использую typescript, react, next.js и node.js, интегрирую ai-инструменты и создаю продукты полного цикла — от идеи и интерфейса до backend-логики и базы данных. Давайте создадим что-то классное вместе!";
+  "Меня зовут Артём, мне 16 лет, учусь в 11 классе. В программировании — с 12 лет: начинал с python, а сейчас работаю как full stack разработчик и создаю современные веб-продукты с фокусом на качество, производительность и удобство пользователя. Использую typescript, react, next.js и node.js, работаю с ai как инструментом ускорения разработки и создаю продукты полного цикла — от идеи и интерфейса до backend-логики и базы данных. Давайте создадим что-то классное вместе!";
 
 // Короткие маркеры — сжатая выжимка из ABOUT_TEXT, а не новая информация.
-const ABOUT_MARKERS = ["Full-Stack", "TypeScript · React · Next.js", "AI-интеграции", "Продукт под ключ"];
+const ABOUT_MARKERS = ["Программирую с 12 лет", "TypeScript · React · Next.js", "AI-assisted development", "Продукт под ключ"];
 
 export default function AboutSection() {
   return (

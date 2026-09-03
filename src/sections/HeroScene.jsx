@@ -1,65 +1,33 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, Points, PointMaterial } from "@react-three/drei";
-import { Object3D } from "three";
+import { Float, Points, PointMaterial, RoundedBox } from "@react-three/drei";
 import { useEffect, useMemo, useRef } from "react";
+import { createCodeMonitorCanvas } from "./codeMonitorTexture.js";
 
-// Справа от заголовка, подальше от текста, чтобы не залезал на него.
-const TESSERACT_BASE_X = 3.6;
-const TESSERACT_SCALE = 1.35;
-
-// 16 вершин гиперкуба — все комбинации ±1 по 4 координатам (x,y,z,w).
-const TESSERACT_VERTICES_4D = Array.from({ length: 16 }, (_, i) => [
-  i & 1 ? 1 : -1,
-  i & 2 ? 1 : -1,
-  i & 4 ? 1 : -1,
-  i & 8 ? 1 : -1,
-]);
-
-// 32 ребра — соединяют вершины, отличающиеся ровно в одной координате.
-const TESSERACT_EDGES = (() => {
-  const edges = [];
-  for (let i = 0; i < 16; i++) {
-    for (let bit = 0; bit < 4; bit++) {
-      const j = i ^ (1 << bit);
-      if (j > i) edges.push([i, j]);
-    }
-  }
-  return edges;
-})();
-
-function rotate4D(v, angleXW, angleYZ) {
-  const [x, y, z, w] = v;
-  const cosXW = Math.cos(angleXW);
-  const sinXW = Math.sin(angleXW);
-  const x1 = x * cosXW - w * sinXW;
-  const w1 = x * sinXW + w * cosXW;
-
-  const cosYZ = Math.cos(angleYZ);
-  const sinYZ = Math.sin(angleYZ);
-  const y1 = y * cosYZ - z * sinYZ;
-  const z1 = y * sinYZ + z * cosYZ;
-
-  return [x1, y1, z1, w1];
-}
-
-// Перспективная проекция 4D -> 3D по координате w (то самое "сложение сквозь себя" у гиперкуба).
-function project4Dto3D([x, y, z, w], viewerDistance) {
-  const factor = viewerDistance / (viewerDistance - w);
-  return [x * factor, y * factor, z * factor];
-}
+// Справа от заголовка на десктопе; по центру и выше на мобильном (см. isMobile).
+const MONITOR_BASE_X_DESKTOP = 3.2;
+const MONITOR_BASE_X_MOBILE = 0;
 
 /**
- * Тессеракт (гиперкуб) — куб внутри куба, соединённые рёбрами, вращающийся
- * сразу в двух 4D-плоскостях (XW и YZ) с проекцией в 3D. Дрейфует к курсору.
- * Digital-sculpture акцент сцены, не просто "вращающийся куб".
+ * 3D-монитор с "живым" кодом на экране (canvas-текстура, см.
+ * codeMonitorTexture.js). Экран самосветящийся (meshBasicMaterial,
+ * toneMapped=false) — остаётся читаемым независимо от освещения сцены.
+ * Держит лёгкое непрерывное покачивание, а не полный оборот — иначе код
+ * половину времени был бы повёрнут от зрителя.
  */
-function Tesseract({ reducedMotion }) {
+function CodeMonitor({ reducedMotion, isMobile, scrollProgress }) {
   const groupRef = useRef();
-  const geometryRef = useRef();
-  const dotsRef = useRef();
+  const textureRef = useRef();
+  const screenMatRef = useRef();
   const pointer = useRef({ x: 0, y: 0 });
-  const dummy = useMemo(() => new Object3D(), []);
-  const linePositions = useMemo(() => new Float32Array(TESSERACT_EDGES.length * 2 * 3), []);
+  const mountedAt = useRef(null);
+  const drawAccum = useRef(0);
+
+  const baseX = isMobile ? MONITOR_BASE_X_MOBILE : MONITOR_BASE_X_DESKTOP;
+  const scale = isMobile ? 0.62 : 1;
+  const baseY = isMobile ? 0.85 : 0;
+
+  const { canvas, draw } = useMemo(() => createCodeMonitorCanvas(), []);
+  const drawInterval = reducedMotion ? 0.5 : isMobile ? 0.12 : 0.08;
 
   useEffect(() => {
     function handlePointerMove(e) {
@@ -70,50 +38,74 @@ function Tesseract({ reducedMotion }) {
     return () => window.removeEventListener("pointermove", handlePointerMove);
   }, []);
 
-  useFrame((state) => {
-    const t = state.clock.elapsedTime;
-    const speed = reducedMotion ? 0.06 : 1;
-    const projected = TESSERACT_VERTICES_4D.map((v) => {
-      const rotated = rotate4D(v, t * 0.4 * speed, t * 0.25 * speed);
-      const [x, y, z] = project4Dto3D(rotated, 3.2);
-      return [x * TESSERACT_SCALE, y * TESSERACT_SCALE, z * TESSERACT_SCALE];
-    });
+  useFrame((state, delta) => {
+    const clockT = state.clock.elapsedTime;
+    if (mountedAt.current === null) mountedAt.current = clockT;
+    const localT = clockT - mountedAt.current;
 
-    TESSERACT_EDGES.forEach(([a, b], i) => {
-      const pa = projected[a];
-      const pb = projected[b];
-      linePositions.set([...pa, ...pb], i * 6);
-    });
-    geometryRef.current.attributes.position.needsUpdate = true;
-    geometryRef.current.computeBoundingSphere();
+    // "Power-on": монитор въезжает масштабом+лёгким довёртом первые ~0.9с после монтирования.
+    const introT = Math.min(localT / 0.9, 1);
+    const eased = 1 - Math.pow(1 - introT, 3);
+    const introScale = reducedMotion ? 1 : 0.55 + eased * 0.45;
 
-    projected.forEach((p, i) => {
-      dummy.position.set(p[0], p[1], p[2]);
-      dummy.updateMatrix();
-      dotsRef.current.setMatrixAt(i, dummy.matrix);
-    });
-    dotsRef.current.instanceMatrix.needsUpdate = true;
+    const idleSpeed = reducedMotion ? 0.05 : 1;
+    const wobbleY = Math.sin(clockT * 0.35) * 0.12 * idleSpeed + pointer.current.x * 0.25;
+    const wobbleX = Math.sin(clockT * 0.27) * 0.05 * idleSpeed - pointer.current.y * 0.12;
 
-    const targetX = TESSERACT_BASE_X + pointer.current.x * 0.3;
-    const targetY = pointer.current.y * 0.35;
-    groupRef.current.position.x += (targetX - groupRef.current.position.x) * 0.04;
-    groupRef.current.position.y += (targetY - groupRef.current.position.y) * 0.04;
+    const scroll = scrollProgress?.get() ?? 0;
+    const scrollFade = 1 - Math.min(scroll * 1.6, 1);
+
+    groupRef.current.rotation.y = wobbleY;
+    groupRef.current.rotation.x = wobbleX;
+    groupRef.current.scale.setScalar(scale * introScale * (0.94 + scrollFade * 0.06));
+
+    const targetX = baseX + pointer.current.x * 0.3;
+    const targetY = baseY + pointer.current.y * 0.2 - scroll * 1.4;
+    groupRef.current.position.x += (targetX - groupRef.current.position.x) * 0.045;
+    groupRef.current.position.y += (targetY - groupRef.current.position.y) * 0.045;
+
+    if (screenMatRef.current) {
+      screenMatRef.current.opacity = scrollFade;
+    }
+
+    drawAccum.current += delta;
+    if (drawAccum.current >= drawInterval) {
+      drawAccum.current = 0;
+      draw(localT);
+      if (textureRef.current) textureRef.current.needsUpdate = true;
+    }
   });
 
   return (
-    <Float speed={reducedMotion ? 0 : 1.4} rotationIntensity={reducedMotion ? 0 : 0.15} floatIntensity={reducedMotion ? 0 : 1}>
-      <group ref={groupRef} position={[TESSERACT_BASE_X, 0, 0]}>
-        <lineSegments>
-          <bufferGeometry ref={geometryRef}>
-            <bufferAttribute attach="attributes-position" args={[linePositions, 3]} />
-          </bufferGeometry>
-          <lineBasicMaterial color="#7dd3fc" transparent opacity={0.85} />
-        </lineSegments>
+    <Float speed={reducedMotion ? 0 : 1.1} rotationIntensity={0} floatIntensity={reducedMotion ? 0 : 0.6}>
+      <group ref={groupRef} position={[baseX, baseY, 0]}>
+        <RoundedBox args={[2.6, 1.68, 0.12]} radius={0.07} smoothness={4}>
+          <meshStandardMaterial color="#11151f" roughness={0.45} metalness={0.35} />
+        </RoundedBox>
 
-        <instancedMesh ref={dotsRef} args={[null, null, TESSERACT_VERTICES_4D.length]}>
-          <sphereGeometry args={[0.05, 12, 12]} />
-          <meshStandardMaterial color="#a78bfa" />
-        </instancedMesh>
+        {/* Тонкий светящийся обод экрана */}
+        <mesh position={[0, 0, 0.061]}>
+          <planeGeometry args={[2.42, 1.52]} />
+          <meshBasicMaterial color="#7dd3fc" transparent opacity={0.22} toneMapped={false} />
+        </mesh>
+
+        {/* Экран — самосветящийся, не зависит от освещения сцены */}
+        <mesh position={[0, 0, 0.066]}>
+          <planeGeometry args={[2.34, 1.44]} />
+          <meshBasicMaterial ref={screenMatRef} transparent opacity={1} toneMapped={false}>
+            <canvasTexture ref={textureRef} attach="map" args={[canvas]} />
+          </meshBasicMaterial>
+        </mesh>
+
+        {/* Подставка */}
+        <mesh position={[0, -1.02, -0.04]}>
+          <boxGeometry args={[0.14, 0.4, 0.1]} />
+          <meshStandardMaterial color="#11151f" roughness={0.5} metalness={0.3} />
+        </mesh>
+        <mesh position={[0, -1.24, -0.04]}>
+          <boxGeometry args={[0.9, 0.06, 0.5]} />
+          <meshStandardMaterial color="#11151f" roughness={0.5} metalness={0.3} />
+        </mesh>
       </group>
     </Float>
   );
@@ -126,7 +118,7 @@ function hash(n) {
   return s - Math.floor(s);
 }
 
-function AnimatedParticles({ count }) {
+function AnimatedParticles({ count, reducedMotion }) {
   const ref = useRef();
 
   const particles = useMemo(() => {
@@ -138,8 +130,11 @@ function AnimatedParticles({ count }) {
   }, [count]);
 
   useFrame((state) => {
-    ref.current.rotation.y = state.clock.elapsedTime * 0.03;
-    ref.current.rotation.x = state.clock.elapsedTime * 0.015;
+    const speed = reducedMotion ? 0.1 : 1;
+    ref.current.rotation.y = state.clock.elapsedTime * 0.03 * speed;
+    ref.current.rotation.x = state.clock.elapsedTime * 0.015 * speed;
+    const breathe = 1 + Math.sin(state.clock.elapsedTime * 0.5) * (reducedMotion ? 0.005 : 0.03);
+    ref.current.scale.setScalar(breathe);
   });
 
   return (
@@ -149,8 +144,8 @@ function AnimatedParticles({ count }) {
   );
 }
 
-/** Лёгкий parallax камеры вслед за курсором — глубина сцены помимо дрейфа самого объекта. */
-function CameraParallax({ reducedMotion }) {
+/** Camera parallax + лёгкий scroll-dolly — курсор и скролл заметно влияют на сцену. */
+function CameraRig({ reducedMotion, scrollProgress }) {
   const pointer = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -164,15 +159,48 @@ function CameraParallax({ reducedMotion }) {
   }, [reducedMotion]);
 
   useFrame((state) => {
-    if (reducedMotion) return;
-    const targetX = pointer.current.x * 0.4;
-    const targetY = pointer.current.y * 0.25;
-    state.camera.position.x += (targetX - state.camera.position.x) * 0.03;
-    state.camera.position.y += (targetY - state.camera.position.y) * 0.03;
+    const scroll = scrollProgress?.get() ?? 0;
+    if (reducedMotion) {
+      state.camera.position.z += (6 + scroll * 1.5 - state.camera.position.z) * 0.05;
+      state.camera.lookAt(0, 0, 0);
+      return;
+    }
+    const targetX = pointer.current.x * 0.55;
+    const targetY = pointer.current.y * 0.32;
+    const targetZ = 6 + scroll * 1.8;
+    state.camera.position.x += (targetX - state.camera.position.x) * 0.035;
+    state.camera.position.y += (targetY - state.camera.position.y) * 0.035;
+    state.camera.position.z += (targetZ - state.camera.position.z) * 0.035;
     state.camera.lookAt(0, 0, 0);
   });
 
   return null;
+}
+
+/** Свет слегка тянется к курсору — интерактивность заметна и в освещении, не только в движении объектов. */
+function CursorLight({ reducedMotion }) {
+  const ref = useRef();
+  const pointer = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    if (reducedMotion) return;
+    function handleMove(e) {
+      pointer.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      pointer.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    }
+    window.addEventListener("pointermove", handleMove, { passive: true });
+    return () => window.removeEventListener("pointermove", handleMove);
+  }, [reducedMotion]);
+
+  useFrame(() => {
+    if (reducedMotion || !ref.current) return;
+    const targetX = 3 + pointer.current.x * 2;
+    const targetY = 3 + pointer.current.y * 2;
+    ref.current.position.x += (targetX - ref.current.position.x) * 0.04;
+    ref.current.position.y += (targetY - ref.current.position.y) * 0.04;
+  });
+
+  return <pointLight ref={ref} position={[3, 3, 5]} intensity={2} color="#7dd3fc" />;
 }
 
 /**
@@ -181,16 +209,16 @@ function CameraParallax({ reducedMotion }) {
  * ощутимую часть бандла; ленивая загрузка не блокирует первую отрисовку
  * текста/CTA, сцена докатывается следом.
  */
-export default function HeroScene({ reducedMotion, isMobile }) {
+export default function HeroScene({ reducedMotion, isMobile, scrollProgress }) {
   return (
-    <Canvas camera={{ position: [0, 0, 6] }} dpr={[1, 2]}>
+    <Canvas camera={{ position: [0, 0, 6] }} dpr={isMobile ? [1, 1.5] : [1, 2]}>
       <color attach="background" args={["#080808"]} />
       <fog attach="fog" args={["#080808", 5, 20]} />
-      <ambientLight intensity={0.7} />
-      <pointLight position={[5, 5, 5]} intensity={2} color="#7dd3fc" />
-      <CameraParallax reducedMotion={reducedMotion} />
-      <Tesseract reducedMotion={reducedMotion} />
-      <AnimatedParticles count={isMobile ? 1200 : 4000} />
+      <ambientLight intensity={0.55} />
+      <CursorLight reducedMotion={reducedMotion} />
+      <CameraRig reducedMotion={reducedMotion} scrollProgress={scrollProgress} />
+      <CodeMonitor reducedMotion={reducedMotion} isMobile={isMobile} scrollProgress={scrollProgress} />
+      <AnimatedParticles count={isMobile ? 900 : 4000} reducedMotion={reducedMotion} />
     </Canvas>
   );
 }
