@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 /** Элемент притягивается к курсору, когда тот оказывается рядом (в радиусе padding). Отключается на touch-устройствах. */
 export default function Magnet({
   children,
-  padding = 60,
-  strength = 6,
+  padding = 90,
+  strength = 4,
   activeTransition = "transform 0.3s ease-out",
   inactiveTransition = "transform 0.6s ease-in-out",
   className,

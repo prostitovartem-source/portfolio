@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import FadeIn from "../components/FadeIn.jsx";
 import LiveProjectButton from "../components/LiveProjectButton.jsx";
+import TiltCard from "../components/TiltCard.jsx";
 
 const PROJECTS = [
   {
@@ -60,7 +61,7 @@ function ProjectCard({ project, index, total }) {
         </div>
 
         <div className="project-card-bottom">
-          <div className="project-poster">
+          <TiltCard className="project-poster" max={7}>
             <span className="project-poster-mark" aria-hidden="true">
               {project.title[0]}
             </span>
@@ -68,7 +69,7 @@ function ProjectCard({ project, index, total }) {
               <p>{project.description}</p>
               <span className="project-poster-tag">{project.tag}</span>
             </div>
-          </div>
+          </TiltCard>
         </div>
       </motion.div>
     </div>

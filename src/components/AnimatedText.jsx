@@ -36,11 +36,16 @@ export default function AnimatedText({ text, className, style }) {
   return (
     <p ref={ref} className={className} style={style}>
       {chars.map((char, i) => {
+        // Пробел — обычный текстовый узел, не span. display:inline-block на
+        // пробеле схлопывался в 0 на границе переноса строки (чаще на узких
+        // мобильных экранах, где слова переносятся значительно чаще), из-за
+        // чего текст визуально "слипался" в одно слово.
+        if (char === " ") return " ";
         const start = i / chars.length;
         const end = start + 1 / chars.length;
         return (
           <Char key={i} range={[start, end]} progress={scrollYProgress}>
-            {char === " " ? " " : char}
+            {char}
           </Char>
         );
       })}

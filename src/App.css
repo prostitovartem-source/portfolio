@@ -515,8 +515,8 @@ body.has-custom-cursor button {
 }
 
 .btn-contact:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 40px rgba(125, 211, 252, 0.3);
+  transform: translateY(-4px) scale(1.035);
+  box-shadow: 0 20px 50px rgba(125, 211, 252, 0.4);
 }
 
 .btn-ghost {
@@ -537,8 +537,10 @@ body.has-custom-cursor button {
 }
 
 .btn-ghost:hover {
-  background: rgba(242, 245, 247, 0.08);
+  background: rgba(242, 245, 247, 0.1);
   border-color: var(--accent);
+  transform: translateY(-4px) scale(1.035);
+  box-shadow: 0 16px 40px rgba(125, 211, 252, 0.18);
 }
 
 /* ══════════════════════ MARQUEE ═══════════════════════════ */
@@ -1020,10 +1022,6 @@ body.has-custom-cursor button {
   background: linear-gradient(160deg, color-mix(in srgb, var(--project-accent) 25%, var(--bg)), var(--bg) 75%);
   border: 1px solid color-mix(in srgb, var(--project-accent) 35%, transparent);
   transition: transform var(--transition-base);
-}
-
-.project-card:hover .project-poster {
-  transform: scale(1.015);
 }
 
 /* Нет hover на тач-устройствах — даём тактильный отклик на tap вместо этого. */

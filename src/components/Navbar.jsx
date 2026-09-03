@@ -66,10 +66,10 @@ export default function Navbar() {
         {open && (
           <motion.div
             className="mobile-nav-panel"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(24px)" }}
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
             <nav className="mobile-nav-links">
               {NAV_LINKS.map((link, i) => (
@@ -77,9 +77,9 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.08 + i * 0.06, duration: 0.4 }}
+                  initial={{ opacity: 0, y: 34, scale: 0.85, filter: "blur(6px)" }}
+                  animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                  transition={{ delay: 0.1 + i * 0.07, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                 >
                   {link.label}
                 </motion.a>
@@ -87,9 +87,9 @@ export default function Navbar() {
             </nav>
 
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.08 + NAV_LINKS.length * 0.06, duration: 0.4 }}
+              initial={{ opacity: 0, y: 34, scale: 0.85 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.1 + NAV_LINKS.length * 0.07, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
             >
               <ContactButton href="#contact" label="Написать мне" />
             </motion.div>

@@ -81,7 +81,7 @@ export default function HeroSection() {
         </FadeIn>
 
         <FadeIn delay={0.9} y={20} className="hero-cta-row">
-          <Magnet padding={70} strength={7}>
+          <Magnet padding={90} strength={4}>
             <a href="#projects" className="btn-ghost" data-cursor-label="→">
               Смотреть проекты
             </a>
