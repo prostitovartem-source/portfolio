@@ -968,7 +968,6 @@ body.has-custom-cursor button {
 .wid-pin-phone {
   position: relative;
   transform-style: preserve-3d;
-  will-change: transform;
 }
 
 /* Плавающие редакторские метки вокруг телефона — не частицы, а UI-метаданные
@@ -978,7 +977,6 @@ body.has-custom-cursor button {
   inset: 0;
   pointer-events: none;
   z-index: 3;
-  will-change: transform;
 }
 
 .wid-pin-deco-set {
@@ -1137,7 +1135,6 @@ body.has-custom-cursor button {
 .wid-screen {
   position: absolute;
   inset: 0;
-  will-change: transform, opacity;
 }
 
 /* ── 06 READY — финальная композиция в языке самого портфолио ─────── */
@@ -1161,7 +1158,7 @@ body.has-custom-cursor button {
   border-radius: var(--radius-full);
   border: 1px solid color-mix(in srgb, var(--accent-2) 32%, transparent);
   color: var(--accent-2);
-  font-size: 0.44rem;
+  font-size: 0.55rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -1229,19 +1226,19 @@ body.has-custom-cursor button {
 .wid-rd-name {
   font-family: "Space Grotesk", sans-serif;
   font-weight: 700;
-  font-size: 0.54rem;
+  font-size: 0.62rem;
 }
 
 .wid-rd-kind {
   margin-left: auto;
   color: var(--text-tertiary);
-  font-size: 0.46rem;
+  font-size: 0.57rem;
 }
 
 .wid-rd-foot {
   margin-top: auto;
   color: var(--text-tertiary);
-  font-size: 0.44rem;
+  font-size: 0.55rem;
 }
 
 /* Клип-область экрана: фон живёт здесь, поэтому он всегда покрывает экран
@@ -1251,7 +1248,6 @@ body.has-custom-cursor button {
   inset: 0;
   overflow: hidden;
   background: linear-gradient(175deg, #f6efe1 0%, #f0e6d3 100%);
-  will-change: transform;
 }
 
 /* Сама страница EMBER — выше экрана, поэтому её можно прокручивать внутри.
@@ -1266,7 +1262,6 @@ body.has-custom-cursor button {
   gap: 22px;
   padding: 34px 13px 28px;
   color: #3a1015;
-  will-change: transform;
 }
 
 .wid-r-nav {
@@ -1285,7 +1280,7 @@ body.has-custom-cursor button {
 
 .wid-r-navlink {
   margin-left: auto;
-  font-size: 0.48rem;
+  font-size: 0.66rem;
   color: #8a5a52;
   letter-spacing: 0.02em;
 }
@@ -1311,7 +1306,7 @@ body.has-custom-cursor button {
   border-radius: var(--radius-full);
   background: rgba(246, 239, 225, 0.92);
   color: #6b1f2a;
-  font-size: 0.42rem;
+  font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1326,7 +1321,7 @@ body.has-custom-cursor button {
 }
 
 .wid-r-sub {
-  font-size: 0.54rem;
+  font-size: 0.62rem;
   color: #8a5a52;
   line-height: 1.4;
 }
@@ -1340,7 +1335,7 @@ body.has-custom-cursor button {
   color: #f6efe1;
   font-family: "Playfair Display", Georgia, serif;
   font-weight: 600;
-  font-size: 0.56rem;
+  font-size: 0.64rem;
   cursor: default;
 }
 
@@ -1380,18 +1375,18 @@ body.has-custom-cursor button {
 }
 
 .wid-r-dish-name {
-  font-size: 0.48rem;
+  font-size: 0.66rem;
   font-weight: 700;
   color: #3a1015;
 }
 
 .wid-r-dish-price {
-  font-size: 0.46rem;
+  font-size: 0.57rem;
   color: #8a5a52;
 }
 
 .wid-r-info {
-  font-size: 0.46rem;
+  font-size: 0.57rem;
   color: #8a5a52;
 }
 
@@ -1402,7 +1397,7 @@ body.has-custom-cursor button {
   padding: 6px 10px;
   border-radius: var(--radius-full);
   border: 1px solid rgba(107, 31, 42, 0.2);
-  font-size: 0.46rem;
+  font-size: 0.57rem;
   font-weight: 600;
   color: #6b1f2a;
   width: fit-content;
@@ -1450,7 +1445,7 @@ body.has-custom-cursor button {
   justify-content: space-between;
   padding-bottom: 7px;
   border-bottom: 1px solid rgba(107, 31, 42, 0.12);
-  font-size: 0.48rem;
+  font-size: 0.66rem;
   color: #6b1f2a;
 }
 
@@ -1463,7 +1458,7 @@ body.has-custom-cursor button {
 }
 
 .wid-r-foot-line {
-  font-size: 0.46rem;
+  font-size: 0.57rem;
   color: #8a5a52;
 }
 
@@ -1503,7 +1498,7 @@ body.has-custom-cursor button {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.44rem;
+  font-size: 0.55rem;
   color: #7fe0a8;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -1540,7 +1535,7 @@ body.has-custom-cursor button {
 }
 
 .wid-da-kpi-label {
-  font-size: 0.42rem;
+  font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #7a8aa0;
@@ -1576,12 +1571,12 @@ body.has-custom-cursor button {
   padding: 6px 8px;
   border-radius: 7px;
   background: rgba(232, 237, 245, 0.04);
-  font-size: 0.46rem;
+  font-size: 0.57rem;
   color: #b7c2d4;
 }
 
 .wid-da-footer {
-  font-size: 0.42rem;
+  font-size: 0.62rem;
   color: #566579;
 }
 
@@ -1626,7 +1621,7 @@ body.has-custom-cursor button {
 
 .wid-sa-revenue-label {
   width: 100%;
-  font-size: 0.46rem;
+  font-size: 0.57rem;
   color: var(--text-tertiary);
 }
 
@@ -1641,7 +1636,7 @@ body.has-custom-cursor button {
   border-radius: var(--radius-full);
   background: rgba(125, 211, 252, 0.14);
   color: var(--accent-2);
-  font-size: 0.44rem;
+  font-size: 0.55rem;
   font-weight: 700;
 }
 
@@ -1662,7 +1657,7 @@ body.has-custom-cursor button {
 }
 
 .wid-sa-stat-label {
-  font-size: 0.42rem;
+  font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--text-tertiary);
@@ -1709,7 +1704,7 @@ body.has-custom-cursor button {
   padding: 6px 8px;
   border-radius: 7px;
   background: var(--surface);
-  font-size: 0.46rem;
+  font-size: 0.57rem;
   color: var(--text-secondary);
 }
 
@@ -1722,18 +1717,18 @@ body.has-custom-cursor button {
 }
 
 .wid-sa-footer {
-  font-size: 0.42rem;
+  font-size: 0.62rem;
   color: var(--text-tertiary);
 }
 
-/* ══ 04 Nova — AI-инструмент генерации изображений ═══════════════ */
+/* ══ 04 Nova — AI-ассистент, интерфейс чата ══════════════════════ */
 .wid-ga {
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
-  gap: 9px;
-  padding: 34px 13px 14px;
+  gap: 12px;
+  padding: 40px 13px 14px;
   background: #0b0a12;
   color: var(--text);
 }
@@ -1742,6 +1737,15 @@ body.has-custom-cursor button {
   display: flex;
   align-items: center;
   gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.wid-ga-avatar {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
 }
 
 .wid-ga-logo-text {
@@ -1752,98 +1756,168 @@ body.has-custom-cursor button {
 
 .wid-ga-model-tag {
   margin-left: auto;
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: var(--radius-full);
   border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
   color: var(--accent);
-  font-size: 0.42rem;
+  font-size: 0.54rem;
   font-weight: 700;
 }
 
-.wid-ga-prompt {
+.wid-ga-thread {
   display: flex;
-  align-items: center;
-  gap: 2px;
-  padding: 8px 10px;
-  border-radius: 9px;
-  border: 1px solid var(--border);
-  background: var(--surface);
+  flex-direction: column;
+  gap: 12px;
 }
 
-.wid-ga-prompt-text {
-  font-size: 0.5rem;
-  color: var(--text-secondary);
+/* Реплика пользователя — пузырь, прижатый вправо. */
+.wid-ga-msg-user {
+  align-self: flex-end;
+  max-width: 82%;
+  padding: 8px 11px;
+  border-radius: 14px 14px 4px 14px;
+  background: color-mix(in srgb, var(--accent) 26%, var(--bg-elevated));
+  border: 1px solid color-mix(in srgb, var(--accent) 34%, transparent);
+  font-size: 0.6rem;
+  line-height: 1.45;
 }
 
-.wid-ga-cursor {
-  width: 1.5px;
-  height: 10px;
-  background: var(--accent-2);
-  animation: wid-blink 1s steps(1) infinite;
+.wid-ga-msg-short {
+  max-width: 58%;
 }
 
-@keyframes wid-blink {
-  50% {
-    opacity: 0;
-  }
+/* Ответ ассистента — без пузыря, с меткой слева: как в чат-интерфейсах. */
+.wid-ga-msg-bot {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
 }
 
-.wid-ga-preview {
-  position: relative;
+.wid-ga-bot-mark {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  margin-top: 1px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, var(--accent-2), var(--accent));
+}
+
+.wid-ga-bot-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
   flex: 1;
-  min-height: 60px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: linear-gradient(140deg, color-mix(in srgb, var(--accent) 45%, transparent), color-mix(in srgb, var(--accent-2) 35%, transparent));
 }
 
-.wid-ga-preview-shimmer {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.22) 48%, transparent 66%);
-  background-size: 220% 100%;
-  animation: wid-shimmer 2.4s linear infinite;
-}
-
-@keyframes wid-shimmer {
-  0% {
-    background-position: 140% 0;
-  }
-  100% {
-    background-position: -60% 0;
-  }
+.wid-ga-bot-text {
+  font-size: 0.6rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
 }
 
 .wid-ga-gallery {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 6px;
 }
 
 .wid-ga-thumb {
   aspect-ratio: 1;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .wid-ga-thumb-a {
-  background: linear-gradient(135deg, var(--accent), transparent);
+  background: radial-gradient(120% 120% at 30% 25%, #f0a868, #6b2f5a);
 }
 
 .wid-ga-thumb-b {
-  background: linear-gradient(135deg, var(--accent-2), transparent);
+  background: radial-gradient(120% 120% at 70% 30%, #7dd3fc, #2b2170);
 }
 
 .wid-ga-thumb-c {
-  background: linear-gradient(135deg, transparent, var(--accent));
+  background: radial-gradient(120% 120% at 40% 70%, #c084fc, #3a1553);
 }
 
 .wid-ga-thumb-d {
-  background: linear-gradient(135deg, transparent, var(--accent-2));
+  background: radial-gradient(120% 120% at 60% 60%, #fda4af, #4a1d38);
 }
 
-.wid-ga-footer {
-  font-size: 0.42rem;
+/* Индикатор набора ответа — три точки. */
+.wid-ga-typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 9px 12px;
+  border-radius: 14px 14px 14px 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.wid-ga-typing span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+}
+
+.wid-ga-typing span:nth-child(2) {
+  opacity: 0.65;
+}
+
+.wid-ga-typing span:nth-child(3) {
+  opacity: 0.4;
+}
+
+.wid-ga-input {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px 8px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.wid-ga-input-text {
   color: var(--text-tertiary);
+  font-size: 0.6rem;
+}
+
+.wid-ga-send {
+  margin-left: auto;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  position: relative;
+}
+
+/* Стрелка отправки — чистый CSS, без иконочного шрифта. */
+.wid-ga-send::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  margin-left: -3px;
+  width: 6px;
+  height: 6px;
+  border-left: 1.5px solid #0a0a10;
+  border-top: 1.5px solid #0a0a10;
+  transform: rotate(45deg);
+}
+
+.wid-ga-send::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  margin-left: -0.75px;
+  width: 1.5px;
+  height: 9px;
+  background: #0a0a10;
 }
 
 /* ══ 05 Interactive — самая экспериментальная сцена, слоистая глубина ══ */
@@ -1908,7 +1982,7 @@ body.has-custom-cursor button {
   border: 1px solid color-mix(in srgb, var(--accent-2) 30%, transparent);
   background: color-mix(in srgb, var(--accent-2) 8%, var(--bg-elevated));
   color: var(--text);
-  font-size: 0.44rem;
+  font-size: 0.55rem;
   font-weight: 600;
 }
 
