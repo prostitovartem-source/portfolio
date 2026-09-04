@@ -858,7 +858,7 @@ body.has-custom-cursor button {
 
 /* ══════════════════════ WHAT I DO (MASTER-TIMELINE PIN) ═══════════════ */
 .wid-section {
-  --wid-service-vh: 130vh;
+  --wid-state-vh: 92vh;
   position: relative;
   overflow: hidden;
   padding: 100px 0 40px;
@@ -885,29 +885,31 @@ body.has-custom-cursor button {
   height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: clamp(24px, 6vw, 90px);
   overflow: hidden;
   padding: 0 clamp(20px, 6vw, 64px);
   perspective: 1800px;
 }
 
-.wid-pin-item {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: clamp(24px, 6vw, 90px);
-  padding: 0 clamp(20px, 6vw, 64px);
-}
-
-.wid-pin-text {
+/* Левая колонка: карточки услуг сложены стопкой и кроссфейдятся —
+   телефон справа при этом никуда не уезжает. */
+.wid-pin-copy {
   position: relative;
   z-index: 2;
   flex: 0 0 auto;
   width: min(420px, 38%);
+  min-height: 320px;
+}
+
+.wid-pin-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 14px;
   opacity: 0;
 }
@@ -967,7 +969,6 @@ body.has-custom-cursor button {
   position: relative;
   transform-style: preserve-3d;
   will-change: transform;
-  opacity: 0;
 }
 
 /* Плавающие редакторские метки вокруг телефона — не частицы, а UI-метаданные
@@ -977,6 +978,13 @@ body.has-custom-cursor button {
   inset: 0;
   pointer-events: none;
   z-index: 3;
+  will-change: transform;
+}
+
+.wid-pin-deco-set {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
 }
 
 .wid-pin-deco-chip {
@@ -1006,9 +1014,8 @@ body.has-custom-cursor button {
 
 .wid-pin-progress {
   position: absolute;
-  left: 50%;
-  bottom: clamp(24px, 4vh, 44px);
-  transform: translateX(-50%);
+  left: 0;
+  bottom: -52px;
   z-index: 4;
   display: flex;
   align-items: center;
@@ -1124,15 +1131,29 @@ body.has-custom-cursor button {
 
 /* ══ 01 EMBER — ресторан. Намеренный контраст с портфолио: кремовый фон,
    бургунди/терракота, editorial serif. Живёт ТОЛЬКО внутри экрана. ══ */
-.wid-r {
+/* Клип-область экрана: фон живёт здесь, поэтому он всегда покрывает экран
+   независимо от того, на сколько прокручена страница внутри. */
+.wid-r-viewport {
   position: absolute;
   inset: 0;
+  overflow: hidden;
+  background: linear-gradient(175deg, #f6efe1 0%, #f0e6d3 100%);
+  will-change: transform;
+}
+
+/* Сама страница EMBER — выше экрана, поэтому её можно прокручивать внутри.
+   Дизайн прежний, изменён только вертикальный ритм. */
+.wid-r {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
-  gap: 9px;
-  padding: 34px 13px 14px;
-  background: linear-gradient(175deg, #f6efe1 0%, #f0e6d3 100%);
+  gap: 22px;
+  padding: 34px 13px 28px;
   color: #3a1015;
+  will-change: transform;
 }
 
 .wid-r-nav {
@@ -1162,7 +1183,8 @@ body.has-custom-cursor button {
 
 .wid-r-hero {
   position: relative;
-  height: clamp(64px, 13vw, 92px);
+  flex: none;
+  height: clamp(130px, 24vw, 172px);
   border-radius: 10px;
   overflow: hidden;
   background: radial-gradient(120% 140% at 20% 15%, #c1602c 0%, #8a2e2a 55%, #4a1518 100%);
@@ -1211,12 +1233,12 @@ body.has-custom-cursor button {
 
 .wid-r-dishes {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-top: auto;
 }
 
 .wid-r-dish {
-  flex: 1;
+  flex: 1 1 calc(50% - 4px);
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -1234,6 +1256,14 @@ body.has-custom-cursor button {
 
 .wid-r-dish-swatch-b {
   background: linear-gradient(135deg, #8a2e2a, #3a1015);
+}
+
+.wid-r-dish-swatch-c {
+  background: linear-gradient(135deg, #a8552f, #6b1f2a);
+}
+
+.wid-r-dish-swatch-d {
+  background: linear-gradient(135deg, #d08a4a, #8a2e2a);
 }
 
 .wid-r-dish-name {
@@ -1270,6 +1300,58 @@ body.has-custom-cursor button {
   height: 5px;
   border-radius: 50%;
   background: #c1602c;
+}
+
+.wid-r-gallery {
+  display: flex;
+  gap: 7px;
+}
+
+.wid-r-tile {
+  flex: 1;
+  height: 84px;
+  border-radius: 8px;
+}
+
+.wid-r-tile-a {
+  background: radial-gradient(130% 130% at 30% 20%, #c1602c, #6b1f2a);
+}
+
+.wid-r-tile-b {
+  background: radial-gradient(130% 130% at 70% 30%, #8a2e2a, #3a1015);
+}
+
+.wid-r-tile-c {
+  background: radial-gradient(130% 130% at 40% 70%, #d08a4a, #8a2e2a);
+}
+
+.wid-r-hours {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.wid-r-hours-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(107, 31, 42, 0.12);
+  font-size: 0.48rem;
+  color: #6b1f2a;
+}
+
+.wid-r-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(107, 31, 42, 0.16);
+}
+
+.wid-r-foot-line {
+  font-size: 0.46rem;
+  color: #8a5a52;
 }
 
 /* ══ 02 Pulse — аналитическое веб-приложение, прохладная палитра ══ */
@@ -1745,28 +1827,35 @@ body.has-custom-cursor button {
 
 @media (max-width: 767px) {
   .wid-section {
-    --wid-service-vh: 100vh;
+    --wid-state-vh: 80vh;
   }
 
   .wid-pin-stage {
-    padding: 0 16px;
-  }
-
-  .wid-pin-item {
     flex-direction: column;
     justify-content: center;
-    gap: 20px;
-    padding: 90px 16px 96px;
+    gap: 18px;
+    padding: 86px 16px 40px;
+  }
+
+  .wid-pin-copy {
+    width: 100%;
+    min-height: 190px;
+    flex: 0 0 auto;
   }
 
   .wid-pin-text {
-    width: 100%;
     text-align: center;
     align-items: center;
   }
 
   .wid-pin-desc {
     max-width: 34ch;
+  }
+
+  .wid-pin-progress {
+    left: 50%;
+    bottom: -34px;
+    transform: translateX(-50%);
   }
 
   .wid-pin-phone-slot {
@@ -1797,10 +1886,22 @@ body.has-custom-cursor button {
     overflow: visible;
   }
 
-  .wid-pin-item {
+  /* Карточки услуг раскладываются в обычный поток и все читаемы, телефон
+     показывает готовый EMBER без движения. */
+  .wid-pin-copy {
+    width: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .wid-pin-text {
     position: relative;
-    inset: auto;
-    flex-wrap: wrap;
+    top: auto;
+    left: auto;
+    right: auto;
+    opacity: 1;
   }
 
   .wid-pin-progress {
