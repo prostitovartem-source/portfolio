@@ -5,6 +5,26 @@ import FadeIn from "../../components/FadeIn.jsx";
 import { SERVICES } from "./data.js";
 import Phone from "./screens/Phone.jsx";
 import RestaurantScreen from "./screens/RestaurantScreen.jsx";
+import WebAppScreen from "./screens/WebAppScreen.jsx";
+import SaaSScreen from "./screens/SaaSScreen.jsx";
+import AIScreen from "./screens/AIScreen.jsx";
+import InteractiveScreen from "./screens/InteractiveScreen.jsx";
+import ReadyScreen from "./screens/ReadyScreen.jsx";
+
+/**
+ * Шесть состояний — шесть РАЗНЫХ продуктов внутри одного и того же телефона.
+ * drift — насколько контент экрана смещается по вертикали за своё состояние:
+ * у сайта это настоящая прокрутка страницы, у остальных — микро-параллакс.
+ * driftTarget — что именно двигать (у EMBER страница живёт внутри clip-слоя).
+ */
+const SCREENS = [
+  { Component: RestaurantScreen, drift: -170, driftTarget: ".wid-r" },
+  { Component: WebAppScreen, drift: -18, driftTarget: ".wid-da" },
+  { Component: SaaSScreen, drift: -16, driftTarget: ".wid-sa" },
+  { Component: AIScreen, drift: -18, driftTarget: ".wid-ga" },
+  { Component: InteractiveScreen, drift: -14, driftTarget: ".wid-ix" },
+  { Component: ReadyScreen, drift: -12, driftTarget: ".wid-rd" },
+];
 
 /**
  * 6 состояний скролла. Телефон СТОИТ на месте справа — меняется только то,
@@ -36,6 +56,7 @@ export default function WhatIDoSection() {
   const decoLayerRef = useRef(null);
   const textRefs = useRef([]);
   const decoRefs = useRef([]);
+  const screenRefs = useRef([]);
   const progressLabelRef = useRef(null);
   const progressFillRef = useRef(null);
 
@@ -55,21 +76,18 @@ export default function WhatIDoSection() {
         (context) => {
           const { isMobile, reduced } = context.conditions;
           const scope = stageRef.current;
-          const glass = scope.querySelector(".wid-r-viewport");
-          const ember = scope.querySelector(".wid-r");
-          const screen = scope.querySelector(".wid-phone-screen-inner");
-
-          // Полный ход внутренней страницы = насколько она выше экрана.
-          // Функция, а не константа: пересчитывается на refresh (ресайз,
-          // подгрузка шрифтов), см. invalidateOnRefresh ниже.
-          const travel = () => (ember && screen ? Math.max(0, ember.scrollHeight - screen.clientHeight) : 0);
+          const glass = scope.querySelector(".wid-phone-screen-inner");
+          // Слой, который реально смещается внутри каждого экрана.
+          const driftEl = (i) => screenRefs.current[i]?.querySelector(SCREENS[i].driftTarget);
 
           if (reduced) {
-            // Без pin/scrub: телефон в нейтрали, EMBER в исходной позиции,
+            // Без pin/scrub: телефон в нейтрали, показан первый продукт,
             // все карточки услуг читаемы (раскладку в поток делает CSS).
             gsap.set(phoneRef.current, { rotationZ: 0, rotationY: 0, scale: 1, x: 0, y: 0 });
-            gsap.set(ember, { y: 0 });
             gsap.set(glass, { y: 0 });
+            gsap.set(screenRefs.current, { opacity: 0 });
+            gsap.set(screenRefs.current[0], { opacity: 1, scale: 1, yPercent: 0 });
+            SCREENS.forEach((_, i) => gsap.set(driftEl(i), { y: 0 }));
             gsap.set(textRefs.current, { opacity: 1, y: 0 });
             gsap.set(decoRefs.current, { opacity: 1, y: 0 });
             return;
@@ -87,7 +105,9 @@ export default function WhatIDoSection() {
             x: amp(STATES[0].phone.x),
             y: amp(STATES[0].phone.y),
           });
-          gsap.set(ember, { y: 0 });
+          gsap.set(screenRefs.current, { opacity: 0, scale: 0.97, yPercent: 6 });
+          gsap.set(screenRefs.current[0], { opacity: 1, scale: 1, yPercent: 0 });
+          SCREENS.forEach((_, i) => gsap.set(driftEl(i), { y: 0 }));
           gsap.set(textRefs.current[0], { opacity: 1, y: 0 });
           gsap.set(textRefs.current.slice(1), { opacity: 0, y: 18 });
           gsap.set(decoRefs.current[0], { opacity: 1, y: 0 });
@@ -142,15 +162,44 @@ export default function WhatIDoSection() {
             // Слой 2 — «стекло»: встречное микросмещение, даёт глубину.
             tl.to(glass, { y: amp(s.glassY), duration: 1 }, at);
 
-            // Слой 3 — сама страница EMBER: ease "none", чтобы читалось как
-            // настоящий скролл сайта, а не как анимация.
-            tl.to(ember, { y: () => -travel() * s.scroll, duration: 1, ease: "none" }, at);
+            // Слой 3 — смена продукта на экране. Уходящий чуть увеличивается
+            // и растворяется, входящий подходит снизу и «садится» в кадр:
+            // читается как морфинг одного проекта в другой, а не как
+            // переключение слайдов. Входящий по DOM-порядку лежит выше,
+            // поэтому в момент перекрытия он перекрывает уходящий.
+            tl.to(
+              screenRefs.current[at],
+              { opacity: 0, scale: 1.04, yPercent: -5, duration: 0.24, ease: "power2.in" },
+              at + 0.6
+            );
+            tl.to(
+              screenRefs.current[i],
+              { opacity: 1, scale: 1, yPercent: 0, duration: 0.26, ease: "power2.out" },
+              at + 0.74
+            );
 
             // Слой 4 — деко: собственные оффсеты, противоход к контенту.
             if (!isMobile) {
               tl.to(decoLayerRef.current, { x: s.deco.x, y: s.deco.y, duration: 1 }, at);
             }
           }
+
+          // Внутреннее движение контента каждого экрана за время его показа.
+          // Окна подрезаны по границам таймлайна: любой твин, вылезший за
+          // SEGMENTS, растянул бы общую длительность и сдвинул все состояния.
+          SCREENS.forEach((cfg, i) => {
+            const el = driftEl(i);
+            if (!el) return;
+            const from = Math.max(0, i - 0.8);
+            const to = Math.min(SEGMENTS, i + 0.85);
+            if (to <= from) return;
+            tl.fromTo(
+              el,
+              { y: 0 },
+              { y: cfg.drift * (isMobile ? 0.6 : 1), duration: to - from, ease: "none" },
+              from
+            );
+          });
 
           // Смена карточки услуги — строго последовательно: уходящая гаснет
           // ПОЛНОСТЬЮ до того, как появится следующая. Перекрытие окон дало бы
@@ -238,7 +287,17 @@ export default function WhatIDoSection() {
           <div className="wid-pin-phone-slot">
             <div ref={phoneRef} className="wid-pin-phone">
               <Phone>
-                <RestaurantScreen />
+                {SCREENS.map(({ Component }, i) => (
+                  <div
+                    key={i}
+                    className="wid-screen"
+                    ref={(el) => {
+                      if (el) screenRefs.current[i] = el;
+                    }}
+                  >
+                    <Component />
+                  </div>
+                ))}
               </Phone>
             </div>
 
