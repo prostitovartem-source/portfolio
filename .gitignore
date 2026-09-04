@@ -27,3 +27,6 @@ dist-ssr
 .claude/skills
 .agents/skills
 skills-lock.json
+
+# Playwright MCP verification artifacts (screenshots/logs, not project content)
+.playwright-mcp

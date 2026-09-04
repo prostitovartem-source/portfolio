@@ -1,12 +1,13 @@
 import Navbar from "./components/Navbar.jsx";
 import Loader from "./components/Loader.jsx";
 import CustomCursor from "./components/CustomCursor.jsx";
+import SmoothScroll from "./components/SmoothScroll.jsx";
 import Footer from "./components/Footer.jsx";
 import HeroSection from "./sections/HeroSection.jsx";
 import MarqueeSection from "./sections/MarqueeSection.jsx";
 import AboutSection from "./sections/AboutSection.jsx";
 import AISection from "./sections/AISection.jsx";
-import ServicesSection from "./sections/ServicesSection.jsx";
+import WhatIDoSection from "./sections/WhatIDo/WhatIDoSection.jsx";
 import StackSection from "./sections/StackSection.jsx";
 import ProjectsSection from "./sections/ProjectsSection.jsx";
 import ContactSection from "./sections/ContactSection.jsx";
@@ -17,13 +18,14 @@ export default function App() {
     <div className="app" style={{ overflowX: "clip" }}>
       <Loader />
       <CustomCursor />
+      <SmoothScroll />
       <Navbar />
 
       <HeroSection />
       <MarqueeSection />
       <AboutSection />
       <AISection />
-      <ServicesSection />
+      <WhatIDoSection />
       <StackSection />
       <ProjectsSection />
       <ContactSection />
