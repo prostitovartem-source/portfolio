@@ -32,6 +32,10 @@ const SERVICES = [
 export default function ServicesSection() {
   return (
     <section className="services" id="services">
+      <span className="section-number section-number-dark" aria-hidden="true">
+        03
+      </span>
+
       <FadeIn delay={0} y={20} className="section-eyebrow section-eyebrow-dark">
         03 / Чем занимаюсь
       </FadeIn>

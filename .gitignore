@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Installed agent skill tooling (not project content)
+.claude/skills
+.agents/skills
+skills-lock.json

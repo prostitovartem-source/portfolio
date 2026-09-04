@@ -7,15 +7,14 @@ import TiltCard from "../components/TiltCard.jsx";
 const PROJECTS = [
   {
     number: "01",
-    title: "Quantix",
+    title: "QWANTIX",
     category: "SaaS-продукт",
     featured: true,
     featuredLabel: "Флагманский проект",
     description:
       "AI SaaS-платформа для автоматизации учёта товаров и обработки накладных. Распознаёт документы с помощью AI, извлекает данные и помогает управлять складскими операциями.",
-    tag: "Next.js • AI • Prisma",
-    link: "https://quantix-five.vercel.app",
-    ctaLabel: "Смотреть проект",
+    tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "AI / OCR", "Yandex Cloud"],
+    status: "soon",
     accent: "#38bdf8",
   },
   {
@@ -25,7 +24,8 @@ const PROJECTS = [
     featured: false,
     description:
       "AI-бот и мини-приложение внутри мессенджера MAX для генерации и стилизации фотографий. Загрузка фото, выбор AI-стиля или свой промпт, внутренняя валюта 🍓 и реферальная система — весь опыт целиком живёт в MAX, без отдельного сайта.",
-    tag: "Next.js • MAX Bot API • Gemini AI",
+    tech: ["Next.js", "React", "TypeScript", "Replicate", "Express"],
+    status: "live",
     link: "https://max.ru/se13793521_bot",
     ctaLabel: "Открыть в MAX",
     accent: "#fb2c5c",
@@ -41,11 +41,12 @@ function ProjectCard({ project, index, total }) {
 
   const targetScale = 1 - (total - 1 - index) * 0.03;
   const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
+  const reversed = index % 2 === 1;
 
   return (
     <div ref={containerRef} className="project-card-container">
       <motion.div
-        className={`project-card ${project.featured ? "project-card-featured" : ""}`}
+        className={`project-card ${project.featured ? "project-card-featured" : ""} ${reversed ? "project-card-reverse" : ""}`}
         style={{ scale, top: `${index * 28}px`, "--project-accent": project.accent }}
       >
         <div className="project-card-top">
@@ -57,7 +58,15 @@ function ProjectCard({ project, index, total }) {
             </span>
             <b className="project-name">{project.title}</b>
           </div>
-          <LiveProjectButton href={project.link} label={project.ctaLabel} />
+
+          {project.status === "live" ? (
+            <LiveProjectButton href={project.link} label={project.ctaLabel} />
+          ) : (
+            <span className="project-status-soon">
+              <span className="project-status-dot" />
+              Demo soon
+            </span>
+          )}
         </div>
 
         <div className="project-card-bottom">
@@ -67,7 +76,13 @@ function ProjectCard({ project, index, total }) {
             </span>
             <div className="project-poster-info">
               <p>{project.description}</p>
-              <span className="project-poster-tag">{project.tag}</span>
+              <div className="project-tech-list">
+                {project.tech.map((t) => (
+                  <span key={t} className="project-tech-chip">
+                    {t}
+                  </span>
+                ))}
+              </div>
             </div>
           </TiltCard>
         </div>
@@ -79,6 +94,10 @@ function ProjectCard({ project, index, total }) {
 export default function ProjectsSection() {
   return (
     <section className="projects" id="projects">
+      <span className="section-number" aria-hidden="true">
+        05
+      </span>
+
       <FadeIn delay={0} y={20} className="section-eyebrow">
         05 / Проекты
       </FadeIn>

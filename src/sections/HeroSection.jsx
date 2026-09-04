@@ -94,6 +94,10 @@ export default function HeroSection() {
         <span className="hero-scroll-line" />
         <span className="hero-scroll-label">Скролл</span>
       </FadeIn>
+
+      <FadeIn delay={1.1} y={0} className="hero-tech-meta" aria-hidden="true">
+        React · TypeScript · Next.js · Node.js
+      </FadeIn>
     </section>
   );
 }

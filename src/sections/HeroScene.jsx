@@ -24,7 +24,9 @@ function CodeMonitor({ reducedMotion, isMobile, scrollProgress }) {
   const drawAccum = useRef(0);
 
   const baseX = isMobile ? MONITOR_BASE_X_MOBILE : MONITOR_BASE_X_DESKTOP;
-  const scale = isMobile ? 0.62 : 1;
+  // Чуть меньше десктопного 1.0 — типографика должна доминировать над 3D,
+  // объект поддерживает композицию, а не соревнуется с заголовком за внимание.
+  const scale = isMobile ? 0.62 : 0.9;
   const baseY = isMobile ? 0.85 : 0;
 
   const { canvas, draw } = useMemo(() => createCodeMonitorCanvas(), []);
@@ -91,7 +93,7 @@ function CodeMonitor({ reducedMotion, isMobile, scrollProgress }) {
         {/* Тонкий светящийся обод экрана — дышит по синусоиде */}
         <mesh position={[0, 0, 0.061]}>
           <planeGeometry args={[2.42, 1.52]} />
-          <meshBasicMaterial ref={rimMatRef} color="#7dd3fc" transparent opacity={0.22} toneMapped={false} />
+          <meshBasicMaterial ref={rimMatRef} color="#8b5cf6" transparent opacity={0.22} toneMapped={false} />
         </mesh>
 
         {/* Экран — самосветящийся, не зависит от освещения сцены */}
@@ -207,7 +209,7 @@ function CursorLight({ reducedMotion }) {
     ref.current.intensity = 2 + Math.sin(state.clock.elapsedTime * 1.1) * 0.6;
   });
 
-  return <pointLight ref={ref} position={[3, 3, 5]} intensity={2} color="#7dd3fc" />;
+  return <pointLight ref={ref} position={[3, 3, 5]} intensity={2} color="#8b5cf6" />;
 }
 
 /**
@@ -219,8 +221,8 @@ function CursorLight({ reducedMotion }) {
 export default function HeroScene({ reducedMotion, isMobile, scrollProgress }) {
   return (
     <Canvas camera={{ position: [0, 0, 6] }} dpr={isMobile ? [1, 1.5] : [1, 2]}>
-      <color attach="background" args={["#080808"]} />
-      <fog attach="fog" args={["#080808", 5, 20]} />
+      <color attach="background" args={["#0a0a10"]} />
+      <fog attach="fog" args={["#0a0a10", 5, 20]} />
       <ambientLight intensity={0.55} />
       <CursorLight reducedMotion={reducedMotion} />
       <CameraRig reducedMotion={reducedMotion} scrollProgress={scrollProgress} />

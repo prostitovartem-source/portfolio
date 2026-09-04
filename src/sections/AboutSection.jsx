@@ -12,6 +12,10 @@ const ABOUT_MARKERS = ["Программирую с 12 лет", "TypeScript · R
 export default function AboutSection() {
   return (
     <section className="about" id="about">
+      <span className="section-number" aria-hidden="true">
+        01
+      </span>
+
       <FadeIn delay={0.1} x={-80} y={0} duration={0.9} className="about-deco about-deco-tl">
         <RingDecoration className="deco-svg deco-svg-lg" />
       </FadeIn>

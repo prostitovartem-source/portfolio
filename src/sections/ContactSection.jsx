@@ -1,4 +1,5 @@
 import FadeIn from "../components/FadeIn.jsx";
+import ContactButton from "../components/ContactButton.jsx";
 
 const CONTACTS = [
   {
@@ -72,6 +73,10 @@ const CONTACTS = [
 export default function ContactSection() {
   return (
     <section className="contact" id="contact">
+      <span className="section-number" aria-hidden="true">
+        06
+      </span>
+
       <FadeIn delay={0} y={20} className="section-eyebrow">
         06 / Контакт
       </FadeIn>
@@ -86,6 +91,10 @@ export default function ContactSection() {
 
       <FadeIn delay={0.1} y={20}>
         <p className="contact-lead">Открыт к работе и новым проектам — напиши мне удобным способом.</p>
+      </FadeIn>
+
+      <FadeIn delay={0.15} y={16} className="contact-primary-cta">
+        <ContactButton href="https://t.me/cooicks" label="Связаться со мной" external />
       </FadeIn>
 
       <div className="contact-grid">

@@ -1,14 +1,13 @@
 import FadeIn from "../components/FadeIn.jsx";
-
-const STACK_GROUPS = [
-  { category: "Frontend", items: ["React", "Next.js", "TypeScript", "Three.js", "Framer Motion"] },
-  { category: "Backend", items: ["Node.js", "PostgreSQL", "Prisma"] },
-  { category: "AI", items: ["AI Integration", "Replicate"] },
-];
+import TechConstellation, { TechConstellationMobile } from "../components/TechConstellation.jsx";
 
 export default function StackSection() {
   return (
     <section className="stack" id="stack">
+      <span className="section-number" aria-hidden="true">
+        04
+      </span>
+
       <FadeIn delay={0} y={20} className="section-eyebrow">
         04 / Технологии
       </FadeIn>
@@ -17,20 +16,16 @@ export default function StackSection() {
         <h2 className="hero-heading stack-heading">Технологии</h2>
       </FadeIn>
 
-      <div className="stack-groups">
-        {STACK_GROUPS.map((group, gi) => (
-          <FadeIn key={group.category} delay={gi * 0.1} y={30} className="stack-group">
-            <span className="stack-group-label">{group.category}</span>
-            <div className="stack-group-items">
-              {group.items.map((item) => (
-                <span key={item} className="stack-chip">
-                  {item}
-                </span>
-              ))}
-            </div>
-          </FadeIn>
-        ))}
-      </div>
+      <FadeIn delay={0.15} y={20} className="stack-legend">
+        <span className="stack-legend-item stack-legend-core">Основной стек</span>
+        <span className="stack-legend-item stack-legend-tool">Рабочий инструмент</span>
+        <span className="stack-legend-item stack-legend-ai">AI-ускоренное</span>
+      </FadeIn>
+
+      <FadeIn delay={0.25} y={30} className="constellation-wrap">
+        <TechConstellation />
+        <TechConstellationMobile />
+      </FadeIn>
     </section>
   );
 }
