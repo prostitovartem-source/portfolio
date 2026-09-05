@@ -55,7 +55,8 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior НЕ smooth: плавность даёт Lenis, а нативный smooth
+     дерётся с ним при программной прокрутке (якоря, ScrollTrigger). */
   background: var(--bg);
 }
 
@@ -90,10 +91,8 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .app::after {
-    opacity: 0.02;
-  }
+html.motion-reduced .app::after {
+  opacity: 0.02;
 }
 
 h1,
@@ -986,16 +985,14 @@ body.has-custom-cursor button {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .about-track {
-    height: auto !important;
-  }
+html.motion-reduced .about-track {
+  height: auto !important;
+}
 
-  .about-stage {
-    position: relative;
-    height: auto;
-    padding: 80px clamp(16px, 4vw, 40px);
-  }
+html.motion-reduced .about-stage {
+  position: relative;
+  height: auto;
+  padding: 80px clamp(16px, 4vw, 40px);
 }
 
 /* ══════════════════════ AI / VIBE CODING ═══════════════════ */
@@ -2340,42 +2337,50 @@ body.has-custom-cursor button {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .wid-pin-track {
-    height: auto !important;
-  }
+html.motion-reduced .wid-pin-track {
+  height: auto !important;
+}
 
-  .wid-pin-stage {
-    position: relative;
-    height: auto;
-    padding: 40px clamp(16px, 4vw, 40px);
-    display: flex;
-    flex-direction: column;
-    gap: 64px;
-    overflow: visible;
-  }
+html.motion-reduced .wid-pin-stage {
+  position: relative;
+  height: auto;
+  padding: 40px clamp(16px, 4vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  overflow: visible;
+}
 
-  /* Карточки услуг раскладываются в обычный поток и все читаемы, телефон
-     показывает готовый EMBER без движения. */
-  .wid-pin-copy {
-    width: 100%;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-  }
+/* Карточки услуг раскладываются в обычный поток и все читаемы, телефон
+   показывает готовый EMBER без движения. */
+html.motion-reduced .wid-pin-copy {
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
 
-  .wid-pin-text {
-    position: relative;
-    top: auto;
-    left: auto;
-    right: auto;
-    opacity: 1;
-  }
+html.motion-reduced .wid-pin-text {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  opacity: 1;
+}
 
-  .wid-pin-progress {
-    display: none;
-  }
+/* Телефон держится липким позиционированием — это раскладка, а не
+   анимация, поэтому допустимо при reduced-motion. Благодаря ему экран
+   продукта остаётся виден, пока проходят карточки услуг. */
+html.motion-reduced .wid-pin-phone-slot {
+  position: sticky;
+  top: 12vh;
+  align-self: flex-start;
+}
+
+html.motion-reduced .wid-pin-progress {
+  position: static;
+  margin-top: 12px;
 }
 
 /* ══════════════════════ STACK ══════════════════════════════ */
@@ -2642,10 +2647,8 @@ body.has-custom-cursor button {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .contact-status-dot {
-    animation: none;
-  }
+html.motion-reduced .contact-status-dot {
+  animation: none;
 }
 
 /* Узел подключения проекта к общей системе связей. */
@@ -3229,16 +3232,180 @@ button:focus-visible {
   outline-offset: 3px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+html.motion-reduced *,
+html.motion-reduced *::before,
+html.motion-reduced *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+html.motion-reduced {
+  scroll-behavior: auto;
+}
+
+/* ── Выбор режима движения ────────────────────────────────────────── */
+/* Не модальное окно: prefers-reduced-motion у части людей стоит по
+   медицинским причинам, и блокирующий диалог был бы неуместен. Плашка не
+   перекрывает контент и исчезает после любого из двух ответов. */
+.motion-prompt {
+  position: fixed;
+  left: clamp(16px, 3vw, 28px);
+  bottom: clamp(16px, 3vw, 28px);
+  z-index: 95;
+  max-width: min(340px, calc(100vw - 32px));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-strong);
+  background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.7);
+}
+
+.motion-prompt-text {
+  color: var(--text-secondary);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.motion-prompt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.motion-prompt-btn {
+  padding: 8px 15px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.motion-prompt-btn:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.motion-prompt-btn-primary {
+  border-color: transparent;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: #0a0a10;
+}
+
+.motion-prompt-btn-primary:hover {
+  color: #0a0a10;
+  filter: brightness(1.08);
+}
+
+.site-footer-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Точка возврата: передумать можно, не залезая в настройки системы. */
+.motion-toggle {
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-tertiary);
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.motion-toggle:hover {
+  color: var(--text-secondary);
+  border-color: var(--border-strong);
+}
+
+@media (max-width: 480px) {
+  .motion-prompt {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    max-width: none;
+  }
+}
+
+/* ── Запас прочности для старых Chromium-браузеров ─────────────────
+   color-mix() появился в Chromium 111 (март 2023). Яндекс Браузер и
+   другие сборки на Blink нередко отстают по версии, а без color-mix
+   57 объявлений в этом файле становятся невалидными — рамки и фоны
+   просто исчезают, и сайт выглядит сломанным. Блок ниже задаёт те же
+   цвета обычной rgba и применяется ТОЛЬКО там, где color-mix не
+   поддерживается: современные браузеры его игнорируют целиком. */
+@supports not (color: color-mix(in srgb, red 50%, blue)) {
+  .ai-tag,
+  .about-tech::after,
+  .wid-pin-deco-chip,
+  .arch-node-core,
+  .contact-status {
+    border-color: rgba(139, 92, 246, 0.4);
   }
 
-  html {
-    scroll-behavior: auto;
+  .ai-flow-node,
+  .arch-node-ai,
+  .wid-saas-node,
+  .about-sat,
+  .wid-rd-status,
+  .wid-ga-model-tag {
+    border-color: rgba(125, 211, 252, 0.34);
+  }
+
+  .ai-tag,
+  .contact-status {
+    background: rgba(139, 92, 246, 0.08);
+  }
+
+  .ai-flow-node,
+  .wid-pin-deco-chip {
+    background: rgba(15, 13, 24, 0.72);
+  }
+
+  .arch-core,
+  .wid-ix-panel-3,
+  .wid-ga-msg-user {
+    background: rgba(139, 92, 246, 0.12);
+    border-color: rgba(139, 92, 246, 0.36);
+  }
+
+  .about-spine {
+    stroke: rgba(139, 92, 246, 0.55);
+  }
+
+  .about-link {
+    stroke: rgba(125, 211, 252, 0.32);
+  }
+
+  .about-converge {
+    stroke: rgba(139, 92, 246, 0.34);
+  }
+
+  .arch-node:hover {
+    box-shadow: 0 6px 20px -10px rgba(139, 92, 246, 0.22);
+  }
+
+  .arch-layer-dot,
+  .arch-core-dot,
+  .bridge-dot,
+  .project-node,
+  .hero-scroll-node,
+  .contact-status-dot {
+    box-shadow: none;
   }
 }

@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
 import FadeIn from "../components/FadeIn.jsx";
 import LiveProjectButton from "../components/LiveProjectButton.jsx";
 import TiltCard from "../components/TiltCard.jsx";
@@ -44,7 +45,7 @@ function ProjectCard({ project, index, total }) {
       const mm = gsap.matchMedia();
 
       mm.add({ all: "all", reduced: "(prefers-reduced-motion: reduce)" }, (context) => {
-        const { reduced } = context.conditions;
+        const reduced = shouldReduceMotion(context.conditions.reduced);
         const q = (s) => cardRef.current.querySelectorAll(s);
         const node = containerRef.current.querySelector(".project-node");
 

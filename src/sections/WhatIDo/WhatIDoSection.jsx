@@ -1,6 +1,8 @@
 import { useRef } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { shouldReduceMotion } from "../../hooks/useMotionPreference.js";
 import FadeIn from "../../components/FadeIn.jsx";
 import { SERVICES } from "./data.js";
 import Phone from "./screens/Phone.jsx";
@@ -74,15 +76,21 @@ export default function WhatIDoSection() {
           reduced: "(prefers-reduced-motion: reduce)",
         },
         (context) => {
-          const { isMobile, reduced } = context.conditions;
+          const { isMobile } = context.conditions;
+          const reduced = shouldReduceMotion(context.conditions.reduced);
           const scope = stageRef.current;
           const glass = scope.querySelector(".wid-phone-screen-inner");
           // Слой, который реально смещается внутри каждого экрана.
           const driftEl = (i) => screenRefs.current[i]?.querySelector(SCREENS[i].driftTarget);
 
           if (reduced) {
-            // Без pin/scrub: телефон в нейтрали, показан первый продукт,
-            // все карточки услуг читаемы (раскладку в поток делает CSS).
+            // Reduced-motion убирает ДВИЖЕНИЕ, но не контент. Раньше здесь
+            // показывался только первый продукт из шести — пользователь с
+            // выключенными анимациями Windows (Firefox это уважает) видел
+            // пять описанных услуг и один экран. Теперь телефон закреплён
+            // липким позиционированием (это раскладка, не анимация), а
+            // экран переключается простой сменой прозрачности по мере
+            // прохождения карточек — без pin, scrub, параллакса и поворотов.
             gsap.set(phoneRef.current, { rotationZ: 0, rotationY: 0, scale: 1, x: 0, y: 0 });
             gsap.set(glass, { y: 0 });
             gsap.set(screenRefs.current, { opacity: 0 });
@@ -90,6 +98,43 @@ export default function WhatIDoSection() {
             SCREENS.forEach((_, i) => gsap.set(driftEl(i), { y: 0 }));
             gsap.set(textRefs.current, { opacity: 1, y: 0 });
             gsap.set(decoRefs.current, { opacity: 1, y: 0 });
+
+            const show = (idx) => {
+              screenRefs.current.forEach((el, i) => {
+                if (el) gsap.set(el, { opacity: i === idx ? 1 : 0, scale: 1, yPercent: 0 });
+              });
+              if (progressLabelRef.current) {
+                const n = Math.min(idx + 1, SERVICES.length);
+                progressLabelRef.current.textContent = `${String(n).padStart(2, "0")} / ${String(SERVICES.length).padStart(2, "0")}`;
+              }
+              if (progressFillRef.current) {
+                progressFillRef.current.style.width = `${(Math.min(idx + 1, SERVICES.length) / SERVICES.length) * 100}%`;
+              }
+            };
+
+            textRefs.current.forEach((el, i) => {
+              if (!el) return;
+              ScrollTrigger.create({
+                trigger: el,
+                start: "top 62%",
+                end: "bottom 38%",
+                onEnter: () => show(i),
+                onEnterBack: () => show(i),
+              });
+            });
+
+            // Экран READY не привязан ни к одной услуге (их пять, а экранов
+            // шесть), поэтому показываем его после выхода из последней
+            // карточки — иначе он недостижим при reduced-motion.
+            const lastText = textRefs.current[SERVICES.length - 1];
+            if (lastText) {
+              ScrollTrigger.create({
+                trigger: lastText,
+                start: "bottom 38%",
+                onEnter: () => show(SCREENS.length - 1),
+                onLeaveBack: () => show(SERVICES.length - 1),
+              });
+            }
             return;
           }
 

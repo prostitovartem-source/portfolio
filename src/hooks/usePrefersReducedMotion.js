@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { shouldReduceMotion } from "./useMotionPreference.js";
 
 /**
  * Единый источник правды для prefers-reduced-motion. Раньше глобальный CSS
@@ -9,12 +10,12 @@ import { useEffect, useState } from "react";
  */
 export default function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    () => typeof window !== "undefined" && shouldReduceMotion()
   );
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const handler = (e) => setReduced(e.matches);
+    const handler = (e) => setReduced(shouldReduceMotion(e.matches));
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
   }, []);

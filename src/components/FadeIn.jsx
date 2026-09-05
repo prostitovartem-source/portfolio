@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
 
 /**
  * Появление элемента при попадании во вьюпорт (однократно): сдвиг + лёгкий
@@ -36,7 +37,7 @@ export default function FadeIn({
         // скролла: ScrollTrigger здесь оставлять нельзя — когда About
         // перестаёт пиниться, высота страницы меняется, позиции триггеров
         // устаревают, и часть элементов так и не проявляется.
-        if (context.conditions.reduced) {
+        if (shouldReduceMotion(context.conditions.reduced)) {
           gsap.set(el, { opacity: 1, x: 0, y: 0, scale: 1, filter: "none" });
           return;
         }

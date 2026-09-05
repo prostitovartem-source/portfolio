@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
 
 /**
  * Стек как архитектура, а не облако логотипов: слои идут сверху вниз и
@@ -63,7 +64,7 @@ export default function TechArchitecture() {
       const mm = gsap.matchMedia();
 
       mm.add({ all: "all", reduced: "(prefers-reduced-motion: reduce)" }, (context) => {
-        const { reduced } = context.conditions;
+        const reduced = shouldReduceMotion(context.conditions.reduced);
         const q = (s) => rootRef.current.querySelectorAll(s);
 
         if (reduced) {

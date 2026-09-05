@@ -1,3 +1,5 @@
+import MotionToggle from "./MotionToggle.jsx";
+
 const LINKS = [
   { label: "Telegram", href: "https://t.me/cooicks" },
   { label: "Email", href: "mailto:copickprostitov@gmail.com" },
@@ -18,7 +20,10 @@ export default function Footer() {
         ))}
       </nav>
 
-      <span className="site-footer-copy">© 2026 · Full-Stack Web Developer</span>
+      <div className="site-footer-meta">
+        <MotionToggle />
+        <span className="site-footer-copy">© 2026 · Full-Stack Web Developer</span>
+      </div>
     </footer>
   );
 }

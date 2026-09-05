@@ -31,6 +31,23 @@
       name="twitter:description"
       content="Full-Stack Web Developer creating modern websites, web applications, SaaS and AI-powered digital products."
     />
+    <script>
+      // Выставляем режим движения ДО первой отрисовки, иначе при выборе
+      // «включить анимации» страница на кадр моргнёт статичной раскладкой.
+      // Приоритет: осознанный выбор человека > настройка системы.
+      (function () {
+        try {
+          var c = localStorage.getItem('copick:motion');
+          var reduced = c === 'reduced' ? true
+            : c === 'full' ? false
+            : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (reduced) document.documentElement.classList.add('motion-reduced');
+        } catch (e) {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+            document.documentElement.classList.add('motion-reduced');
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

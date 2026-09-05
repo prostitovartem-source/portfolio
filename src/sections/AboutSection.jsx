@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
 import ContactButton from "../components/ContactButton.jsx";
 
 const ABOUT_TEXT =
@@ -74,7 +75,8 @@ export default function AboutSection() {
           reduced: "(prefers-reduced-motion: reduce)",
         },
         (context) => {
-          const { isMobile, reduced } = context.conditions;
+          const { isMobile } = context.conditions;
+          const reduced = shouldReduceMotion(context.conditions.reduced);
           const scope = stageRef.current;
           const q = (sel) => scope.querySelectorAll(sel);
 

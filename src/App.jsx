@@ -3,6 +3,7 @@ import Loader from "./components/Loader.jsx";
 import CustomCursor from "./components/CustomCursor.jsx";
 import SmoothScroll from "./components/SmoothScroll.jsx";
 import SectionBridge from "./components/SectionBridge.jsx";
+import MotionPrompt from "./components/MotionPrompt.jsx";
 import Footer from "./components/Footer.jsx";
 import HeroSection from "./sections/HeroSection.jsx";
 import MarqueeSection from "./sections/MarqueeSection.jsx";
@@ -34,6 +35,7 @@ export default function App() {
       <ContactSection />
 
       <Footer />
+      <MotionPrompt />
     </div>
   );
 }
