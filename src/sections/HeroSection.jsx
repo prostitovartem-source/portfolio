@@ -91,8 +91,9 @@ export default function HeroSection() {
       </motion.div>
 
       <FadeIn delay={1.2} y={0} className="hero-scroll-cue" aria-hidden="true">
-        <span className="hero-scroll-line" />
         <span className="hero-scroll-label">Скролл</span>
+        <span className="hero-scroll-line" />
+        <span className="hero-scroll-node" />
       </FadeIn>
 
       <FadeIn delay={1.1} y={0} className="hero-tech-meta" aria-hidden="true">

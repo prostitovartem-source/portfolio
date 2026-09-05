@@ -1,13 +1,14 @@
-import { motion } from "framer-motion";
-import usePrefersReducedMotion from "../hooks/usePrefersReducedMotion.js";
-
-const EASE = [0.16, 1, 0.3, 1];
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 /**
  * Появление элемента при попадании во вьюпорт (однократно): сдвиг + лёгкий
- * scale-in + blur-to-sharp — не плоский opacity-фейд. Учитывает
- * prefers-reduced-motion — при активной настройке появляется почти
- * мгновенно, без сдвига/scale/blur.
+ * scale-in + blur-to-sharp — не плоский opacity-фейд.
+ *
+ * Переведён с framer-motion на GSAP: на сайте остаётся одна система
+ * скролл-анимации, а не две параллельных. Публичный API компонента не
+ * изменился, поэтому все существующие вызовы работают как раньше.
  */
 export default function FadeIn({
   as = "div",
@@ -21,27 +22,51 @@ export default function FadeIn({
   style,
   children,
 }) {
-  const MotionTag = motion[as] ?? motion.div;
-  const reduced = usePrefersReducedMotion();
+  const ref = useRef(null);
 
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add({ all: "all", reduced: "(prefers-reduced-motion: reduce)" }, (context) => {
+        const el = ref.current;
+        if (!el) return;
+
+        // При reduced-motion контент показывается сразу и не зависит от
+        // скролла: ScrollTrigger здесь оставлять нельзя — когда About
+        // перестаёт пиниться, высота страницы меняется, позиции триггеров
+        // устаревают, и часть элементов так и не проявляется.
+        if (context.conditions.reduced) {
+          gsap.set(el, { opacity: 1, x: 0, y: 0, scale: 1, filter: "none" });
+          return;
+        }
+
+        gsap.fromTo(
+          el,
+          { opacity: 0, x, y, scale, filter: `blur(${blur}px)` },
+          {
+            opacity: 1,
+            x: 0,
+            y: 0,
+            scale: 1,
+            filter: "blur(0px)",
+            delay,
+            duration,
+            ease: "expo.out",
+            scrollTrigger: { trigger: el, start: "top 98%", once: true },
+          }
+        );
+      });
+
+      return () => mm.revert();
+    },
+    { scope: ref, dependencies: [] }
+  );
+
+  const Tag = as;
   return (
-    <MotionTag
-      className={className}
-      style={style}
-      initial={
-        reduced
-          ? { opacity: 0 }
-          : { opacity: 0, x, y, scale, filter: `blur(${blur}px)` }
-      }
-      whileInView={
-        reduced
-          ? { opacity: 1 }
-          : { opacity: 1, x: 0, y: 0, scale: 1, filter: "blur(0px)" }
-      }
-      viewport={{ once: true, margin: "50px", amount: 0 }}
-      transition={reduced ? { duration: 0.15 } : { delay, duration, ease: EASE }}
-    >
+    <Tag ref={ref} className={className} style={style}>
       {children}
-    </MotionTag>
+    </Tag>
   );
 }

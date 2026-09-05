@@ -1,5 +1,5 @@
 import FadeIn from "../components/FadeIn.jsx";
-import TechConstellation, { TechConstellationMobile } from "../components/TechConstellation.jsx";
+import TechArchitecture from "../components/TechArchitecture.jsx";
 
 export default function StackSection() {
   return (
@@ -22,10 +22,7 @@ export default function StackSection() {
         <span className="stack-legend-item stack-legend-ai">AI-ускоренное</span>
       </FadeIn>
 
-      <FadeIn delay={0.25} y={30} className="constellation-wrap">
-        <TechConstellation />
-        <TechConstellationMobile />
-      </FadeIn>
+      <TechArchitecture />
     </section>
   );
 }

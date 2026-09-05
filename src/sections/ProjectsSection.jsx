@@ -1,5 +1,6 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import FadeIn from "../components/FadeIn.jsx";
 import LiveProjectButton from "../components/LiveProjectButton.jsx";
 import TiltCard from "../components/TiltCard.jsx";
@@ -14,8 +15,10 @@ const PROJECTS = [
     description:
       "AI SaaS-платформа для автоматизации учёта товаров и обработки накладных. Распознаёт документы с помощью AI, извлекает данные и помогает управлять складскими операциями.",
     tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "AI / OCR", "Yandex Cloud"],
-    status: "soon",
-    accent: "#38bdf8",
+    status: "live",
+    link: "https://quantix-five.vercel.app/",
+    ctaLabel: "Открыть QWANTIX",
+    accent: "var(--accent-2)",
   },
   {
     number: "02",
@@ -28,26 +31,76 @@ const PROJECTS = [
     status: "live",
     link: "https://max.ru/se13793521_bot",
     ctaLabel: "Открыть в MAX",
-    accent: "#fb2c5c",
+    accent: "var(--accent)",
   },
 ];
 
 function ProjectCard({ project, index, total }) {
   const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "start start"],
-  });
+  const cardRef = useRef(null);
 
-  const targetScale = 1 - (total - 1 - index) * 0.03;
-  const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add({ all: "all", reduced: "(prefers-reduced-motion: reduce)" }, (context) => {
+        const { reduced } = context.conditions;
+        const q = (s) => cardRef.current.querySelectorAll(s);
+        const node = containerRef.current.querySelector(".project-node");
+
+        if (reduced) {
+          gsap.set([...q(".project-tech-chip"), node], { opacity: 1, y: 0, scale: 1 });
+          return;
+        }
+
+        gsap.set(q(".project-tech-chip"), { opacity: 0, y: 10 });
+        gsap.set(node, { opacity: 0, scale: 0.4 });
+
+        // Карточка «подключается» к системе: сначала загорается узел на
+        // связке, затем по очереди активируются технологии проекта.
+        const reveal = gsap.timeline({
+          defaults: { ease: "power2.out" },
+          scrollTrigger: { trigger: cardRef.current, start: "top 78%", once: true },
+        });
+        reveal.to(node, { opacity: 1, scale: 1, duration: 0.4 });
+        reveal.to(q(".project-tech-chip"), { opacity: 1, y: 0, duration: 0.35, stagger: 0.05 }, "-=0.15");
+
+        // Стопка карточек: нижняя чуть уменьшается, когда её накрывает
+        // следующая. Эффект сохранён с прежней версии, переведён с
+        // framer-motion на GSAP — чтобы на сайте осталась одна система
+        // скролл-анимации, а не две параллельных.
+        const targetScale = 1 - (total - 1 - index) * 0.03;
+        gsap.fromTo(
+          cardRef.current,
+          { scale: 1 },
+          {
+            scale: targetScale,
+            ease: "none",
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top bottom",
+              end: "top top",
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      });
+
+      return () => mm.revert();
+    },
+    { scope: containerRef, dependencies: [] }
+  );
+
   const reversed = index % 2 === 1;
 
   return (
     <div ref={containerRef} className="project-card-container">
-      <motion.div
+      <span className="project-node" aria-hidden="true" />
+      <div
+        ref={cardRef}
         className={`project-card ${project.featured ? "project-card-featured" : ""} ${reversed ? "project-card-reverse" : ""}`}
-        style={{ scale, top: `${index * 28}px`, "--project-accent": project.accent }}
+        style={{ top: `${index * 28}px`, "--project-accent": project.accent }}
       >
         <div className="project-card-top">
           <span className="project-number">{project.number}</span>
@@ -86,7 +139,7 @@ function ProjectCard({ project, index, total }) {
             </div>
           </TiltCard>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import Navbar from "./components/Navbar.jsx";
 import Loader from "./components/Loader.jsx";
 import CustomCursor from "./components/CustomCursor.jsx";
 import SmoothScroll from "./components/SmoothScroll.jsx";
+import SectionBridge from "./components/SectionBridge.jsx";
 import Footer from "./components/Footer.jsx";
 import HeroSection from "./sections/HeroSection.jsx";
 import MarqueeSection from "./sections/MarqueeSection.jsx";
@@ -27,7 +28,9 @@ export default function App() {
       <AISection />
       <WhatIDoSection />
       <StackSection />
+      <SectionBridge label="архитектура → продукт" />
       <ProjectsSection />
+      <SectionBridge label="все системы соединены" />
       <ContactSection />
 
       <Footer />

@@ -1,3 +1,6 @@
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import FadeIn from "../components/FadeIn.jsx";
 import ContactButton from "../components/ContactButton.jsx";
 
@@ -20,7 +23,7 @@ const CONTACTS = [
         />
       </svg>
     ),
-    color: "#38bdf8",
+    color: "var(--accent-2)",
   },
   {
     label: "Email",
@@ -42,7 +45,7 @@ const CONTACTS = [
         <path d="m2 7 10 7 10-7" />
       </svg>
     ),
-    color: "#a78bfa",
+    color: "var(--accent)",
   },
   {
     label: "GitHub",
@@ -66,13 +69,46 @@ const CONTACTS = [
         />
       </svg>
     ),
-    color: "#60a5fa",
+    color: "color-mix(in srgb, var(--accent) 45%, var(--accent-2))",
   },
 ];
 
 export default function ContactSection() {
+  const rootRef = useRef(null);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add({ all: "all", reduced: "(prefers-reduced-motion: reduce)" }, (context) => {
+        const { reduced } = context.conditions;
+        const q = (s) => rootRef.current.querySelectorAll(s);
+
+        if (reduced) {
+          gsap.set([...q(".contact-status"), ...q(".contact-card")], { opacity: 1, y: 0 });
+          return;
+        }
+
+        gsap.set(q(".contact-status"), { opacity: 0, y: 10 });
+        gsap.set(q(".contact-card"), { opacity: 0, y: 22 });
+
+        // Финал системы: статус подтверждается, затем «загораются» конечные
+        // точки связи. Здесь намеренно спокойнее, чем в остальных секциях.
+        const tl = gsap.timeline({
+          defaults: { ease: "power2.out" },
+          scrollTrigger: { trigger: rootRef.current, start: "top 72%", once: true },
+        });
+        tl.to(q(".contact-status"), { opacity: 1, y: 0, duration: 0.5 });
+        tl.to(q(".contact-card"), { opacity: 1, y: 0, duration: 0.5, stagger: 0.1 }, "-=0.2");
+      });
+
+      return () => mm.revert();
+    },
+    { scope: rootRef, dependencies: [] }
+  );
+
   return (
-    <section className="contact" id="contact">
+    <section ref={rootRef} className="contact" id="contact">
       <span className="section-number" aria-hidden="true">
         06
       </span>
@@ -80,6 +116,11 @@ export default function ContactSection() {
       <FadeIn delay={0} y={20} className="section-eyebrow">
         06 / Контакт
       </FadeIn>
+
+      <span className="contact-status">
+        <span className="contact-status-dot" aria-hidden="true" />
+        Открыт к связи
+      </span>
 
       <FadeIn delay={0.05} y={40}>
         <h2 className="hero-heading contact-heading">
@@ -98,14 +139,19 @@ export default function ContactSection() {
       </FadeIn>
 
       <div className="contact-grid">
-        {CONTACTS.map((c, i) => (
-          <FadeIn key={c.label} delay={0.15 + i * 0.08} y={20}>
-            <a href={c.href} target="_blank" rel="noopener noreferrer" className="contact-card" style={{ "--accent-color": c.color }}>
-              <span className="contact-icon">{c.icon}</span>
-              <span className="contact-label">{c.label}</span>
-              <span className="contact-value">{c.value}</span>
-            </a>
-          </FadeIn>
+        {CONTACTS.map((c) => (
+          <a
+            key={c.label}
+            href={c.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-card"
+            style={{ "--accent-color": c.color }}
+          >
+            <span className="contact-icon">{c.icon}</span>
+            <span className="contact-label">{c.label}</span>
+            <span className="contact-value">{c.value}</span>
+          </a>
         ))}
       </div>
     </section>
