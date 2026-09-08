@@ -2786,6 +2786,51 @@ html.motion-reduced .contact-status-dot {
   opacity: var(--opacity-meta);
 }
 
+/* Метка авторства проекта. Стоит отдельной строкой над категорией:
+   в одной строке с ней и с «Флагманским проектом» получалось три чипа
+   подряд, и заголовок терялся. Дот — тот же узловой мотив, что и в
+   остальных секциях. */
+.project-personal {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 4px 12px 4px 10px;
+  margin-bottom: 2px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.project-personal-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--project-accent);
+}
+
+/* Тонкая реакция: метка оживает вместе с карточкой, а не сама по себе. */
+.project-card:hover .project-personal {
+  color: var(--text);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+  .project-personal {
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    padding: 3px 10px 3px 8px;
+  }
+}
+
 .project-featured-badge {
   display: inline-flex;
   align-items: center;
@@ -3394,6 +3439,10 @@ html.motion-reduced {
 
   .about-converge {
     stroke: rgba(139, 92, 246, 0.34);
+  }
+
+  .project-personal {
+    border-color: rgba(242, 245, 247, 0.16);
   }
 
   .arch-node:hover {

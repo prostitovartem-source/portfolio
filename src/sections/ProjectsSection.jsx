@@ -9,30 +9,46 @@ import TiltCard from "../components/TiltCard.jsx";
 const PROJECTS = [
   {
     number: "01",
-    title: "QWANTIX",
+    title: "QUANTIX",
     category: "SaaS-продукт",
+    personal: true,
     featured: true,
     featuredLabel: "Флагманский проект",
     description:
-      "AI SaaS-платформа для автоматизации учёта товаров и обработки накладных. Распознаёт документы с помощью AI, извлекает данные и помогает управлять складскими операциями.",
+      "Собственный продукт, который я придумал и довёл до работающего сервиса сам — от идеи и интерфейса до backend-логики и базы данных. AI SaaS-платформа для автоматизации учёта товаров и обработки накладных: распознаёт документы с помощью AI, извлекает данные и помогает управлять складскими операциями.",
     tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "AI / OCR", "Yandex Cloud"],
     status: "live",
     link: "https://quantix-five.vercel.app/",
-    ctaLabel: "Открыть QWANTIX",
+    ctaLabel: "Открыть QUANTIX",
     accent: "var(--accent-2)",
   },
   {
     number: "02",
     title: "ALTME AI",
     category: "AI-бот для MAX",
+    personal: true,
     featured: false,
     description:
-      "AI-бот и мини-приложение внутри мессенджера MAX для генерации и стилизации фотографий. Загрузка фото, выбор AI-стиля или свой промпт, внутренняя валюта 🍓 и реферальная система — весь опыт целиком живёт в MAX, без отдельного сайта.",
+      "Мой собственный AI-продукт: концепция, разработка и запуск целиком мои. AI-бот и мини-приложение внутри мессенджера MAX для генерации и стилизации фотографий. Загрузка фото, выбор AI-стиля или свой промпт, внутренняя валюта 🍓 и реферальная система — весь опыт целиком живёт в MAX, без отдельного сайта.",
     tech: ["Next.js", "React", "TypeScript", "Replicate", "Express"],
     status: "live",
     link: "https://max.ru/se13793521_bot",
     ctaLabel: "Открыть в MAX",
     accent: "var(--accent)",
+  },
+  {
+    number: "03",
+    title: "ZFINDE",
+    category: "Веб-продукт",
+    personal: true,
+    featured: false,
+    description:
+      "Свой инструмент под собственную задачу — придумал и сделал от начала до конца. «Лидоискатель» ищет компании без своего сайта по городу и нише: собирает их из открытых источников, без платных API, и показывает телефоны для связи.",
+    tech: ["Next.js", "React", "Vercel"],
+    status: "live",
+    link: "https://zfinde.vercel.app/",
+    ctaLabel: "Открыть ZFINDE",
+    accent: "var(--accent-2)",
   },
 ];
 
@@ -106,6 +122,12 @@ function ProjectCard({ project, index, total }) {
         <div className="project-card-top">
           <span className="project-number">{project.number}</span>
           <div className="project-heading">
+            {project.personal && (
+              <span className="project-personal">
+                <span className="project-personal-dot" aria-hidden="true" />
+                Personal project
+              </span>
+            )}
             <span className="project-category">
               {project.category}
               {project.featured && <span className="project-featured-badge">{project.featuredLabel}</span>}
