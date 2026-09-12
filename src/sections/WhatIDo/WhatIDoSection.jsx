@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { shouldReduceMotion } from "../../hooks/useMotionPreference.js";
+import { t } from "../../i18n/index.js";
 import FadeIn from "../../components/FadeIn.jsx";
 import { SERVICES } from "./data.js";
 import Phone from "./screens/Phone.jsx";
@@ -284,11 +285,11 @@ export default function WhatIDoSection() {
       </span>
 
       <FadeIn delay={0} y={20} className="section-eyebrow">
-        03 / Чем занимаюсь
+        {t("whatIdo.eyebrow")}
       </FadeIn>
 
       <FadeIn delay={0.05} y={40}>
-        <h2 className="hero-heading wid-heading">Что я делаю</h2>
+        <h2 className="hero-heading wid-heading">{t("whatIdo.heading")}</h2>
       </FadeIn>
 
       <div ref={trackRef} className="wid-pin-track" style={{ height: `calc(var(--wid-state-vh) * ${SEGMENTS + 1})` }}>

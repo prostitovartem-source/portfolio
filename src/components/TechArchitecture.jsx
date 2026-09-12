@@ -2,6 +2,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
+import { t } from "../i18n/index.js";
 
 /**
  * Стек как архитектура, а не облако логотипов: слои идут сверху вниз и
@@ -11,49 +12,35 @@ import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
  * level отражает роль, а не «качество»: core — то, на чём пишется основное,
  * tool — рабочий инструмент, ai — AI-слой.
  */
-const LAYERS = [
-  {
-    id: "frontend",
-    title: "Frontend",
-    note: "интерфейс и взаимодействие",
-    nodes: [
-      { label: "TypeScript", level: "core" },
-      { label: "React", level: "core" },
-      { label: "Next.js", level: "core" },
-      { label: "JavaScript", level: "core" },
-      { label: "HTML", level: "tool" },
-      { label: "CSS", level: "tool" },
-      { label: "Tailwind", level: "tool" },
-      { label: "Framer Motion", level: "tool" },
-      { label: "Three.js", level: "tool" },
-      { label: "GSAP", level: "tool" },
-    ],
-  },
-  {
-    id: "backend",
-    title: "Backend",
-    note: "логика и API",
-    nodes: [{ label: "Node.js", level: "core" }],
-  },
-  {
-    id: "data",
-    title: "Данные",
-    note: "хранение и доступ",
-    nodes: [
-      { label: "Prisma", level: "tool" },
-      { label: "PostgreSQL", level: "tool" },
-    ],
-  },
-  {
-    id: "ai",
-    title: "AI",
-    note: "модели внутри продукта",
-    nodes: [
-      { label: "AI APIs", level: "ai" },
-      { label: "Python", level: "ai" },
-    ],
-  },
-];
+const LAYER_NODES = {
+  frontend: [
+    { label: "TypeScript", level: "core" },
+    { label: "React", level: "core" },
+    { label: "Next.js", level: "core" },
+    { label: "JavaScript", level: "core" },
+    { label: "HTML", level: "tool" },
+    { label: "CSS", level: "tool" },
+    { label: "Tailwind", level: "tool" },
+    { label: "Framer Motion", level: "tool" },
+    { label: "Three.js", level: "tool" },
+    { label: "GSAP", level: "tool" },
+  ],
+  backend: [{ label: "Node.js", level: "core" }],
+  data: [
+    { label: "Prisma", level: "tool" },
+    { label: "PostgreSQL", level: "tool" },
+  ],
+  ai: [
+    { label: "AI APIs", level: "ai" },
+    { label: "Python", level: "ai" },
+  ],
+};
+
+const LAYERS = Object.keys(LAYER_NODES).map((id) => ({
+  id,
+  ...t(`stack.layers.${id}`),
+  nodes: LAYER_NODES[id],
+}));
 
 export default function TechArchitecture() {
   const rootRef = useRef(null);
@@ -134,8 +121,8 @@ export default function TechArchitecture() {
 
       <div className="arch-core">
         <span className="arch-core-dot" aria-hidden="true" />
-        <b className="arch-core-title">Full Stack</b>
-        <span className="arch-core-note">продукт целиком — от интерфейса до базы данных</span>
+        <b className="arch-core-title">{t("stack.core.title")}</b>
+        <span className="arch-core-note">{t("stack.core.note")}</span>
       </div>
     </div>
   );

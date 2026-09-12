@@ -1,4 +1,5 @@
 import FadeIn from "../components/FadeIn.jsx";
+import { t } from "../i18n/index.js";
 
 const FLOW = ["Idea", "Architecture", "Code", "Debug", "Test", "Polish"];
 
@@ -11,28 +12,23 @@ export default function AISection() {
 
       <div className="ai-content">
         <FadeIn delay={0} y={20} className="section-eyebrow">
-          02 / AI-разработка
+          {t("ai.eyebrow")}
         </FadeIn>
 
         <FadeIn delay={0.05} y={20}>
-          <span className="ai-tag">vibe coding</span>
+          <span className="ai-tag">{t("ai.tag")}</span>
         </FadeIn>
 
         <FadeIn delay={0.15} y={30}>
           <h2 className="hero-heading ai-heading">
-            AI ускоряет
+            {t("ai.headingLine1")}
             <br />
-            разработку
+            {t("ai.headingLine2")}
           </h2>
         </FadeIn>
 
         <FadeIn delay={0.3} y={20}>
-          <p className="ai-text">
-            Использую AI не вместо разработки, а как инструмент ускорения: для
-            прототипирования, исследования решений, генерации boilerplate,
-            debugging и итерации продукта. Каждую строчку понимаю сам —
-            AI ускоряет, а не заменяет.
-          </p>
+          <p className="ai-text">{t("ai.text")}</p>
         </FadeIn>
 
         <div className="ai-flow">

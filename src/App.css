@@ -3170,6 +3170,13 @@ html.motion-reduced .contact-status-dot {
     display: none;
   }
 
+  /* Специфичность .site-nav .site-nav-lang (не просто .site-nav-lang) —
+     иначе .lang-switch{display:inline-flex}, объявленный ниже в файле,
+     выигрывает при равной специфичности по порядку исходников. */
+  .site-nav .site-nav-lang {
+    display: none;
+  }
+
   .site-nav-toggle {
     display: flex;
   }
@@ -3376,6 +3383,73 @@ html.motion-reduced {
 .motion-toggle:hover {
   color: var(--text-secondary);
   border-color: var(--border-strong);
+}
+
+/* ── Переключатель языка ──────────────────────────────────────────
+   Тот же язык дизайна, что у motion-toggle: тонкая пилюля, фиолетовый
+   акцент только на активном состоянии, без отдельной визуальной системы. */
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.lang-switch-btn {
+  padding: 5px 11px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-tertiary);
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
+}
+
+.lang-switch-btn:hover {
+  color: var(--text-secondary);
+}
+
+.lang-switch-active {
+  color: var(--bg);
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.lang-switch-active:hover {
+  color: var(--bg);
+}
+
+.lang-switch-btn:active {
+  transform: scale(0.94);
+}
+
+.lang-switch-sep {
+  display: none;
+}
+
+/* Короткое затухание всей страницы перед перезагрузкой на смену языка —
+   переключение читается как намеренное решение, а не обрыв. */
+html.lang-leaving .app {
+  opacity: 0.4;
+  filter: blur(6px);
+  transition: opacity 0.24s ease, filter 0.24s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.lang-leaving .app {
+    transition: none;
+    filter: none;
+  }
+}
+
+.mobile-nav-lang {
+  margin-top: 4px;
 }
 
 @media (max-width: 480px) {

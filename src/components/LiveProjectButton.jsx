@@ -1,7 +1,9 @@
 import Magnet from "./Magnet.jsx";
+import { isEn } from "../i18n/index.js";
 
 /** Кнопка-ghost со ссылкой на живой проект, с magnetic-эффектом. */
-export default function LiveProjectButton({ href, label = "Смотреть проект", className }) {
+export default function LiveProjectButton({ href, label, className }) {
+  const resolvedLabel = label ?? (isEn() ? "View project" : "Смотреть проект");
   return (
     <Magnet padding={90} strength={4}>
       <a
@@ -11,7 +13,7 @@ export default function LiveProjectButton({ href, label = "Смотреть пр
         className={`btn-ghost ${className ?? ""}`}
         data-cursor-label="Open"
       >
-        {label}
+        {resolvedLabel}
       </a>
     </Magnet>
   );

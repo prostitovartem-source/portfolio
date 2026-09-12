@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ContactButton from "./ContactButton.jsx";
+import LanguageSwitcher from "./LanguageSwitcher.jsx";
+import { t } from "../i18n/index.js";
 
 const NAV_LINKS = [
-  { label: "Обо мне", href: "#about" },
-  { label: "Работы", href: "#projects" },
-  { label: "Стек", href: "#stack" },
-  { label: "Контакт", href: "#contact" },
+  { key: "about", href: "#about" },
+  { key: "projects", href: "#projects" },
+  { key: "stack", href: "#stack" },
+  { key: "contact", href: "#contact" },
 ];
 
 /** Фиксированный navbar на весь сайт: прозрачный вверху, уплотняется при скролле. На мобильном — компактный toggle вместо сжатого текстового ряда. */
@@ -38,24 +40,26 @@ export default function Navbar() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
       >
-        <a href="#" className="site-nav-brand" data-cursor-label="Наверх" onClick={() => setOpen(false)}>
+        <a href="#" className="site-nav-brand" data-cursor-label={t("nav.toTop")} onClick={() => setOpen(false)}>
           COPICK
         </a>
 
         <nav className="site-nav-links">
           {NAV_LINKS.map((link) => (
             <a key={link.href} href={link.href}>
-              {link.label}
+              {t(`nav.${link.key}`)}
             </a>
           ))}
         </nav>
+
+        <LanguageSwitcher className="site-nav-lang" />
 
         <button
           type="button"
           className={`site-nav-toggle ${open ? "site-nav-toggle-open" : ""}`}
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          aria-label={open ? "Закрыть меню" : "Открыть меню"}
+          aria-label={open ? t("nav.menuClose") : t("nav.menuOpen")}
         >
           <span />
           <span />
@@ -81,7 +85,7 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                   transition={{ delay: 0.1 + i * 0.07, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  {link.label}
+                  {t(`nav.${link.key}`)}
                 </motion.a>
               ))}
             </nav>
@@ -91,7 +95,16 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: 0.1 + NAV_LINKS.length * 0.07, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
             >
-              <ContactButton href="#contact" label="Написать мне" />
+              <ContactButton href="#contact" label={t("nav.contactCta")} />
+            </motion.div>
+
+            <motion.div
+              className="mobile-nav-lang"
+              initial={{ opacity: 0, y: 34, scale: 0.85 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.1 + (NAV_LINKS.length + 1) * 0.07, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <LanguageSwitcher />
             </motion.div>
           </motion.div>
         )}

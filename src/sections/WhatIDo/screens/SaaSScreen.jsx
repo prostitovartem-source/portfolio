@@ -1,3 +1,5 @@
+import { t } from "../../../i18n/index.js";
+
 /**
  * Quantix — вымышленный коммерческий SaaS-дашборд (в духе того, что
  * реально строится под этот тип продукта): выручка, счета, склад.
@@ -5,6 +7,8 @@
  * продукта.
  */
 export default function SaaSScreen() {
+  const s = t("whatIdo.screens.saas");
+
   return (
     <div className="wid-sa">
       <div className="wid-sa-topbar">
@@ -13,18 +17,18 @@ export default function SaaSScreen() {
       </div>
 
       <div className="wid-sa-revenue">
-        <span className="wid-sa-revenue-label">Выручка за месяц</span>
-        <span className="wid-sa-revenue-value">₽482 000</span>
+        <span className="wid-sa-revenue-label">{s.revenueLabel}</span>
+        <span className="wid-sa-revenue-value">{s.revenueValue}</span>
         <span className="wid-sa-revenue-trend">+12%</span>
       </div>
 
       <div className="wid-sa-stats">
         <div className="wid-sa-stat">
-          <span className="wid-sa-stat-label">Заказы</span>
+          <span className="wid-sa-stat-label">{s.orders}</span>
           <span className="wid-sa-stat-value">128</span>
         </div>
         <div className="wid-sa-stat">
-          <span className="wid-sa-stat-label">Товары</span>
+          <span className="wid-sa-stat-label">{s.products}</span>
           <span className="wid-sa-stat-value">64</span>
         </div>
       </div>
@@ -39,21 +43,15 @@ export default function SaaSScreen() {
       </div>
 
       <div className="wid-sa-list">
-        <div className="wid-sa-list-row">
-          <span>Счёт #1042</span>
-          <span className="wid-sa-list-status wid-sa-list-status-ok">оплачен</span>
-        </div>
-        <div className="wid-sa-list-row">
-          <span>Счёт #1041</span>
-          <span className="wid-sa-list-status">ожидает</span>
-        </div>
-        <div className="wid-sa-list-row">
-          <span>Кроссовки Air</span>
-          <span className="wid-sa-list-status">12 шт</span>
-        </div>
+        {s.list.map((row) => (
+          <div className="wid-sa-list-row" key={row.label}>
+            <span>{row.label}</span>
+            <span className={`wid-sa-list-status ${row.ok ? "wid-sa-list-status-ok" : ""}`}>{row.status}</span>
+          </div>
+        ))}
       </div>
 
-      <div className="wid-sa-footer">Обновлено только что</div>
+      <div className="wid-sa-footer">{s.footer}</div>
     </div>
   );
 }

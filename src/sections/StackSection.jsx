@@ -1,5 +1,6 @@
 import FadeIn from "../components/FadeIn.jsx";
 import TechArchitecture from "../components/TechArchitecture.jsx";
+import { t } from "../i18n/index.js";
 
 export default function StackSection() {
   return (
@@ -9,17 +10,17 @@ export default function StackSection() {
       </span>
 
       <FadeIn delay={0} y={20} className="section-eyebrow">
-        04 / Технологии
+        {t("stack.eyebrow")}
       </FadeIn>
 
       <FadeIn delay={0.05} y={40}>
-        <h2 className="hero-heading stack-heading">Технологии</h2>
+        <h2 className="hero-heading stack-heading">{t("stack.heading")}</h2>
       </FadeIn>
 
       <FadeIn delay={0.15} y={20} className="stack-legend">
-        <span className="stack-legend-item stack-legend-core">Основной стек</span>
-        <span className="stack-legend-item stack-legend-tool">Рабочий инструмент</span>
-        <span className="stack-legend-item stack-legend-ai">AI-ускоренное</span>
+        <span className="stack-legend-item stack-legend-core">{t("stack.legendCore")}</span>
+        <span className="stack-legend-item stack-legend-tool">{t("stack.legendTool")}</span>
+        <span className="stack-legend-item stack-legend-ai">{t("stack.legendAi")}</span>
       </FadeIn>
 
       <TechArchitecture />

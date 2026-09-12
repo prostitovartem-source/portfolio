@@ -2,6 +2,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
+import { t } from "../i18n/index.js";
 import FadeIn from "../components/FadeIn.jsx";
 import ContactButton from "../components/ContactButton.jsx";
 
@@ -115,28 +116,28 @@ export default function ContactSection() {
       </span>
 
       <FadeIn delay={0} y={20} className="section-eyebrow">
-        06 / Контакт
+        {t("contact.eyebrow")}
       </FadeIn>
 
       <span className="contact-status">
         <span className="contact-status-dot" aria-hidden="true" />
-        Открыт к связи
+        {t("contact.status")}
       </span>
 
       <FadeIn delay={0.05} y={40}>
         <h2 className="hero-heading contact-heading">
-          Пиши по вопросам
+          {t("contact.headingLine1")}
           <br />
-          сотрудничества.
+          {t("contact.headingLine2")}
         </h2>
       </FadeIn>
 
       <FadeIn delay={0.1} y={20}>
-        <p className="contact-lead">Открыт к работе и новым проектам — напиши мне удобным способом.</p>
+        <p className="contact-lead">{t("contact.lead")}</p>
       </FadeIn>
 
       <FadeIn delay={0.15} y={16} className="contact-primary-cta">
-        <ContactButton href="https://t.me/cooicks" label="Связаться со мной" external />
+        <ContactButton href="https://t.me/cooicks" label={t("contact.primaryCta")} external />
       </FadeIn>
 
       <div className="contact-grid">

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -12,24 +12,27 @@
       rel="stylesheet"
     />
 
+    <!-- Русский — канонический язык по умолчанию, без JS. Английский
+         подключается только если он явно выбран (см. скрипт ниже),
+         тем же приёмом, что и motion-reduced. -->
     <title>copick — Full-Stack Web Developer</title>
     <meta
       name="description"
-      content="Full-Stack Web Developer creating modern websites, web applications, SaaS and AI-powered digital products."
+      content="Full-Stack разработчик: современные сайты, веб-приложения, SaaS и AI-продукты — от идеи до готового решения."
     />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="copick — Full-Stack Web Developer" />
     <meta
       property="og:description"
-      content="Full-Stack Web Developer creating modern websites, web applications, SaaS and AI-powered digital products."
+      content="Full-Stack разработчик: современные сайты, веб-приложения, SaaS и AI-продукты — от идеи до готового решения."
     />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="copick — Full-Stack Web Developer" />
     <meta
       name="twitter:description"
-      content="Full-Stack Web Developer creating modern websites, web applications, SaaS and AI-powered digital products."
+      content="Full-Stack разработчик: современные сайты, веб-приложения, SaaS и AI-продукты — от идеи до готового решения."
     />
     <script>
       // Выставляем режим движения ДО первой отрисовки, иначе при выборе
@@ -46,6 +49,31 @@
           if (window.matchMedia('(prefers-reduced-motion: reduce)').matches)
             document.documentElement.classList.add('motion-reduced');
         }
+      })();
+
+      // Тот же приём для языка: если выбран EN, подменяем lang/SEO-теги
+      // синхронно, до первой отрисовки — иначе была бы вспышка русского
+      // <title>/description на кадр при заходе с сохранённым EN.
+      (function () {
+        try {
+          if (localStorage.getItem('copick:lang') !== 'en') return;
+        } catch (e) {
+          return;
+        }
+        document.documentElement.lang = 'en';
+        var title = 'copick — Full-Stack Web Developer';
+        var desc = 'Full-Stack Web Developer creating modern websites, web applications, SaaS and AI-powered digital products.';
+        document.title = title;
+        [
+          ['meta[name="description"]', desc],
+          ['meta[property="og:title"]', title],
+          ['meta[property="og:description"]', desc],
+          ['meta[name="twitter:title"]', title],
+          ['meta[name="twitter:description"]', desc],
+        ].forEach(function (pair) {
+          var el = document.querySelector(pair[0]);
+          if (el) el.setAttribute('content', pair[1]);
+        });
       })();
     </script>
   </head>

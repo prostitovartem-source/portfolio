@@ -5,52 +5,58 @@ import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
 import FadeIn from "../components/FadeIn.jsx";
 import LiveProjectButton from "../components/LiveProjectButton.jsx";
 import TiltCard from "../components/TiltCard.jsx";
+import { t } from "../i18n/index.js";
 
-const PROJECTS = [
-  {
-    number: "01",
-    title: "QUANTIX",
-    category: "SaaS-продукт",
-    personal: true,
-    featured: true,
-    featuredLabel: "Флагманский проект",
-    description:
-      "Собственный продукт, который я придумал и довёл до работающего сервиса сам — от идеи и интерфейса до backend-логики и базы данных. AI SaaS-платформа для автоматизации учёта товаров и обработки накладных: распознаёт документы с помощью AI, извлекает данные и помогает управлять складскими операциями.",
-    tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "AI / OCR", "Yandex Cloud"],
-    status: "live",
-    link: "https://quantix-five.vercel.app/",
-    ctaLabel: "Открыть QUANTIX",
-    accent: "var(--accent-2)",
-  },
-  {
-    number: "02",
-    title: "ALTME AI",
-    category: "AI-бот для MAX",
-    personal: true,
-    featured: false,
-    description:
-      "Мой собственный AI-продукт: концепция, разработка и запуск целиком мои. AI-бот и мини-приложение внутри мессенджера MAX для генерации и стилизации фотографий. Загрузка фото, выбор AI-стиля или свой промпт, внутренняя валюта 🍓 и реферальная система — весь опыт целиком живёт в MAX, без отдельного сайта.",
-    tech: ["Next.js", "React", "TypeScript", "Replicate", "Express"],
-    status: "live",
-    link: "https://max.ru/se13793521_bot",
-    ctaLabel: "Открыть в MAX",
-    accent: "var(--accent)",
-  },
-  {
-    number: "03",
-    title: "ZFINDE",
-    category: "Веб-продукт",
-    personal: true,
-    featured: false,
-    description:
-      "Свой инструмент под собственную задачу — придумал и сделал от начала до конца. «Лидоискатель» ищет компании без своего сайта по городу и нише: собирает их из открытых источников, без платных API, и показывает телефоны для связи.",
-    tech: ["Next.js", "React", "Vercel"],
-    status: "live",
-    link: "https://zfinde.vercel.app/",
-    ctaLabel: "Открыть ZFINDE",
-    accent: "var(--accent-2)",
-  },
-];
+function buildProjects() {
+  const quantix = t("projects.quantix");
+  const altme = t("projects.altme");
+  const zfinde = t("projects.zfinde");
+
+  return [
+    {
+      number: "01",
+      title: "QUANTIX",
+      category: quantix.category,
+      personal: true,
+      featured: true,
+      featuredLabel: quantix.featuredLabel,
+      description: quantix.description,
+      tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "AI / OCR", "Yandex Cloud"],
+      status: "live",
+      link: "https://quantix-five.vercel.app/",
+      ctaLabel: quantix.cta,
+      accent: "var(--accent-2)",
+    },
+    {
+      number: "02",
+      title: "ALTME AI",
+      category: altme.category,
+      personal: true,
+      featured: false,
+      description: altme.description,
+      tech: ["Next.js", "React", "TypeScript", "Replicate", "Express"],
+      status: "live",
+      link: "https://max.ru/se13793521_bot",
+      ctaLabel: altme.cta,
+      accent: "var(--accent)",
+    },
+    {
+      number: "03",
+      title: "ZFINDE",
+      category: zfinde.category,
+      personal: true,
+      featured: false,
+      description: zfinde.description,
+      tech: ["Next.js", "React", "Vercel"],
+      status: "live",
+      link: "https://zfinde.vercel.app/",
+      ctaLabel: zfinde.cta,
+      accent: "var(--accent-2)",
+    },
+  ];
+}
+
+const PROJECTS = buildProjects();
 
 function ProjectCard({ project, index, total }) {
   const containerRef = useRef(null);
@@ -125,7 +131,7 @@ function ProjectCard({ project, index, total }) {
             {project.personal && (
               <span className="project-personal">
                 <span className="project-personal-dot" aria-hidden="true" />
-                Personal project
+                {t("projects.personalBadge")}
               </span>
             )}
             <span className="project-category">
@@ -140,7 +146,7 @@ function ProjectCard({ project, index, total }) {
           ) : (
             <span className="project-status-soon">
               <span className="project-status-dot" />
-              Demo soon
+              {t("projects.demoSoon")}
             </span>
           )}
         </div>
@@ -153,9 +159,9 @@ function ProjectCard({ project, index, total }) {
             <div className="project-poster-info">
               <p>{project.description}</p>
               <div className="project-tech-list">
-                {project.tech.map((t) => (
-                  <span key={t} className="project-tech-chip">
-                    {t}
+                {project.tech.map((tech) => (
+                  <span key={tech} className="project-tech-chip">
+                    {tech}
                   </span>
                 ))}
               </div>
@@ -175,11 +181,11 @@ export default function ProjectsSection() {
       </span>
 
       <FadeIn delay={0} y={20} className="section-eyebrow">
-        05 / Проекты
+        {t("projects.eyebrow")}
       </FadeIn>
 
       <FadeIn delay={0.05} y={40}>
-        <h2 className="hero-heading projects-heading">Избранные проекты</h2>
+        <h2 className="hero-heading projects-heading">{t("projects.heading")}</h2>
       </FadeIn>
 
       <div className="project-cards-wrap">

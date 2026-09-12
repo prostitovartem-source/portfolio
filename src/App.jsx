@@ -4,6 +4,7 @@ import CustomCursor from "./components/CustomCursor.jsx";
 import SmoothScroll from "./components/SmoothScroll.jsx";
 import SectionBridge from "./components/SectionBridge.jsx";
 import MotionPrompt from "./components/MotionPrompt.jsx";
+import { t } from "./i18n/index.js";
 import Footer from "./components/Footer.jsx";
 import HeroSection from "./sections/HeroSection.jsx";
 import MarqueeSection from "./sections/MarqueeSection.jsx";
@@ -29,9 +30,9 @@ export default function App() {
       <AISection />
       <WhatIDoSection />
       <StackSection />
-      <SectionBridge label="архитектура → продукт" />
+      <SectionBridge label={t("bridges.archToProduct")} />
       <ProjectsSection />
-      <SectionBridge label="все системы соединены" />
+      <SectionBridge label={t("bridges.allConnected")} />
       <ContactSection />
 
       <Footer />

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useMotionPreference, { writeMotionChoice } from "../hooks/useMotionPreference.js";
+import { t } from "../i18n/index.js";
 
 /**
  * Ненавязчивое предложение включить анимации — только тем, у кого система
@@ -18,8 +19,8 @@ export default function MotionPrompt() {
   useEffect(() => {
     // Показываем не сразу: пусть человек сначала увидит сайт.
     if (!systemReduced || choice !== null) return;
-    const t = setTimeout(() => setVisible(true), 1800);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setVisible(true), 1800);
+    return () => clearTimeout(timer);
   }, [systemReduced, choice]);
 
   if (!visible) return null;
@@ -34,16 +35,14 @@ export default function MotionPrompt() {
   }
 
   return (
-    <div className="motion-prompt" role="region" aria-label="Настройка анимаций">
-      <p className="motion-prompt-text">
-        В системе выключены анимации, поэтому сайт показан статично. Включить движение здесь?
-      </p>
+    <div className="motion-prompt" role="region" aria-label={t("motion.ariaLabel")}>
+      <p className="motion-prompt-text">{t("motion.promptText")}</p>
       <div className="motion-prompt-actions">
         <button type="button" className="motion-prompt-btn motion-prompt-btn-primary" onClick={() => decide("full")}>
-          Включить
+          {t("motion.enable")}
         </button>
         <button type="button" className="motion-prompt-btn" onClick={() => decide("reduced")}>
-          Оставить как есть
+          {t("motion.keep")}
         </button>
       </div>
     </div>

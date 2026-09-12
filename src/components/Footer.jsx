@@ -1,4 +1,5 @@
 import MotionToggle from "./MotionToggle.jsx";
+import { t } from "../i18n/index.js";
 
 const LINKS = [
   { label: "Telegram", href: "https://t.me/cooicks" },
@@ -22,7 +23,7 @@ export default function Footer() {
 
       <div className="site-footer-meta">
         <MotionToggle />
-        <span className="site-footer-copy">© 2026 · Full-Stack Web Developer</span>
+        <span className="site-footer-copy">{t("footer.copy")}</span>
       </div>
     </footer>
   );

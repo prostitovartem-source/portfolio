@@ -3,35 +3,28 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
 import ContactButton from "../components/ContactButton.jsx";
+import { t } from "../i18n/index.js";
 
-const ABOUT_TEXT =
-  "Меня зовут Артём, мне 16 лет, учусь в 11 классе. В программировании — с 14 лет: начинал с python, а сейчас работаю как full stack разработчик и создаю современные веб-продукты (и не только) с фокусом на качество, производительность и удобство пользователя. Использую typescript, react, next.js и node.js, работаю с ai как инструментом ускорения разработки и создаю продукты полного цикла — от идеи и интерфейса до backend-логики и базы данных.";
+const ABOUT_TEXT = t("about.text");
 
 // Слова стека внутри параграфа подсвечиваются и реагируют на курсор —
-// они же служат «сигналами» системы, а не декоративными бейджами.
-const TECH_WORDS = new Set(["python", "typescript", "react", "next.js", "node.js", "ai", "backend-логики"]);
+// они же служат «сигналами» системы, а не декоративными бейджами. Список
+// слов для подсветки идёт из словаря вместе с текстом — в RU и EN тексте
+// это разные токены (например "backend-логики" против "backend").
+const TECH_WORDS = new Set(t("about.techWords"));
 
-const ABOUT_MARKERS = [
-  "Программирую с 14 лет",
-  "TypeScript · React · Next.js",
-  "AI-assisted development",
-  "Продукт под ключ",
-];
+const ABOUT_MARKERS = t("about.markers");
 
 /**
  * Семь фаз эволюции. Каждая веха на «хребте» таймлайна открывает свой
  * узел-возможность справа — так личная история превращается в архитектуру
  * системы, а на последней фазе всё сходится в «Продукт».
  */
-const PHASES = [
-  { id: "start", label: "14 лет", note: "первая строка кода", sat: null },
-  { id: "python", label: "Python", note: "алгоритмы, логика", sat: "Логика" },
-  { id: "web", label: "Web", note: "вёрстка, браузер", sat: "Frontend" },
-  { id: "react", label: "React / TypeScript", note: "компоненты, типы", sat: "Интерфейсы" },
-  { id: "node", label: "Next.js / Node.js", note: "сервер, API", sat: "Backend" },
-  { id: "ai", label: "AI", note: "модели в продукте", sat: "AI-слой" },
-  { id: "fullstack", label: "Full Stack", note: "полный цикл", sat: "Продукт" },
-];
+const PHASE_IDS = ["start", "python", "web", "react", "node", "ai", "fullstack"];
+const PHASES = PHASE_IDS.map((id) => {
+  const phase = t(`about.phases.${id}`);
+  return { id, label: phase.label, note: phase.note, sat: phase.sat ?? null };
+});
 
 // Геометрия SVG (viewBox 0 0 120 200): хребет слева, узлы-возможности справа.
 const SPINE_X = 26;
@@ -280,19 +273,19 @@ export default function AboutSection() {
 
           <div ref={copyRef} className="about-copy">
             <span className="section-eyebrow about-eyebrow">
-              01 / Обо мне
+              {t("about.eyebrow")}
               <span className="about-eyebrow-line" aria-hidden="true" />
             </span>
 
-            <h2 className="hero-heading about-heading">Обо мне</h2>
+            <h2 className="hero-heading about-heading">{t("about.heading")}</h2>
 
             <div ref={ageWrapRef} className="about-age">
               <span ref={ageRef} className="about-age-value">
                 0
               </span>
               <span className="about-age-label">
-                лет
-                <span className="about-age-sub">в 11 классе</span>
+                {t("about.ageSuffix")}
+                <span className="about-age-sub">{t("about.ageSub")}</span>
               </span>
             </div>
 

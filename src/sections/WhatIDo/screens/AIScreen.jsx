@@ -1,9 +1,13 @@
+import { t } from "../../../i18n/index.js";
+
 /**
  * Nova — AI-ассистент с генерацией изображений. Интерфейс построен как
  * настоящий чат (реплики, аватар, набор ответа, поле ввода), а не как
  * набор прямоугольников: это сразу читается как AI-продукт.
  */
 export default function AIScreen() {
+  const s = t("whatIdo.screens.ai");
+
   return (
     <div className="wid-ga">
       <div className="wid-ga-topbar">
@@ -13,12 +17,12 @@ export default function AIScreen() {
       </div>
 
       <div className="wid-ga-thread">
-        <div className="wid-ga-msg wid-ga-msg-user">закат над горами, кинематографично</div>
+        <div className="wid-ga-msg wid-ga-msg-user">{s.userMsg1}</div>
 
         <div className="wid-ga-msg-bot">
           <span className="wid-ga-bot-mark" />
           <div className="wid-ga-bot-body">
-            <span className="wid-ga-bot-text">Готово — четыре варианта:</span>
+            <span className="wid-ga-bot-text">{s.botText}</span>
             <div className="wid-ga-gallery">
               <span className="wid-ga-thumb wid-ga-thumb-a" />
               <span className="wid-ga-thumb wid-ga-thumb-b" />
@@ -28,7 +32,7 @@ export default function AIScreen() {
           </div>
         </div>
 
-        <div className="wid-ga-msg wid-ga-msg-user wid-ga-msg-short">сделай теплее</div>
+        <div className="wid-ga-msg wid-ga-msg-user wid-ga-msg-short">{s.userMsg2}</div>
 
         <div className="wid-ga-msg-bot">
           <span className="wid-ga-bot-mark" />
@@ -41,7 +45,7 @@ export default function AIScreen() {
       </div>
 
       <div className="wid-ga-input">
-        <span className="wid-ga-input-text">Сообщение…</span>
+        <span className="wid-ga-input-text">{s.inputPlaceholder}</span>
         <span className="wid-ga-send" />
       </div>
     </div>

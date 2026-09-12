@@ -1,9 +1,13 @@
+import { t } from "../../../i18n/index.js";
+
 /**
  * Pulse — вымышленное аналитическое веб-приложение. Прохладная палитра,
  * живой график, лента активности — читается как реальный рабочий продукт,
  * не как макет дашборда "вообще".
  */
 export default function WebAppScreen() {
+  const s = t("whatIdo.screens.webapp");
+
   return (
     <div className="wid-da">
       <div className="wid-da-topbar">
@@ -15,15 +19,15 @@ export default function WebAppScreen() {
         </span>
       </div>
 
-      <h4 className="wid-da-headline">Обзор в реальном времени</h4>
+      <h4 className="wid-da-headline">{s.headline}</h4>
 
       <div className="wid-da-kpis">
         <div className="wid-da-kpi">
-          <span className="wid-da-kpi-label">Активные</span>
-          <span className="wid-da-kpi-value">1 204</span>
+          <span className="wid-da-kpi-label">{s.active}</span>
+          <span className="wid-da-kpi-value">{s.activeValue}</span>
         </div>
         <div className="wid-da-kpi">
-          <span className="wid-da-kpi-label">Задержка</span>
+          <span className="wid-da-kpi-label">{s.latency}</span>
           <span className="wid-da-kpi-value">42 ms</span>
         </div>
       </div>
@@ -38,12 +42,14 @@ export default function WebAppScreen() {
       </svg>
 
       <div className="wid-da-feed">
-        <div className="wid-da-feed-row">Иван оплатил счёт #2291</div>
-        <div className="wid-da-feed-row">Новый пользователь зарегистрирован</div>
-        <div className="wid-da-feed-row">Деплой завершён · main</div>
+        {s.feed.map((row) => (
+          <div className="wid-da-feed-row" key={row}>
+            {row}
+          </div>
+        ))}
       </div>
 
-      <div className="wid-da-footer">Синхронизировано 2с назад</div>
+      <div className="wid-da-footer">{s.footer}</div>
     </div>
   );
 }

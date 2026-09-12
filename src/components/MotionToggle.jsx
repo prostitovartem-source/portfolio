@@ -1,4 +1,5 @@
 import useMotionPreference, { writeMotionChoice } from "../hooks/useMotionPreference.js";
+import { t } from "../i18n/index.js";
 
 /**
  * Постоянная точка возврата: передумать можно в любой момент, не залезая в
@@ -14,7 +15,7 @@ export default function MotionToggle() {
 
   return (
     <button type="button" className="motion-toggle" onClick={toggle} aria-pressed={!reduced}>
-      Анимации: {reduced ? "выкл" : "вкл"}
+      {t("motion.togglePrefix")} {reduced ? t("motion.toggleOff") : t("motion.toggleOn")}
     </button>
   );
 }

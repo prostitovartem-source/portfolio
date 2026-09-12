@@ -1,3 +1,5 @@
+import { t } from "../../../i18n/index.js";
+
 /**
  * READY — финальная композиция: телефон показывает собранный результат
  * всего, что было построено по ходу секции. Единственный экран в языке
@@ -5,48 +7,32 @@
  * а не ещё один интерфейс.
  */
 export default function ReadyScreen() {
+  const s = t("whatIdo.screens.ready");
+
   return (
     <div className="wid-rd">
       <div className="wid-rd-status">
         <span className="wid-rd-status-dot" />
-        Собрано
+        {s.status}
       </div>
 
       <h4 className="wid-rd-title">
-        Пять продуктов —
+        {s.titleLine1}
         <br />
-        один подход
+        {s.titleLine2}
       </h4>
 
       <div className="wid-rd-list">
-        <div className="wid-rd-row">
-          <span className="wid-rd-swatch wid-rd-swatch-1" />
-          <span className="wid-rd-name">EMBER</span>
-          <span className="wid-rd-kind">сайт</span>
-        </div>
-        <div className="wid-rd-row">
-          <span className="wid-rd-swatch wid-rd-swatch-2" />
-          <span className="wid-rd-name">Pulse</span>
-          <span className="wid-rd-kind">веб-приложение</span>
-        </div>
-        <div className="wid-rd-row">
-          <span className="wid-rd-swatch wid-rd-swatch-3" />
-          <span className="wid-rd-name">Quantix</span>
-          <span className="wid-rd-kind">SaaS</span>
-        </div>
-        <div className="wid-rd-row">
-          <span className="wid-rd-swatch wid-rd-swatch-4" />
-          <span className="wid-rd-name">Nova</span>
-          <span className="wid-rd-kind">AI</span>
-        </div>
-        <div className="wid-rd-row">
-          <span className="wid-rd-swatch wid-rd-swatch-5" />
-          <span className="wid-rd-name">Depth</span>
-          <span className="wid-rd-kind">интерфейс</span>
-        </div>
+        {s.items.map((item, i) => (
+          <div className="wid-rd-row" key={item.name}>
+            <span className={`wid-rd-swatch wid-rd-swatch-${i + 1}`} />
+            <span className="wid-rd-name">{item.name}</span>
+            <span className="wid-rd-kind">{item.kind}</span>
+          </div>
+        ))}
       </div>
 
-      <div className="wid-rd-foot">От макета до продакшена</div>
+      <div className="wid-rd-foot">{s.footer}</div>
     </div>
   );
 }

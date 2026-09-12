@@ -4,6 +4,7 @@ import FadeIn from "../components/FadeIn.jsx";
 import Magnet from "../components/Magnet.jsx";
 import ContactButton from "../components/ContactButton.jsx";
 import usePrefersReducedMotion from "../hooks/usePrefersReducedMotion.js";
+import { t } from "../i18n/index.js";
 
 // Three.js/@react-three/fiber/drei — тяжёлый кусок бандла, живёт в
 // отдельном чанке и подгружается уже после первой отрисовки текста/CTA.
@@ -61,7 +62,7 @@ export default function HeroSection() {
 
         <FadeIn delay={0.15} y={16} className="hero-status">
           <span className="hero-status-dot" />
-          Открыт к проектам
+          {t("hero.status")}
         </FadeIn>
 
         <h1 className="hero-title-main">
@@ -74,24 +75,21 @@ export default function HeroSection() {
         </h1>
 
         <FadeIn delay={0.75} y={20} className="hero-subtext">
-          <p>
-            Создаю современные сайты, веб-приложения и цифровые продукты —
-            от идеи до готового решения.
-          </p>
+          <p>{t("hero.description")}</p>
         </FadeIn>
 
         <FadeIn delay={0.9} y={20} className="hero-cta-row">
           <Magnet padding={90} strength={4}>
             <a href="#projects" className="btn-ghost" data-cursor-label="→">
-              Смотреть проекты
+              {t("hero.ctaProjects")}
             </a>
           </Magnet>
-          <ContactButton href="#contact" label="Написать мне" />
+          <ContactButton href="#contact" label={t("nav.contactCta")} />
         </FadeIn>
       </motion.div>
 
       <FadeIn delay={1.2} y={0} className="hero-scroll-cue" aria-hidden="true">
-        <span className="hero-scroll-label">Скролл</span>
+        <span className="hero-scroll-label">{t("hero.scroll")}</span>
         <span className="hero-scroll-line" />
         <span className="hero-scroll-node" />
       </FadeIn>
