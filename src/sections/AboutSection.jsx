@@ -393,7 +393,7 @@ export default function AboutSection() {
             <ol className="sr-only">
               {PHASES.map((p) => (
                 <li key={`sr-${p.id}`}>
-                  {p.label} — {p.note}
+                  {p.label} - {p.note}
                   {p.sat ? `, ${p.sat}` : ""}
                 </li>
               ))}

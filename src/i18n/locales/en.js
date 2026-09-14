@@ -3,7 +3,7 @@
 // kept exactly as in the Russian version.
 export default {
   seo: {
-    title: "copick — Full-Stack Web Developer",
+    title: "copick - Full-Stack Web Developer",
     description: "Full-Stack Web Developer creating modern websites, web applications, SaaS and AI-powered digital products.",
   },
 
@@ -20,7 +20,7 @@ export default {
 
   hero: {
     status: "Open to projects",
-    description: "I build modern websites, web apps, and digital products — from idea to finished product.",
+    description: "I build modern websites, web apps, and digital products - from idea to finished product.",
     ctaProjects: "View projects",
     scroll: "Scroll",
   },
@@ -29,12 +29,12 @@ export default {
     eyebrow: "01 / About",
     heading: "About me",
     ageSuffix: "years old",
-    ageSub: "senior year, high school",
-    text: "My name is Artem — I'm 16, in my final year of school. I've been programming since 14: I started with Python, and now I work as a full-stack developer, building modern web products (and more) with a focus on quality, performance, and usability. I use TypeScript, React, Next.js, and Node.js, treat AI as a tool that speeds up development, and build complete products end-to-end — from idea and interface to backend logic and the database.",
+    ageSub: "",
+    text: "My name is Artem - I'm 16. I've been programming for 2 years: I started with Python, and now I work as a full-stack developer, building modern web products (and more) with a focus on quality, performance, and usability. I use TypeScript, React, Next.js, and Node.js, treat AI as a tool that speeds up development, and build complete products end-to-end - from idea and interface to backend logic and the database.",
     techWords: ["python", "typescript", "react", "next.js", "node.js", "ai", "backend"],
-    markers: ["Coding since 14", "TypeScript · React · Next.js", "AI-assisted development", "End-to-end delivery"],
+    markers: ["2 years of coding", "TypeScript · React · Next.js", "AI-assisted development", "End-to-end delivery"],
     phases: {
-      start: { label: "Age 14", note: "first line of code" },
+      start: { label: "Start", note: "first line of code" },
       python: { label: "Python", note: "algorithms, logic", sat: "Logic" },
       web: { label: "Web", note: "markup, browser", sat: "Frontend" },
       react: { label: "React / TypeScript", note: "components, types", sat: "Interfaces" },
@@ -49,7 +49,7 @@ export default {
     tag: "vibe coding",
     headingLine1: "AI speeds up",
     headingLine2: "development",
-    text: "I use AI not instead of development, but as an accelerator: for prototyping, exploring solutions, generating boilerplate, debugging, and iterating on the product. I understand every line myself — AI speeds things up, it doesn't replace the work.",
+    text: "I use AI not instead of development, but as an accelerator: for prototyping, exploring solutions, generating boilerplate, debugging, and iterating on the product. I understand every line myself - AI speeds things up, it doesn't replace the work.",
   },
 
   whatIdo: {
@@ -58,12 +58,12 @@ export default {
     services: {
       websites: {
         name: "Websites",
-        description: "Fast, modern websites with thoughtful animation and attention to detail — built with React and Next.js.",
+        description: "Fast, modern websites with thoughtful animation and attention to detail - built with React and Next.js.",
         deco: ["Open for dinner", "Reservation · 19:30"],
       },
       webapps: {
         name: "Web Applications",
-        description: "Full-featured web applications — from the interface to the API and business logic in Node.js.",
+        description: "Full-featured web applications - from the interface to the API and business logic in Node.js.",
         deco: ["Live data", "Updated · 2s"],
       },
       saas: {
@@ -73,12 +73,12 @@ export default {
       },
       ai: {
         name: "AI Integrations",
-        description: "Embedding AI models (Replicate and compatible APIs) into the product — from image processing to content generation.",
+        description: "Embedding AI models (Replicate and compatible APIs) into the product - from image processing to content generation.",
         deco: ["Model: SDXL", "Generating · 4s"],
       },
       interactive: {
         name: "Interactive Interfaces",
-        description: "Interfaces built with Framer Motion and Three.js that don't just work — they feel like a finished product.",
+        description: "Interfaces built with Framer Motion and Three.js that don't just work - they feel like a finished product.",
         deco: ["60 fps", "Cursor active"],
       },
     },
@@ -99,8 +99,8 @@ export default {
           { name: "Pistachio baklava", price: "640 ₽" },
         ],
         hours: [
-          { days: "Mon – Thu", time: "18:00 — 00:00" },
-          { days: "Fri – Sun", time: "17:00 — 02:00" },
+          { days: "Mon – Thu", time: "18:00 - 00:00" },
+          { days: "Fri – Sun", time: "17:00 - 02:00" },
         ],
         info: "Patriarshiye · Daily 18:00–00:00",
         reserve: "Today · 19:30 · 2 guests",
@@ -128,13 +128,13 @@ export default {
       },
       ai: {
         userMsg1: "sunset over mountains, cinematic",
-        botText: "Done — four options:",
+        botText: "Done - four options:",
         userMsg2: "make it warmer",
         inputPlaceholder: "Message…",
       },
       ready: {
         status: "Complete",
-        titleLine1: "Five products —",
+        titleLine1: "Five products -",
         titleLine2: "one approach",
         items: [
           { name: "EMBER", kind: "website" },
@@ -160,7 +160,7 @@ export default {
       data: { title: "Data", note: "storage and access" },
       ai: { title: "AI", note: "models inside the product" },
     },
-    core: { title: "Full Stack", note: "the whole product — from interface to database" },
+    core: { title: "Full Stack", note: "the whole product - from interface to database" },
   },
 
   bridges: {
@@ -177,19 +177,19 @@ export default {
       category: "SaaS product",
       featuredLabel: "Flagship project",
       description:
-        "A product I conceived and built myself, end to end — from idea and interface to backend logic and the database. An AI SaaS platform for inventory and invoice management: it recognizes documents with AI, extracts the data, and helps run warehouse operations.",
+        "A product I conceived and built myself, end to end - from idea and interface to backend logic and the database. An AI SaaS platform for inventory and invoice management: it recognizes documents with AI, extracts the data, and helps run warehouse operations.",
       cta: "Open QUANTIX",
     },
     altme: {
       category: "AI bot for MAX",
       description:
-        "My own AI product — concept, development, and launch all mine. An AI bot and mini-app inside the MAX messenger for generating and restyling photos. Upload a photo, pick an AI style or write your own prompt, an in-app currency 🍓, and a referral system — the whole experience lives inside MAX, with no separate website.",
+        "My own AI product - concept, development, and launch all mine. An AI bot and mini-app inside the MAX messenger for generating and restyling photos. Upload a photo, pick an AI style or write your own prompt, an in-app currency 🍓, and a referral system - the whole experience lives inside MAX, with no separate website.",
       cta: "Open in MAX",
     },
     zfinde: {
       category: "Web product",
       description:
-        "A tool I built for my own need, from concept to finish. «Lidoiskatel» (“Lead Finder”) looks for businesses without a website by city and niche — pulling them from open sources, no paid APIs, and surfacing phone numbers to call.",
+        "A tool I built for my own need, from concept to finish. «Lidoiskatel» (“Lead Finder”) looks for businesses without a website by city and niche - pulling them from open sources, no paid APIs, and surfacing phone numbers to call.",
       cta: "Open ZFINDE",
     },
   },
@@ -199,7 +199,7 @@ export default {
     status: "Open to connect",
     headingLine1: "Reach out about",
     headingLine2: "working together.",
-    lead: "Open to new projects and collaborations — reach out however works best for you.",
+    lead: "Open to new projects and collaborations - reach out however works best for you.",
     primaryCta: "Message me",
   },
 
