@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { lazy, Suspense, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { shouldReduceMotion } from "../../hooks/useMotionPreference.js";
@@ -8,6 +8,10 @@ import LiveScreen from "./LiveScreens.jsx";
 import { CHAPTERS, SCREENS } from "./data.js";
 import "./showcase.css";
 import "./live-screens.css";
+
+// Three.js - тяжёлый кусок, общий чанк с 3D в hero; грузится только
+// на десктопе с включёнными анимациями.
+const Phone3D = lazy(() => import("./Phone3D.jsx"));
 
 const pad = (n) => String(n).padStart(2, "0");
 
@@ -234,6 +238,8 @@ export default function ShowcaseSection() {
   const sectionRef = useRef(null);
   const stageRef = useRef(null);
   const phoneRef = useRef(null);
+  const slotRef = useRef(null);
+  const [use3d, setUse3d] = useState(false);
 
   useGSAP(
     () => {
@@ -512,6 +518,8 @@ export default function ShowcaseSection() {
             })
             .add(tl);
           setRail(0);
+          setUse3d(true);
+          return () => setUse3d(false);
         }
       );
 
@@ -561,7 +569,13 @@ export default function ShowcaseSection() {
           </div>
         ))}
 
-        <div className="sc-phone-slot">
+        {use3d && (
+          <Suspense fallback={null}>
+            <Phone3D phoneRef={phoneRef} slotRef={slotRef} />
+          </Suspense>
+        )}
+
+        <div ref={slotRef} className="sc-phone-slot">
           <Phone ref={phoneRef}>
             <div className="sc-screens">
               {SCREENS.map((s, i) => (
