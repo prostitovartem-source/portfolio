@@ -6,11 +6,11 @@ const STORAGE_KEY = "copick:lang";
 export const DEFAULT_LOCALE = "ru";
 
 /**
- * Язык переключается перезагрузкой страницы — тем же приёмом, что уже
+ * Язык переключается перезагрузкой страницы - тем же приёмом, что уже
  * используется в этом проекте для смены motion-предпочтения
  * (см. MotionToggle/MotionPrompt): пересобрать на лету все GSAP-таймлайны
  * с их ScrollTrigger-пинами (About, WhatIDo, TechArchitecture) safely
- * нельзя — размеры текста меняются при смене языка, старые измерения
+ * нельзя - размеры текста меняются при смене языка, старые измерения
  * останутся в замерах пина. Перезагрузка даёт гарантированно чистый пересчёт
  * без риска сломанных сцен, и делает язык обычным module-level синглтоном:
  * компонентам не нужен React Context, достаточно вызвать t() при рендере.
@@ -20,7 +20,7 @@ function detectLocale() {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored === "ru" || stored === "en") return stored;
   } catch {
-    // localStorage недоступен (приватный режим, политика браузера) — тихо
+    // localStorage недоступен (приватный режим, политика браузера) - тихо
     // остаёмся на дефолтном языке.
   }
   return DEFAULT_LOCALE;
@@ -52,7 +52,7 @@ export function isEn() {
   return locale === "en";
 }
 
-/** Сохраняет выбор и перезагружает страницу — см. комментарий выше. */
+/** Сохраняет выбор и перезагружает страницу - см. комментарий выше. */
 export function setLocale(next) {
   try {
     localStorage.setItem(STORAGE_KEY, next);

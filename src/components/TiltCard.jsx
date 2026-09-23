@@ -1,7 +1,7 @@
 import { useRef } from "react";
 
 /**
- * 3D-наклон под курсор (perspective tilt) — прямая мутация DOM-стиля через
+ * 3D-наклон под курсор (perspective tilt) - прямая мутация DOM-стиля через
  * ref, без React state/ререндеров на каждый mousemove. Отключается на
  * touch-устройствах, где нет курсора для наклона.
  */

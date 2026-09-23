@@ -11,7 +11,7 @@ const NAV_LINKS = [
   { key: "contact", href: "#contact" },
 ];
 
-/** Фиксированный navbar на весь сайт: прозрачный вверху, уплотняется при скролле. На мобильном — компактный toggle вместо сжатого текстового ряда. */
+/** Фиксированный navbar на весь сайт: прозрачный вверху, уплотняется при скролле. На мобильном - компактный toggle вместо сжатого текстового ряда. */
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);

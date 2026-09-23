@@ -6,10 +6,10 @@ import { ReactLenis, useLenis } from "lenis/react";
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * Единственный глобальный Lenis-инстанс сайта (root — доступен всему
+ * Единственный глобальный Lenis-инстанс сайта (root - доступен всему
  * дереву через useLenis, управляет скроллом всего document). autoRaf:false
- * — Lenis не гоняет свой отдельный requestAnimationFrame; вместо этого
- * GSAP-тикер сам вызывает lenis.raf() каждый кадр — единственный rAF-цикл
+ * - Lenis не гоняет свой отдельный requestAnimationFrame; вместо этого
+ * GSAP-тикер сам вызывает lenis.raf() каждый кадр - единственный rAF-цикл
  * на сайте. useLenis(ScrollTrigger.update) держит ScrollTrigger в курсе
  * сглаженной (не нативной) позиции скролла на каждый тик Lenis.
  * Официальный паттерн, см. darkroomengineering/lenis packages/react/README.

@@ -7,7 +7,7 @@ const LINKS = [
   { label: "GitHub", href: "https://github.com/prostitovartem-source" },
 ];
 
-/** Минимальный футер: бренд, реальные ссылки, копирайт — без лишних элементов. */
+/** Минимальный футер: бренд, реальные ссылки, копирайт - без лишних элементов. */
 export default function Footer() {
   return (
     <footer className="site-footer">

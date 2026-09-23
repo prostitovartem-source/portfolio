@@ -8,7 +8,7 @@ import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
  * к узлу следующего раздела. Нужна, чтобы переход не читался как «секция
  * кончилась», а как продолжение одной системы.
  *
- * label — короткая техническая подпись перехода (архитектура → продукт).
+ * label - короткая техническая подпись перехода (архитектура → продукт).
  */
 export default function SectionBridge({ label }) {
   const rootRef = useRef(null);

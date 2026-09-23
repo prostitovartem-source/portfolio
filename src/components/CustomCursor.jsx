@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 /**
  * Минимальный кастомный курсор: точка следует за мышью, увеличивается над
  * интерактивными элементами. Отключён на touch-устройствах и при
- * prefers-reduced-motion — ничего не ломает, просто не монтируется.
+ * prefers-reduced-motion - ничего не ломает, просто не монтируется.
  */
 export default function CustomCursor() {
   const dotRef = useRef(null);

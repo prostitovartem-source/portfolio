@@ -3,7 +3,7 @@ import { shouldReduceMotion } from "./useMotionPreference.js";
 
 /**
  * Единый источник правды для prefers-reduced-motion. Раньше глобальный CSS
- * (App.css) гасил только CSS transition/animation — JS-анимации Framer
+ * (App.css) гасил только CSS transition/animation - JS-анимации Framer
  * Motion (FadeIn, AnimatedText, вход Hero-заголовка) это не затрагивало и
  * человек с этой настройкой всё равно видел полное движение. Хук читает
  * live-значение и подписывается на смену системной настройки.

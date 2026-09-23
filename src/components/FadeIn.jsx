@@ -5,7 +5,7 @@ import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
 
 /**
  * Появление элемента при попадании во вьюпорт (однократно): сдвиг + лёгкий
- * scale-in + blur-to-sharp — не плоский opacity-фейд.
+ * scale-in + blur-to-sharp - не плоский opacity-фейд.
  *
  * Переведён с framer-motion на GSAP: на сайте остаётся одна система
  * скролл-анимации, а не две параллельных. Публичный API компонента не
@@ -34,7 +34,7 @@ export default function FadeIn({
         if (!el) return;
 
         // При reduced-motion контент показывается сразу и не зависит от
-        // скролла: ScrollTrigger здесь оставлять нельзя — когда About
+        // скролла: ScrollTrigger здесь оставлять нельзя - когда About
         // перестаёт пиниться, высота страницы меняется, позиции триггеров
         // устаревают, и часть элементов так и не проявляется.
         if (shouldReduceMotion(context.conditions.reduced)) {

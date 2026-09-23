@@ -1,10 +1,8 @@
-// English — secondary language. Adapted for meaning and tone, not
-// translated word-for-word. Brand names, tech names and product names are
-// kept exactly as in the Russian version.
+// English - the secondary locale. Same keys as ru.js.
 export default {
   seo: {
     title: "copick - Full-Stack Web Developer",
-    description: "Full-Stack Web Developer creating modern websites, web applications, SaaS and AI-powered digital products.",
+    description: "Full-stack developer building websites, web apps, SaaS and AI products. From idea to launch.",
   },
 
   nav: {
@@ -20,8 +18,8 @@ export default {
 
   hero: {
     status: "Open to projects",
-    description: "I build modern websites, web apps, and digital products - from idea to finished product.",
-    ctaProjects: "View projects",
+    description: "I build web products end to end: interface, backend, database and AI. Three of them are already running in production.",
+    ctaProjects: "See the work",
     scroll: "Scroll",
   },
 
@@ -30,9 +28,9 @@ export default {
     heading: "About me",
     ageSuffix: "years old",
     ageSub: "",
-    text: "My name is Artem - I'm 16. I've been programming for 2 years: I started with Python, and now I work as a full-stack developer, building modern web products (and more) with a focus on quality, performance, and usability. I use TypeScript, React, Next.js, and Node.js, treat AI as a tool that speeds up development, and build complete products end-to-end - from idea and interface to backend logic and the database.",
+    text: "I'm Artem, 16. I've been writing code for 2 years: I started with python and now build full-stack products with typescript, react, next.js and node.js. I come up with the idea, design the interface, write the backend and take it all the way to launch. ai is a tool that makes me faster, not one that does the work for me.",
     techWords: ["python", "typescript", "react", "next.js", "node.js", "ai", "backend"],
-    markers: ["2 years of coding", "TypeScript · React · Next.js", "AI-assisted development", "End-to-end delivery"],
+    markers: ["2 years of coding", "TypeScript · React · Next.js", "AI in my workflow and products", "From idea to launch"],
     phases: {
       start: { label: "Start", note: "first line of code" },
       python: { label: "Python", note: "algorithms, logic", sat: "Logic" },
@@ -45,105 +43,57 @@ export default {
   },
 
   ai: {
-    eyebrow: "02 / AI-Assisted Dev",
+    eyebrow: "02 / AI at work",
     tag: "vibe coding",
-    headingLine1: "AI speeds up",
-    headingLine2: "development",
-    text: "I use AI not instead of development, but as an accelerator: for prototyping, exploring solutions, generating boilerplate, debugging, and iterating on the product. I understand every line myself - AI speeds things up, it doesn't replace the work.",
+    headingLine1: "AI speeds me up,",
+    headingLine2: "it doesn't replace me",
+    text: "Prototypes, exploring options, boilerplate, debugging: that's where AI saves me hours. The architecture and every line that ships to production, I understand myself.",
   },
 
-  whatIdo: {
-    eyebrow: "03 / What I Do",
-    heading: "What I Do",
-    services: {
-      websites: {
-        name: "Websites",
-        description: "Fast, modern websites with thoughtful animation and attention to detail - built with React and Next.js.",
-        deco: ["Open for dinner", "Reservation · 19:30"],
-      },
-      webapps: {
-        name: "Web Applications",
-        description: "Full-featured web applications - from the interface to the API and business logic in Node.js.",
-        deco: ["Live data", "Updated · 2s"],
-      },
-      saas: {
-        name: "SaaS Products",
-        description: "Turnkey SaaS products: authentication, databases (PostgreSQL, Prisma), third-party integrations.",
-        deco: ["MRR is growing", "Synced"],
-      },
-      ai: {
-        name: "AI Integrations",
-        description: "Embedding AI models (Replicate and compatible APIs) into the product - from image processing to content generation.",
-        deco: ["Model: SDXL", "Generating · 4s"],
-      },
-      interactive: {
-        name: "Interactive Interfaces",
-        description: "Interfaces built with Framer Motion and Three.js that don't just work - they feel like a finished product.",
-        deco: ["60 fps", "Cursor active"],
-      },
+  showcase: {
+    eyebrow: "03 / Shipped",
+    headingLine1: "Not mockups.",
+    headingLine2: "Live products.",
+    sub: "Every screen here was captured from a working site. Keep scrolling and the phone walks you through them.",
+    labels: {
+      built: "What I built",
+      stack: "Stack",
+      live: "Live",
+      open: "Open",
+      step: "Screen",
     },
-    screens: {
-      restaurant: {
-        menu: "Menu",
-        book: "Book",
-        heroTag: "Open flame",
-        headlineLine1: "A dinner",
-        headlineLine2: "worth remembering",
-        sub1: "Seasonal menu. Open flame. Evening atmosphere.",
-        cta: "Reserve a table",
-        sub2: "Cooked over live fire: wood oven, charcoal, seasonal produce from local farms.",
-        dishes: [
-          { name: "Tuna tartare", price: "890 ₽" },
-          { name: "Ribeye steak", price: "2,400 ₽" },
-          { name: "Charred octopus", price: "1,650 ₽" },
-          { name: "Pistachio baklava", price: "640 ₽" },
+    chapters: {
+      altime: {
+        kind: "AI photoshoots in MAX",
+        lead: "A mini app and bot inside the MAX messenger. Upload a photo, pick a photoshoot, and Gemini puts you in a new scene.",
+        built: ["MAX mini app", "Bot", "AI generation", "Payments via YooKassa", "Catalog admin"],
+        cta: "Open in MAX",
+        steps: [
+          "Home: 160+ photoshoots in 14 groups. The catalog is edited from the admin panel, no redeploy needed.",
+          "Pick a photoshoot, upload a photo, and the final price is shown right away.",
+          "The Premium group. Every preview was generated by the same model.",
+          "Its own currency, strawberries. Packs, promo codes and in-app payments.",
         ],
-        hours: [
-          { days: "Mon – Thu", time: "18:00 - 00:00" },
-          { days: "Fri – Sun", time: "17:00 - 02:00" },
+      },
+      quantix: {
+        kind: "SaaS for small shops",
+        lead: "Invoice tracking for small shops. Snap a paper invoice and the AI fills in the supplier, items and totals.",
+        built: ["Landing page and SEO", "User dashboard", "Invoice recognition", "Quantix AI over your data", "Cash book"],
+        cta: "Open QUANTIX",
+        steps: [
+          "The landing page: explains the product to a shop owner with no accountant and no Excel.",
+          "Sign up and log in to the dashboard where invoices, prices and cash live.",
         ],
-        info: "Patriarshiye · Daily 18:00–00:00",
-        reserve: "Today · 19:30 · 2 guests",
-        footLine: "Bolshaya Bronnaya, 12",
       },
-      webapp: {
-        headline: "Real-time overview",
-        active: "Active",
-        activeValue: "1,204",
-        latency: "Latency",
-        feed: ["Ivan paid invoice #2291", "New user signed up", "Deploy finished · main"],
-        footer: "Synced 2s ago",
-      },
-      saas: {
-        revenueLabel: "Monthly revenue",
-        revenueValue: "₽482,000",
-        orders: "Orders",
-        products: "Products",
-        list: [
-          { label: "Invoice #1042", status: "paid", ok: true },
-          { label: "Invoice #1041", status: "pending", ok: false },
-          { label: "Air Sneakers", status: "12 pcs", ok: false },
+      zfinde: {
+        kind: "Lead finder",
+        lead: "Finds businesses without a website by city and niche. Open data sources only, no paid APIs.",
+        built: ["OpenStreetMap collection", "Duplicate merging", "Lead scoring", "CSV export"],
+        cta: "Open ZFINDE",
+        steps: [
+          "City, niche and how many leads you need. That's it.",
+          "A real search: cafes in Stavropol. 146 found, 77 without a website. Phone numbers are blurred.",
         ],
-        footer: "Updated just now",
-      },
-      ai: {
-        userMsg1: "sunset over mountains, cinematic",
-        botText: "Done - four options:",
-        userMsg2: "make it warmer",
-        inputPlaceholder: "Message…",
-      },
-      ready: {
-        status: "Complete",
-        titleLine1: "Five products -",
-        titleLine2: "one approach",
-        items: [
-          { name: "EMBER", kind: "website" },
-          { name: "Pulse", kind: "web app" },
-          { name: "Quantix", kind: "SaaS" },
-          { name: "Nova", kind: "AI" },
-          { name: "Depth", kind: "interface" },
-        ],
-        footer: "From mockup to production",
       },
     },
   },
@@ -160,47 +110,62 @@ export default {
       data: { title: "Data", note: "storage and access" },
       ai: { title: "AI", note: "models inside the product" },
     },
-    core: { title: "Full Stack", note: "the whole product - from interface to database" },
+    core: { title: "Full Stack", note: "the whole product, from interface to database" },
   },
 
   bridges: {
     archToProduct: "architecture → product",
-    allConnected: "all systems connected",
+    allConnected: "every system connected",
   },
 
   projects: {
     eyebrow: "05 / Projects",
-    heading: "Selected projects",
+    heading: "Projects",
     personalBadge: "Personal project",
-    demoSoon: "Demo soon",
     quantix: {
-      category: "SaaS product",
-      featuredLabel: "Flagship project",
+      category: "SaaS",
       description:
-        "A product I conceived and built myself, end to end - from idea and interface to backend logic and the database. An AI SaaS platform for inventory and invoice management: it recognizes documents with AI, extracts the data, and helps run warehouse operations.",
+        "My own product, from the first idea to a working service. Software for small shop owners: invoices, marked-up prices, cash tracking and an AI that reads paper documents.",
+      facts: [
+        { k: "Invoices", v: "markup and final prices are calculated as you type" },
+        { k: "Invoice photo", v: "AI recognizes the supplier, items and totals" },
+        { k: "Quantix AI", v: "ask about your purchases in plain language" },
+        { k: "Cash book", v: "balance, income and spending without Excel" },
+      ],
       cta: "Open QUANTIX",
     },
-    altme: {
-      category: "AI bot for MAX",
+    altime: {
+      category: "AI product in MAX",
       description:
-        "My own AI product - concept, development, and launch all mine. An AI bot and mini-app inside the MAX messenger for generating and restyling photos. Upload a photo, pick an AI style or write your own prompt, an in-app currency 🍓, and a referral system - the whole experience lives inside MAX, with no separate website.",
+        "AI photoshoots right inside a messenger. Concept, design, backend, payments and launch were all on me. The shots below were generated by the product itself.",
+      stats: [
+        { v: "160+", l: "photoshoots" },
+        { v: "14", l: "groups" },
+        { v: "🍓", l: "own currency" },
+      ],
       cta: "Open in MAX",
     },
     zfinde: {
-      category: "Web product",
+      category: "Tool",
       description:
-        "A tool I built for my own need, from concept to finish. «Lidoiskatel» (“Lead Finder”) looks for businesses without a website by city and niche - pulling them from open sources, no paid APIs, and surfacing phone numbers to call.",
+        "Built for my own problem: finding businesses that need a website. It collects them from open sources, merges duplicates and keeps the ones with no site.",
+      stats: [
+        { v: "146", l: "found" },
+        { v: "77", l: "no website" },
+        { v: "28", l: "duplicates merged" },
+      ],
+      note: "Real query: cafes, Stavropol",
       cta: "Open ZFINDE",
     },
   },
 
   contact: {
     eyebrow: "06 / Contact",
-    status: "Open to connect",
-    headingLine1: "Reach out about",
-    headingLine2: "working together.",
-    lead: "Open to new projects and collaborations - reach out however works best for you.",
-    primaryCta: "Message me",
+    status: "Open to work",
+    headingLine1: "Got an idea?",
+    headingLine2: "Let's build it.",
+    lead: "Open to work and new projects. Reach out however suits you.",
+    primaryCta: "Get in touch",
   },
 
   footer: {

@@ -7,9 +7,9 @@ import { t } from "../i18n/index.js";
 
 const ABOUT_TEXT = t("about.text");
 
-// Слова стека внутри параграфа подсвечиваются и реагируют на курсор —
+// Слова стека внутри параграфа подсвечиваются и реагируют на курсор -
 // они же служат «сигналами» системы, а не декоративными бейджами. Список
-// слов для подсветки идёт из словаря вместе с текстом — в RU и EN тексте
+// слов для подсветки идёт из словаря вместе с текстом - в RU и EN тексте
 // это разные токены (например "backend-логики" против "backend").
 const TECH_WORDS = new Set(t("about.techWords"));
 
@@ -17,7 +17,7 @@ const ABOUT_MARKERS = t("about.markers");
 
 /**
  * Семь фаз эволюции. Каждая веха на «хребте» таймлайна открывает свой
- * узел-возможность справа — так личная история превращается в архитектуру
+ * узел-возможность справа - так личная история превращается в архитектуру
  * системы, а на последней фазе всё сходится в «Продукт».
  */
 const PHASE_IDS = ["start", "python", "web", "react", "node", "ai", "fullstack"];
@@ -39,7 +39,7 @@ const convergePath = (i, lastI) => `M ${SAT_X} ${satY(i)} Q ${SAT_X + 22} ${(sat
 
 function splitWords(text) {
   return text.split(" ").map((word, i) => {
-    const clean = word.toLowerCase().replace(/[.,—:()]/g, "");
+    const clean = word.toLowerCase().replace(/[.,-:()]/g, "");
     return { word, isTech: TECH_WORDS.has(clean), key: `${clean}-${i}` };
   });
 }
@@ -150,7 +150,7 @@ export default function AboutSection() {
           tl.to(q(".about-word"), { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, stagger: 0.012 }, 0.25);
           tl.to(ageWrapRef.current, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5 }, 0.3);
 
-          // Маркеры и кнопка — часть вводного блока: если придержать их до
+          // Маркеры и кнопка - часть вводного блока: если придержать их до
           // финала, левая колонка почти весь скролл выглядит незаконченной.
           tl.to([...q(".about-marker"), ...q(".about-cta")], { opacity: 1, y: 0, duration: 0.4, stagger: 0.05 }, 0.55);
 
@@ -193,7 +193,7 @@ export default function AboutSection() {
               { attr: { r: 6.4 }, opacity: 0.85, duration: 0.45 },
               at - 0.1
             );
-            // completed: видима, но спокойнее — кольцо гаснет, точка садится
+            // completed: видима, но спокойнее - кольцо гаснет, точка садится
             tl.to(dot, { attr: { r: 2.4 }, opacity: 0.7, duration: 0.4 }, at + 0.45);
             tl.to(ring, { attr: { r: 8.5 }, opacity: 0, duration: 0.5 }, at + 0.45);
 
@@ -368,7 +368,7 @@ export default function AboutSection() {
                 ) : null
               )}
 
-              {/* Подписи живут в той же системе координат, что и узлы —
+              {/* Подписи живут в той же системе координат, что и узлы -
                   иначе при preserveAspectRatio они неизбежно разъезжаются
                   с кругами на разных пропорциях контейнера. */}
               {PHASES.map((p, i) => (
@@ -388,7 +388,7 @@ export default function AboutSection() {
               ))}
             </svg>
 
-            {/* Тот же путь развития — обычным списком для скринридеров:
+            {/* Тот же путь развития - обычным списком для скринридеров:
                 SVG-версия декоративна и скрыта от них. */}
             <ol className="sr-only">
               {PHASES.map((p) => (

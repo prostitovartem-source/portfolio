@@ -10,8 +10,8 @@ const MONITOR_BASE_X_MOBILE = 0;
 /**
  * 3D-монитор с "живым" кодом на экране (canvas-текстура, см.
  * codeMonitorTexture.js). Экран самосветящийся (meshBasicMaterial,
- * toneMapped=false) — остаётся читаемым независимо от освещения сцены.
- * Держит лёгкое непрерывное покачивание, а не полный оборот — иначе код
+ * toneMapped=false) - остаётся читаемым независимо от освещения сцены.
+ * Держит лёгкое непрерывное покачивание, а не полный оборот - иначе код
  * половину времени был бы повёрнут от зрителя.
  */
 function CodeMonitor({ reducedMotion, isMobile, scrollProgress }) {
@@ -24,7 +24,7 @@ function CodeMonitor({ reducedMotion, isMobile, scrollProgress }) {
   const drawAccum = useRef(0);
 
   const baseX = isMobile ? MONITOR_BASE_X_MOBILE : MONITOR_BASE_X_DESKTOP;
-  // Чуть меньше десктопного 1.0 — типографика должна доминировать над 3D,
+  // Чуть меньше десктопного 1.0 - типографика должна доминировать над 3D,
   // объект поддерживает композицию, а не соревнуется с заголовком за внимание.
   const scale = isMobile ? 0.62 : 0.9;
   const baseY = isMobile ? 0.85 : 0;
@@ -90,13 +90,13 @@ function CodeMonitor({ reducedMotion, isMobile, scrollProgress }) {
           <meshStandardMaterial color="#11151f" roughness={0.45} metalness={0.35} />
         </RoundedBox>
 
-        {/* Тонкий светящийся обод экрана — дышит по синусоиде */}
+        {/* Тонкий светящийся обод экрана - дышит по синусоиде */}
         <mesh position={[0, 0, 0.061]}>
           <planeGeometry args={[2.42, 1.52]} />
           <meshBasicMaterial ref={rimMatRef} color="#8b5cf6" transparent opacity={0.22} toneMapped={false} />
         </mesh>
 
-        {/* Экран — самосветящийся, не зависит от освещения сцены */}
+        {/* Экран - самосветящийся, не зависит от освещения сцены */}
         <mesh position={[0, 0, 0.066]}>
           <planeGeometry args={[2.34, 1.44]} />
           <meshBasicMaterial ref={screenMatRef} transparent opacity={1} toneMapped={false}>
@@ -118,7 +118,7 @@ function CodeMonitor({ reducedMotion, isMobile, scrollProgress }) {
   );
 }
 
-// Дешёвый детерминированный "хэш" в [0, 1) — вместо Math.random (стабильные
+// Дешёвый детерминированный "хэш" в [0, 1) - вместо Math.random (стабильные
 // позиции частиц, не пересчитываются на каждый ререндер).
 function hash(n) {
   const s = Math.sin(n * 12.9898) * 43758.5453;
@@ -151,7 +151,7 @@ function AnimatedParticles({ count, reducedMotion }) {
   );
 }
 
-/** Camera parallax + лёгкий scroll-dolly — курсор и скролл заметно влияют на сцену. */
+/** Camera parallax + лёгкий scroll-dolly - курсор и скролл заметно влияют на сцену. */
 function CameraRig({ reducedMotion, scrollProgress }) {
   const pointer = useRef({ x: 0, y: 0 });
 
@@ -184,7 +184,7 @@ function CameraRig({ reducedMotion, scrollProgress }) {
   return null;
 }
 
-/** Свет слегка тянется к курсору — интерактивность заметна и в освещении, не только в движении объектов. */
+/** Свет слегка тянется к курсору - интерактивность заметна и в освещении, не только в движении объектов. */
 function CursorLight({ reducedMotion }) {
   const ref = useRef();
   const pointer = useRef({ x: 0, y: 0 });
@@ -214,7 +214,7 @@ function CursorLight({ reducedMotion }) {
 
 /**
  * Вся Three.js-сцена Hero вынесена в отдельный чанк (см. React.lazy в
- * HeroSection.jsx) — @react-three/fiber, drei и three вместе весят
+ * HeroSection.jsx) - @react-three/fiber, drei и three вместе весят
  * ощутимую часть бандла; ленивая загрузка не блокирует первую отрисовку
  * текста/CTA, сцена докатывается следом.
  */

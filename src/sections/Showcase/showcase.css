@@ -1,0 +1,700 @@
+/* ══════════════════════ SHOWCASE: живые продукты в телефоне ══════════════
+   Одна закреплённая сцена во весь экран. Телефон - главный актёр: встаёт
+   из-под заголовка, переезжает между сторонами на смене продукта,
+   внутри прокручиваются настоящие экраны. Всё остальное - слои вокруг. */
+
+.sc-section {
+  position: relative;
+  background: var(--bg);
+}
+
+.sc-stage {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* ── Фоновые слои: цвет продукта и огромная подпись ─────────────────── */
+.sc-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.sc-glow {
+  position: absolute;
+  top: 50%;
+  width: 62vw;
+  aspect-ratio: 1;
+  margin-top: -31vw;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--sc-accent) 26%, transparent) 0%,
+    color-mix(in srgb, var(--sc-accent) 8%, transparent) 38%,
+    transparent 66%
+  );
+  filter: blur(1.5rem);
+}
+
+.sc-glow-right {
+  left: calc(70% - 31vw);
+}
+
+.sc-glow-left {
+  left: calc(30% - 31vw);
+}
+
+.sc-mark {
+  position: absolute;
+  bottom: -3.2vw;
+  white-space: nowrap;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 21vw;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: color-mix(in srgb, var(--sc-accent) 9%, transparent);
+}
+
+.sc-mark span {
+  display: inline-block;
+}
+
+.sc-mark-right {
+  right: -2vw;
+}
+
+.sc-mark-left {
+  left: -2vw;
+}
+
+/* ── Интро ────────────────────────────────────────────────────────── */
+.sc-intro {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 6.5vw;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.sc-heading {
+  margin: 0.2em 0 0.35em;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: clamp(3.25rem, 7.6vw, 11rem);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  color: var(--text);
+}
+
+.sc-heading span {
+  display: block;
+}
+
+/* Сдвиг второй строки - сама типографика ведёт взгляд вправо, к телефону. */
+.sc-heading span + span {
+  padding-left: 0.9em;
+  color: var(--text-secondary);
+}
+
+.sc-sub {
+  max-width: 34ch;
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+/* ── Текст главы ─────────────────────────────────────────────────── */
+.sc-copy-slot {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.sc-copy {
+  position: absolute;
+  top: 50%;
+  width: min(40rem, 35vw);
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+
+.sc-copy-left {
+  left: 6.5vw;
+}
+
+.sc-copy-right {
+  right: 6.5vw;
+}
+
+.sc-kicker {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.sc-kicker-index {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  color: var(--sc-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.sc-name {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0.18em 0 0.28em;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: clamp(3.5rem, 6.4vw, 9.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  color: var(--text);
+}
+
+.sc-char-mask {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.sc-char {
+  display: inline-block;
+  transform-origin: 0 100%;
+}
+
+.sc-lead {
+  max-width: 34ch;
+  margin: 0;
+  font-size: 1.22rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.sc-caps {
+  position: relative;
+  min-height: 5.6rem;
+  margin-top: 1.9rem;
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--sc-accent);
+}
+
+.sc-cap {
+  position: absolute;
+  top: 0;
+  left: 1.1rem;
+  right: 0;
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.sc-cap-step {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--sc-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.sc-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.sc-meta-label {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--text-tertiary);
+}
+
+.sc-built,
+.sc-stack {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sc-built li {
+  padding: 0.34rem 0;
+  font-size: 0.95rem;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+
+.sc-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.sc-stack li {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+}
+
+.sc-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 2rem;
+  padding: 0.9rem 1.45rem;
+  border-radius: var(--radius-full);
+  background: var(--sc-accent);
+  color: #0a0a10;
+  font-weight: 600;
+  font-size: 0.98rem;
+  text-decoration: none;
+  transition:
+    transform 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+
+.sc-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.8rem 2rem -0.8rem var(--sc-accent);
+}
+
+.sc-cta:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+.sc-cta-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #0a0a10;
+  animation: sc-live 1.8s ease-in-out infinite;
+}
+
+@keyframes sc-live {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* ── Слот телефона ───────────────────────────────────────────────── */
+.sc-phone-slot {
+  position: absolute;
+  top: calc(50% + 2.5svh);
+  left: 50%;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  --ph: min(80svh, 62rem);
+}
+
+/* ── Телефон ─────────────────────────────────────────────────────── */
+.sc-phone {
+  position: relative;
+  width: calc(var(--ph) * 0.4638);
+  font-size: calc(var(--ph) * 0.4638 / 30);
+  will-change: transform;
+}
+
+.sc-phone-body {
+  position: relative;
+  padding: 0.62em;
+  border-radius: 4.9em;
+  background: linear-gradient(
+    150deg,
+    #6d6d76 0%,
+    #34343a 16%,
+    #1c1c20 42%,
+    #232328 64%,
+    #4a4a52 86%,
+    #7c7c85 100%
+  );
+  box-shadow:
+    inset 0 0 0 0.07em rgba(255, 255, 255, 0.28),
+    inset 0 0 0.35em rgba(0, 0, 0, 0.85),
+    0 4em 7em -2em rgba(0, 0, 0, 0.85),
+    0 1.2em 2.4em -1em rgba(0, 0, 0, 0.7);
+}
+
+.sc-phone-bezel {
+  padding: 0.86em;
+  border-radius: 4.3em;
+  background: #030303;
+  box-shadow: inset 0 0 0 0.1em #16161a;
+}
+
+.sc-phone-screen {
+  position: relative;
+  overflow: hidden;
+  border-radius: 3.45em;
+  background: #000;
+  isolation: isolate;
+  transform: translateZ(0);
+}
+
+.sc-screens {
+  position: relative;
+  aspect-ratio: 390 / 890.8;
+}
+
+.sc-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #0b0709;
+  color: #fff;
+}
+
+.sc-screen-light {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.sc-status {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  aspect-ratio: 390 / 46.8;
+  padding: 0.35em 7.5% 0 10%;
+  font-family: -apple-system, "SF Pro Text", "Inter", sans-serif;
+  font-size: 1.12em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.sc-status-icons {
+  display: flex;
+  align-items: center;
+  gap: 0.32em;
+}
+
+.sc-status-icons svg {
+  height: 0.72em;
+  width: auto;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.sc-status-signal,
+.sc-status-wifi {
+  stroke: none !important;
+}
+
+.sc-status-battery {
+  height: 0.78em !important;
+}
+
+.sc-status-battery rect:first-child {
+  opacity: 0.45;
+}
+
+.sc-viewport {
+  position: relative;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.sc-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  will-change: transform;
+}
+
+.sc-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+}
+
+.sc-bar-top {
+  top: 0;
+  background-position: top center;
+}
+
+.sc-bar-bottom {
+  bottom: 0;
+  background-position: bottom center;
+  /* Навигация в ALTIME плавает над контентом - оставляем только саму
+     «таблетку», фон над ней растворяем. */
+  -webkit-mask-image: linear-gradient(to top, #000 80%, transparent 100%);
+  mask-image: linear-gradient(to top, #000 80%, transparent 100%);
+}
+
+.sc-phone-island {
+  position: absolute;
+  top: 0.95em;
+  left: 50%;
+  z-index: 6;
+  width: 9.4em;
+  height: 2.75em;
+  margin-left: -4.7em;
+  border-radius: 2em;
+  background: #000;
+  box-shadow: inset 0 0 0 0.06em rgba(255, 255, 255, 0.05);
+}
+
+/* Блик на стекле - едва заметная диагональ, без глянца «из коробки». */
+.sc-phone-glass {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    118deg,
+    rgba(255, 255, 255, 0.13) 0%,
+    rgba(255, 255, 255, 0.03) 22%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0) 72%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  box-shadow: inset 0 0 0 0.05em rgba(255, 255, 255, 0.06);
+}
+
+.sc-phone-btn {
+  position: absolute;
+  width: 0.34em;
+  border-radius: 0.2em;
+  background: linear-gradient(90deg, #2a2a2f, #6a6a72 60%, #3a3a40);
+}
+
+.sc-phone-btn-action {
+  left: -0.26em;
+  top: 16%;
+  height: 4.5%;
+}
+
+.sc-phone-btn-up {
+  left: -0.26em;
+  top: 24%;
+  height: 7.5%;
+}
+
+.sc-phone-btn-down {
+  left: -0.26em;
+  top: 33.5%;
+  height: 7.5%;
+}
+
+.sc-phone-btn-power {
+  right: -0.26em;
+  top: 26%;
+  height: 12%;
+  background: linear-gradient(270deg, #2a2a2f, #6a6a72 60%, #3a3a40);
+}
+
+/* Слой «пальца»: совпадает с областью экрана под статус-баром. */
+.sc-taplayer {
+  position: absolute;
+  top: 5.254%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.sc-tap {
+  position: absolute;
+  width: 4.4em;
+  height: 4.4em;
+  margin: -2.2em 0 0 -2.2em;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.2) 55%, transparent 70%);
+  box-shadow: 0 0 0 0.14em rgba(255, 255, 255, 0.55);
+}
+
+/* ── Рейка глав ──────────────────────────────────────────────────── */
+.sc-rail {
+  position: absolute;
+  left: 50%;
+  bottom: 3.2vh;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  transform: translateX(-50%);
+}
+
+.sc-rail-items {
+  display: flex;
+  gap: 2.2rem;
+}
+
+.sc-rail-item {
+  display: flex;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  transition: color 0.35s var(--ease);
+}
+
+.sc-rail-index {
+  font-variant-numeric: tabular-nums;
+}
+
+.sc-rail-item.is-active {
+  color: var(--text);
+}
+
+.sc-rail-item.is-active .sc-rail-index {
+  color: var(--sc-accent);
+}
+
+.sc-rail-track {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--border);
+}
+
+.sc-rail-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--text);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+/* ── Статичная версия: мобильные и режим без анимаций ─────────────── */
+.sc-static {
+  display: none;
+  padding: 5rem 1.25rem 2rem;
+}
+
+.sc-static-head {
+  margin-bottom: 3.5rem;
+}
+
+.sc-static-chapter {
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.sc-static-name {
+  margin: 0.2em 0 0.3em;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.8rem, 11vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+
+.sc-static-phones {
+  display: flex;
+  gap: 1.25rem;
+  margin: 2rem -1.25rem 0;
+  padding: 0.5rem 1.25rem 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.sc-static-phones::-webkit-scrollbar {
+  display: none;
+}
+
+.sc-static-shot {
+  flex: 0 0 auto;
+  margin: 0;
+  scroll-snap-align: start;
+}
+
+.sc-phone-static {
+  --ph: min(30rem, 68vh);
+}
+
+.sc-static-shot figcaption {
+  max-width: calc(var(--ph, 30rem) * 0.4638);
+  margin-top: 0.9rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.sc-phone-static .sc-screen {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (max-width: 900px) {
+  .sc-stage {
+    display: none;
+  }
+
+  .sc-static {
+    display: block;
+  }
+
+  .sc-phone-static {
+    --ph: min(26rem, 66vh);
+  }
+
+  .sc-static-shot figcaption {
+    max-width: calc(min(26rem, 66vh) * 0.4638);
+  }
+
+  .sc-meta {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 901px) {
+  .sc-static-phones {
+    margin: 2.5rem 0 0;
+    padding: 0.5rem 0 1rem;
+    gap: 2.5rem;
+  }
+
+  .sc-static {
+    padding: 8rem 6.5vw 4rem;
+  }
+
+  .sc-static-chapter {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+html.motion-reduced .sc-stage {
+  display: none;
+}
+
+html.motion-reduced .sc-static {
+  display: block;
+}
+
+html.motion-reduced .sc-cta-dot {
+  animation: none;
+}

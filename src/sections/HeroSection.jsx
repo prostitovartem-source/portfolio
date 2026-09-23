@@ -6,7 +6,7 @@ import ContactButton from "../components/ContactButton.jsx";
 import usePrefersReducedMotion from "../hooks/usePrefersReducedMotion.js";
 import { t } from "../i18n/index.js";
 
-// Three.js/@react-three/fiber/drei — тяжёлый кусок бандла, живёт в
+// Three.js/@react-three/fiber/drei - тяжёлый кусок бандла, живёт в
 // отдельном чанке и подгружается уже после первой отрисовки текста/CTA.
 const HeroScene = lazy(() => import("./HeroScene.jsx"));
 
@@ -38,7 +38,7 @@ export default function HeroSection() {
   const sectionRef = useRef(null);
 
   // Скролл влияет на сцену напрямую: content уходит вверх и тает, а
-  // scrollYProgress (MotionValue) читается внутри HeroScene через .get() —
+  // scrollYProgress (MotionValue) читается внутри HeroScene через .get() -
   // без лишних React-ререндеров на каждый пиксель скролла.
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
   const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
