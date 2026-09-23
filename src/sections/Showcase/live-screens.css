@@ -1,0 +1,677 @@
+/* ══════════════ Живые экраны телефона ══════════════
+   Размеры в «точках» экрана iPhone: ширина экрана = 390pt, как у
+   скриншотов. Тогда живые экраны и настоящие кадры одного масштаба. */
+
+.lv {
+  --pt: calc(27.04em / 390);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: -apple-system, "SF Pro Text", "Inter", sans-serif;
+  font-size: calc(var(--pt) * 15);
+  line-height: 1.35;
+  color: #fff;
+}
+
+.lv b,
+.lv i,
+.lv small {
+  font-style: normal;
+}
+
+/* ── Чат бота в MAX ─────────────────────────────── */
+.lv-chat {
+  background: #0d0c11;
+}
+
+.lv-chat-head {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--pt) * 10);
+  padding: calc(var(--pt) * 8) calc(var(--pt) * 14) calc(var(--pt) * 10);
+  background: #16151c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lv-chat-back {
+  width: calc(var(--pt) * 10);
+  height: calc(var(--pt) * 10);
+  border-left: 2px solid #8e8a99;
+  border-bottom: 2px solid #8e8a99;
+  transform: rotate(45deg);
+  margin-right: calc(var(--pt) * 4);
+}
+
+.lv-chat-avatar {
+  display: grid;
+  place-items: center;
+  width: calc(var(--pt) * 38);
+  height: calc(var(--pt) * 38);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff4f86, #e11d5c);
+}
+
+.lv-chat-avatar svg {
+  width: 55%;
+  height: 55%;
+}
+
+.lv-chat-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.lv-chat-title b {
+  font-size: calc(var(--pt) * 16);
+  font-weight: 600;
+}
+
+.lv-chat-title i {
+  font-size: calc(var(--pt) * 12.5);
+  color: #8e8a99;
+}
+
+.lv-chat-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--pt) * 8);
+  padding: calc(var(--pt) * 12) calc(var(--pt) * 12);
+  overflow: hidden;
+  background:
+    radial-gradient(120% 60% at 80% 0%, rgba(244, 63, 117, 0.08), transparent 60%),
+    #0d0c11;
+}
+
+.lv-chat-day {
+  align-self: center;
+  padding: calc(var(--pt) * 3) calc(var(--pt) * 10);
+  font-size: calc(var(--pt) * 11.5);
+  color: #a19dab;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+}
+
+.lv-msg {
+  max-width: 86%;
+  padding: calc(var(--pt) * 9) calc(var(--pt) * 12);
+  font-size: calc(var(--pt) * 13.5);
+  border-radius: calc(var(--pt) * 16);
+}
+
+.lv-msg-user {
+  align-self: flex-end;
+  background: #4f7cff;
+  border-bottom-right-radius: calc(var(--pt) * 5);
+}
+
+.lv-msg-bot {
+  align-self: flex-start;
+  background: #211f28;
+  border-bottom-left-radius: calc(var(--pt) * 5);
+}
+
+.lv-kb {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--pt) * 5);
+  width: 86%;
+  margin-top: calc(var(--pt) * -3);
+}
+
+.lv-kb span {
+  padding: calc(var(--pt) * 9);
+  font-size: calc(var(--pt) * 13);
+  font-weight: 600;
+  text-align: center;
+  color: #d9d6e0;
+  background: #1a1920;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: calc(var(--pt) * 11);
+}
+
+.lv-kb .lv-kb-app {
+  color: #fff;
+  background: linear-gradient(135deg, #ff4f86, #e11d5c);
+  border-color: transparent;
+}
+
+.lv-chat-input {
+  padding: calc(var(--pt) * 10) calc(var(--pt) * 12) calc(var(--pt) * 26);
+  background: #16151c;
+}
+
+.lv-chat-input span {
+  display: block;
+  padding: calc(var(--pt) * 9) calc(var(--pt) * 14);
+  font-size: calc(var(--pt) * 14);
+  color: #6f6b79;
+  background: #0d0c11;
+  border-radius: 999px;
+}
+
+/* ── Схема автоматизации ────────────────────────── */
+.lv-flow,
+.lv-run {
+  background-color: #0b0f0e;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.4px);
+  background-size: calc(var(--pt) * 18) calc(var(--pt) * 18);
+}
+
+.lv-flow-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(var(--pt) * 12) calc(var(--pt) * 16);
+  background: rgba(11, 15, 14, 0.9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lv-flow-name {
+  display: flex;
+  flex-direction: column;
+}
+
+.lv-flow-name b {
+  font-size: calc(var(--pt) * 16);
+  font-weight: 600;
+}
+
+.lv-flow-name i {
+  font-size: calc(var(--pt) * 12);
+  color: #7d8a86;
+}
+
+.lv-flow-live {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--pt) * 6);
+  padding: calc(var(--pt) * 4) calc(var(--pt) * 10);
+  font-size: calc(var(--pt) * 12);
+  font-weight: 600;
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.1);
+  border-radius: 999px;
+}
+
+.lv-flow-live i {
+  width: calc(var(--pt) * 7);
+  height: calc(var(--pt) * 7);
+  border-radius: 50%;
+  background: #34d399;
+}
+
+.lv-flow-canvas {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--pt) * 16) calc(var(--pt) * 22);
+}
+
+.lv-flow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lv-flow-wire {
+  position: relative;
+  width: 2px;
+  height: calc(var(--pt) * 22);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.lv-flow-packet {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: calc(var(--pt) * 9);
+  height: calc(var(--pt) * 9);
+  margin: calc(var(--pt) * -4.5) 0 0 calc(var(--pt) * -4.5);
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 calc(var(--pt) * 12) #34d399;
+}
+
+.lv-node {
+  --on: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--pt) * 12);
+  width: 100%;
+  padding: calc(var(--pt) * 11) calc(var(--pt) * 12);
+  background: #121816;
+  border: 1px solid color-mix(in srgb, #34d399 calc(var(--on) * 70%), rgba(255, 255, 255, 0.08));
+  border-radius: calc(var(--pt) * 14);
+  box-shadow: 0 0 calc(var(--pt) * 22 * var(--on)) calc(var(--pt) * -6) #34d399;
+  opacity: calc(0.45 + var(--on) * 0.55);
+}
+
+.lv-node-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: calc(var(--pt) * 36);
+  height: calc(var(--pt) * 36);
+  font-size: calc(var(--pt) * 17);
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.1);
+  border-radius: calc(var(--pt) * 10);
+}
+
+.lv-node-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.lv-node-text i {
+  font-size: calc(var(--pt) * 11);
+  color: #7d8a86;
+}
+
+.lv-node-text b {
+  font-size: calc(var(--pt) * 14.5);
+  font-weight: 600;
+}
+
+.lv-node-text small {
+  font-size: calc(var(--pt) * 11.5);
+  color: #9aa6a2;
+}
+
+.lv-node-ok {
+  position: absolute;
+  top: calc(var(--pt) * 8);
+  right: calc(var(--pt) * 10);
+  font-size: calc(var(--pt) * 12);
+  color: #34d399;
+  opacity: var(--on);
+}
+
+.lv-flow-side {
+  margin-top: auto;
+  padding-top: calc(var(--pt) * 14);
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.lv-node-small {
+  padding: calc(var(--pt) * 9) calc(var(--pt) * 12);
+}
+
+/* ── Один проход ───────────────────────────────── */
+.lv-run-status {
+  padding: calc(var(--pt) * 4) calc(var(--pt) * 10);
+  font-size: calc(var(--pt) * 12);
+  font-weight: 600;
+  color: #0b0f0e;
+  background: #34d399;
+  border-radius: 999px;
+}
+
+.lv-run-list {
+  margin: 0;
+  padding: calc(var(--pt) * 18) calc(var(--pt) * 18) 0;
+  list-style: none;
+}
+
+.lv-run-row {
+  display: grid;
+  grid-template-columns: calc(var(--pt) * 44) calc(var(--pt) * 16) 1fr;
+  align-items: start;
+  padding-bottom: calc(var(--pt) * 16);
+}
+
+.lv-run-time {
+  font-family: "JetBrains Mono", monospace;
+  font-size: calc(var(--pt) * 11);
+  color: #7d8a86;
+  padding-top: calc(var(--pt) * 2);
+}
+
+.lv-run-dot {
+  width: calc(var(--pt) * 8);
+  height: calc(var(--pt) * 8);
+  margin-top: calc(var(--pt) * 5);
+  border-radius: 50%;
+  background: #34d399;
+}
+
+.lv-run-body {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--pt) * 3);
+}
+
+.lv-run-body b {
+  font-size: calc(var(--pt) * 14);
+  font-weight: 600;
+}
+
+.lv-run-body code {
+  font-family: "JetBrains Mono", monospace;
+  font-size: calc(var(--pt) * 11.5);
+  color: #9fe7c8;
+  word-break: break-word;
+}
+
+.lv-run-guard {
+  margin: calc(var(--pt) * 4) calc(var(--pt) * 18) 0;
+  padding: calc(var(--pt) * 12);
+  font-size: calc(var(--pt) * 12.5);
+  color: #9aa6a2;
+  background: #121816;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: calc(var(--pt) * 12);
+}
+
+.lv-run-guard b {
+  display: block;
+  margin-bottom: calc(var(--pt) * 3);
+  color: #fff;
+  font-weight: 600;
+}
+
+.lv-run-toast {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--pt) * 12);
+  margin: auto calc(var(--pt) * 14) calc(var(--pt) * 30);
+  padding: calc(var(--pt) * 12) calc(var(--pt) * 14);
+  background: #1a2320;
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  border-radius: calc(var(--pt) * 16);
+}
+
+.lv-run-toast > span:first-child {
+  font-size: calc(var(--pt) * 24);
+}
+
+.lv-run-toast span:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.lv-run-toast b {
+  font-weight: 600;
+}
+
+.lv-run-toast i {
+  font-size: calc(var(--pt) * 12.5);
+  color: #9aa6a2;
+}
+
+/* ── AI-генерация ──────────────────────────────── */
+.lv-ai {
+  gap: calc(var(--pt) * 12);
+  padding: calc(var(--pt) * 12) calc(var(--pt) * 16) 0;
+  background:
+    radial-gradient(90% 50% at 50% 60%, rgba(167, 139, 250, 0.14), transparent 70%),
+    #0c0a12;
+}
+
+.lv-ai-head {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--pt) * 6);
+}
+
+.lv-ai-head b {
+  font-size: calc(var(--pt) * 22);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.lv-ai-chip {
+  align-self: flex-start;
+  padding: calc(var(--pt) * 4) calc(var(--pt) * 10);
+  font-family: "JetBrains Mono", monospace;
+  font-size: calc(var(--pt) * 11);
+  color: #c9b8ff;
+  background: rgba(167, 139, 250, 0.12);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  border-radius: 999px;
+}
+
+.lv-ai-input {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--pt) * 12);
+  padding: calc(var(--pt) * 10);
+  background: #17141f;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: calc(var(--pt) * 14);
+}
+
+.lv-ai-photo {
+  display: grid;
+  place-items: end center;
+  width: calc(var(--pt) * 46);
+  height: calc(var(--pt) * 56);
+  overflow: hidden;
+  background: #2a2535;
+  border-radius: calc(var(--pt) * 10);
+}
+
+.lv-ai-photo svg {
+  width: 82%;
+  fill: #5a5268;
+}
+
+.lv-ai-input-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.lv-ai-input-text i {
+  font-size: calc(var(--pt) * 12);
+  color: #8f879e;
+}
+
+.lv-ai-input-text b {
+  font-size: calc(var(--pt) * 14);
+  font-weight: 600;
+}
+
+.lv-ai-progress {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--pt) * 6);
+}
+
+.lv-ai-bar {
+  height: calc(var(--pt) * 5);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+
+.lv-ai-bar-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #a78bfa, #f43f75);
+  transform-origin: 0 50%;
+}
+
+.lv-ai-steps {
+  display: flex;
+  justify-content: space-between;
+  font-size: calc(var(--pt) * 11.5);
+  color: #bdb5cc;
+}
+
+.lv-ai-result {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: calc(var(--pt) * 16);
+  aspect-ratio: 4 / 4.2;
+}
+
+.lv-ai-result img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+  display: block;
+}
+
+.lv-ai-result figcaption {
+  position: absolute;
+  left: calc(var(--pt) * 12);
+  bottom: calc(var(--pt) * 10);
+  font-weight: 700;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+}
+
+.lv-ai-more {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(var(--pt) * 8);
+}
+
+.lv-ai-more img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: calc(var(--pt) * 10);
+}
+
+.lv-ai-note {
+  margin: 0;
+  font-size: calc(var(--pt) * 12);
+  color: #8f879e;
+}
+
+/* ── Распознавание накладной (QUANTIX, светлая тема) ── */
+.lv-ocr {
+  gap: calc(var(--pt) * 14);
+  padding: calc(var(--pt) * 14) calc(var(--pt) * 16) 0;
+  color: #0f172a;
+  background: #f8fafc;
+}
+
+.lv-ocr-head {
+  display: flex;
+  flex-direction: column;
+}
+
+.lv-ocr-head b {
+  font-size: calc(var(--pt) * 13);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #2563eb;
+}
+
+.lv-ocr-head span {
+  font-size: calc(var(--pt) * 21);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.lv-ocr-paper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--pt) * 9);
+  padding: calc(var(--pt) * 16);
+  overflow: hidden;
+  background: #fffdf6;
+  border: 1px solid #e7e2d3;
+  border-radius: calc(var(--pt) * 6);
+  box-shadow: 0 calc(var(--pt) * 10) calc(var(--pt) * 24) calc(var(--pt) * -12) rgba(15, 23, 42, 0.35);
+  transform: rotate(-1.5deg);
+}
+
+.lv-ocr-paper-title {
+  font-family: "JetBrains Mono", monospace;
+  font-size: calc(var(--pt) * 12);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #5b5646;
+}
+
+.lv-ocr-line {
+  height: calc(var(--pt) * 6);
+  background: #d9d3c1;
+  border-radius: 2px;
+}
+
+.lv-ocr-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: calc(var(--pt) * 26);
+  margin-top: calc(var(--pt) * -13);
+  background: linear-gradient(180deg, transparent, rgba(37, 99, 235, 0.28), transparent);
+  border-bottom: 2px solid #2563eb;
+  opacity: 0;
+}
+
+.lv-ocr-fields {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: calc(var(--pt) * 14);
+}
+
+.lv-ocr-field,
+.lv-ocr-row,
+.lv-ocr-total {
+  display: grid;
+  gap: calc(var(--pt) * 8);
+  padding: calc(var(--pt) * 10) calc(var(--pt) * 14);
+  font-size: calc(var(--pt) * 13);
+  border-bottom: 1px solid #eef2f7;
+}
+
+.lv-ocr-field i {
+  font-size: calc(var(--pt) * 11.5);
+  color: #64748b;
+}
+
+.lv-ocr-field b {
+  font-weight: 600;
+}
+
+.lv-ocr-row {
+  grid-template-columns: 1fr auto auto;
+  color: #334155;
+}
+
+.lv-ocr-row b {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.lv-ocr-total {
+  grid-template-columns: 1fr auto;
+  border-bottom: 0;
+  background: #eff4ff;
+}
+
+.lv-ocr-total span {
+  color: #475569;
+  font-size: calc(var(--pt) * 12);
+}
+
+.lv-ocr-total b {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.lv-ocr-demo {
+  align-self: center;
+  padding: calc(var(--pt) * 3) calc(var(--pt) * 10);
+  font-size: calc(var(--pt) * 11);
+  color: #64748b;
+  background: #eef2f7;
+  border-radius: 999px;
+}

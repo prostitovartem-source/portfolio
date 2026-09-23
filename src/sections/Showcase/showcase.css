@@ -72,6 +72,44 @@
   left: -2vw;
 }
 
+/* Своя фактура у отдельных глав: сетка узлов у автоматизации, кольца у AI. */
+.sc-decor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60vw;
+  pointer-events: none;
+}
+
+.sc-decor-right {
+  right: 0;
+}
+
+.sc-decor-left {
+  left: 0;
+}
+
+.sc-decor-grid {
+  background-image:
+    radial-gradient(color-mix(in srgb, var(--sc-accent) 35%, transparent) 1.5px, transparent 2px),
+    linear-gradient(color-mix(in srgb, var(--sc-accent) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--sc-accent) 7%, transparent) 1px, transparent 1px);
+  background-size: 6rem 6rem;
+  background-position: 3rem 3rem, 0 0, 0 0;
+  -webkit-mask-image: radial-gradient(closest-side, #000 20%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 20%, transparent 100%);
+}
+
+.sc-decor-rings {
+  background: repeating-radial-gradient(
+    circle at 50% 52%,
+    transparent 0 5.5rem,
+    color-mix(in srgb, var(--sc-accent) 14%, transparent) 5.5rem calc(5.5rem + 1px)
+  );
+  -webkit-mask-image: radial-gradient(closest-side, #000 25%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 25%, transparent 100%);
+}
+
 /* ── Интро ────────────────────────────────────────────────────────── */
 .sc-intro {
   position: absolute;
@@ -156,13 +194,19 @@
 .sc-name {
   display: flex;
   flex-wrap: wrap;
-  margin: 0.18em 0 0.28em;
+  column-gap: 0.24em;
+  margin: 0.2em 0 0.32em;
   font-family: "Space Grotesk", sans-serif;
   font-weight: 700;
-  font-size: clamp(3.5rem, 6.4vw, 9.5rem);
-  line-height: 0.9;
-  letter-spacing: -0.05em;
+  font-size: clamp(3rem, 4.9vw, 7.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
   color: var(--text);
+}
+
+.sc-word {
+  display: inline-flex;
+  white-space: nowrap;
 }
 
 .sc-char-mask {
