@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
 import { t } from "../i18n/index.js";
+import { play } from "../lib/sound.js";
 import "./projects.css";
 
 const MEDIA = `${import.meta.env.BASE_URL}media/`;
@@ -255,6 +256,8 @@ export default function ProjectsSection() {
         altTl
           .fromTo($(".pj-alt-fan"), { "--fan": 0 }, { "--fan": 1, duration: 1, ease: "power2.inOut" }, 0.6)
           .fromTo($(".pj-alt-title"), { yPercent: 40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.6 }, 0.9)
+          // Веер собрался - тёплый аккорд (только при скролле вниз).
+          .call(() => altTl.scrollTrigger?.direction === 1 && play("bloom"), null, 0.95)
           .fromTo($$(".pj-alt-copy > :not(.pj-alt-title)"), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, stagger: 0.08, duration: 0.5 }, 1.1)
           .to({}, { duration: 0.6 });
 

@@ -2,6 +2,8 @@ import Navbar from "./components/Navbar.jsx";
 import Loader from "./components/Loader.jsx";
 import CustomCursor from "./components/CustomCursor.jsx";
 import SmoothScroll from "./components/SmoothScroll.jsx";
+import ScrollFx from "./components/ScrollFx.jsx";
+import SoundFx from "./components/SoundFx.jsx";
 import SectionBridge from "./components/SectionBridge.jsx";
 import MotionPrompt from "./components/MotionPrompt.jsx";
 import { t } from "./i18n/index.js";
@@ -37,6 +39,8 @@ export default function App() {
 
       <Footer />
       <MotionPrompt />
+      <ScrollFx />
+      <SoundFx />
     </div>
   );
 }

@@ -39,7 +39,8 @@ const convergePath = (i, lastI) => `M ${SAT_X} ${satY(i)} Q ${SAT_X + 22} ${(sat
 
 function splitWords(text) {
   return text.split(" ").map((word, i) => {
-    const clean = word.toLowerCase().replace(/[.,-:()]/g, "");
+    // Знаки препинания по краям слова, но не точка внутри (next.js, node.js).
+    const clean = word.toLowerCase().replace(/^[«(]+|[»),:;.!?]+$/g, "");
     return { word, isTech: TECH_WORDS.has(clean), key: `${clean}-${i}` };
   });
 }

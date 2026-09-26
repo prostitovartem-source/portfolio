@@ -1,4 +1,5 @@
 import FadeIn from "../components/FadeIn.jsx";
+import SplitHeading from "../components/SplitHeading.jsx";
 import { t } from "../i18n/index.js";
 
 const FLOW = ["Idea", "Architecture", "Code", "Debug", "Test", "Polish"];
@@ -19,13 +20,11 @@ export default function AISection() {
           <span className="ai-tag">{t("ai.tag")}</span>
         </FadeIn>
 
-        <FadeIn delay={0.15} y={30}>
-          <h2 className="hero-heading ai-heading">
-            {t("ai.headingLine1")}
-            <br />
-            {t("ai.headingLine2")}
-          </h2>
-        </FadeIn>
+        <SplitHeading
+          lines={[t("ai.headingLine1"), t("ai.headingLine2")]}
+          className="hero-heading ai-heading"
+          delay={0.1}
+        />
 
         <FadeIn delay={0.3} y={20}>
           <p className="ai-text">{t("ai.text")}</p>

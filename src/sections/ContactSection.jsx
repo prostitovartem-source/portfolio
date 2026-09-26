@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
 import { t } from "../i18n/index.js";
 import FadeIn from "../components/FadeIn.jsx";
+import SplitHeading from "../components/SplitHeading.jsx";
 import ContactButton from "../components/ContactButton.jsx";
 
 const CONTACTS = [
@@ -109,6 +110,15 @@ export default function ContactSection() {
     { scope: rootRef, dependencies: [] }
   );
 
+  // Подсветка карточки идёт за курсором: координаты в CSS-переменные,
+  // сам градиент рисует ::before (см. .contact-card в App.css).
+  function handleCardMove(e) {
+    const card = e.currentTarget;
+    const r = card.getBoundingClientRect();
+    card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    card.style.setProperty("--my", `${e.clientY - r.top}px`);
+  }
+
   return (
     <section ref={rootRef} className="contact" id="contact">
       <span className="section-number" aria-hidden="true">
@@ -124,13 +134,10 @@ export default function ContactSection() {
         {t("contact.status")}
       </span>
 
-      <FadeIn delay={0.05} y={40}>
-        <h2 className="hero-heading contact-heading">
-          {t("contact.headingLine1")}
-          <br />
-          {t("contact.headingLine2")}
-        </h2>
-      </FadeIn>
+      <SplitHeading
+        lines={[t("contact.headingLine1"), t("contact.headingLine2")]}
+        className="hero-heading contact-heading"
+      />
 
       <FadeIn delay={0.1} y={20}>
         <p className="contact-lead">{t("contact.lead")}</p>
@@ -148,6 +155,7 @@ export default function ContactSection() {
             target="_blank"
             rel="noopener noreferrer"
             className="contact-card"
+            onMouseMove={handleCardMove}
             style={{ "--accent-color": c.color }}
           >
             <span className="contact-icon">{c.icon}</span>

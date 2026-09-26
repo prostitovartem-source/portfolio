@@ -1,4 +1,5 @@
 import FadeIn from "../components/FadeIn.jsx";
+import SplitHeading from "../components/SplitHeading.jsx";
 import TechArchitecture from "../components/TechArchitecture.jsx";
 import { t } from "../i18n/index.js";
 
@@ -13,9 +14,7 @@ export default function StackSection() {
         {t("stack.eyebrow")}
       </FadeIn>
 
-      <FadeIn delay={0.05} y={40}>
-        <h2 className="hero-heading stack-heading">{t("stack.heading")}</h2>
-      </FadeIn>
+      <SplitHeading lines={t("stack.heading")} className="hero-heading stack-heading" />
 
       <FadeIn delay={0.15} y={20} className="stack-legend">
         <span className="stack-legend-item stack-legend-core">{t("stack.legendCore")}</span>

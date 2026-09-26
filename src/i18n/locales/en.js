@@ -206,6 +206,11 @@ export default {
     toggleOff: "off",
   },
 
+  sound: {
+    turnOn: "Turn sound on",
+    turnOff: "Turn sound off",
+  },
+
   langSwitch: {
     ariaLabel: "Site language",
   },

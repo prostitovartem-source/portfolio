@@ -1,8 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { motion, AnimatePresence } from "framer-motion";
 import ContactButton from "./ContactButton.jsx";
 import LanguageSwitcher from "./LanguageSwitcher.jsx";
+import SoundToggle from "./SoundToggle.jsx";
 import { t } from "../i18n/index.js";
+import useIntroReady from "../hooks/useIntroReady.js";
+import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const NAV_LINKS = [
   { key: "about", href: "#about" },
@@ -15,6 +23,28 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const introReady = useIntroReady();
+  const progressRef = useRef(null);
+
+  // Тонкая полоса прогресса чтения под навбаром - scrub по всей странице,
+  // без React-состояния на скролл.
+  useGSAP(() => {
+    const bar = progressRef.current;
+    if (!bar) return;
+    if (shouldReduceMotion()) {
+      gsap.set(bar, { display: "none" });
+      return;
+    }
+    gsap.fromTo(
+      bar,
+      { scaleX: 0 },
+      {
+        scaleX: 1,
+        ease: "none",
+        scrollTrigger: { trigger: document.documentElement, start: "top top", end: "bottom bottom", scrub: 0.3 },
+      }
+    );
+  }, []);
 
   useEffect(() => {
     function handleScroll() {
@@ -37,9 +67,10 @@ export default function Navbar() {
       <motion.header
         className={`site-nav ${scrolled || open ? "site-nav-scrolled" : ""}`}
         initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+        animate={introReady ? { opacity: 1, y: 0 } : undefined}
+        transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
+        <span ref={progressRef} className="site-nav-progress" aria-hidden="true" />
         <a href="#" className="site-nav-brand" data-cursor-label={t("nav.toTop")} onClick={() => setOpen(false)}>
           COPICK
         </a>
@@ -52,7 +83,10 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <LanguageSwitcher className="site-nav-lang" />
+        <div className="site-nav-actions">
+          <SoundToggle />
+          <LanguageSwitcher className="site-nav-lang" />
+        </div>
 
         <button
           type="button"
