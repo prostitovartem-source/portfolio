@@ -311,7 +311,7 @@ export default function ProjectsSection() {
   return (
     <section ref={ref} className="pj-section" id="projects">
       <span className="section-number" aria-hidden="true">
-        05
+        06
       </span>
       <header className="pj-head">
         <p className="section-eyebrow">{t("projects.eyebrow")}</p>

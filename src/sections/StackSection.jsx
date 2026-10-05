@@ -7,7 +7,7 @@ export default function StackSection() {
   return (
     <section className="stack" id="stack">
       <span className="section-number" aria-hidden="true">
-        04
+        05
       </span>
 
       <FadeIn delay={0} y={20} className="section-eyebrow">

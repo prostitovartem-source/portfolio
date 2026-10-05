@@ -1,0 +1,446 @@
+/* ══════════════════════ AI VIDEO ═══════════════════════════ */
+.vid-section {
+  position: relative;
+  overflow: hidden;
+  padding: 100px 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.vid-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1040px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.vid-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 24px;
+  max-width: 100%;
+}
+
+.vid-heading {
+  font-size: clamp(1.9rem, 5.4vw, 3.5rem);
+}
+
+.vid-text {
+  max-width: 720px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+}
+
+/* ── Переключатель «Без видео / С видео» ─────────────────── */
+.vid-toggle {
+  display: inline-flex;
+  padding: 4px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+}
+
+.vid-toggle-btn {
+  padding: 10px 22px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background var(--transition-base), color var(--transition-base);
+}
+
+.vid-toggle-btn:hover {
+  color: var(--text);
+}
+
+.vid-toggle-btn.is-active {
+  background: linear-gradient(123deg, var(--accent) 0%, var(--accent-2) 100%);
+  color: #0a0a10;
+}
+
+.vid-toggle-btn:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 2px;
+}
+
+/* ── Сцена: окно браузера + телефон ──────────────────────── */
+.vid-stage-fade {
+  width: 100%;
+}
+
+.vid-stage {
+  position: relative;
+  width: 100%;
+  max-width: 940px;
+  margin: 0 auto;
+  /* Запас под телефон, выступающий за нижний край браузера. */
+  padding-bottom: 5%;
+}
+
+.vid-browser {
+  border-radius: var(--radius-md);
+  border: 2px solid rgba(242, 245, 247, 0.25);
+  background: var(--bg-elevated);
+  overflow: hidden;
+  box-shadow: 0 30px 80px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.vid-browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-hover);
+}
+
+.vid-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border-strong);
+}
+
+.vid-url {
+  margin-left: 12px;
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--text-tertiary);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+
+/* Общая механика слоёв: постер всегда под видео, видео плавно проявляется. */
+.vid-hero,
+.vid-phone-screen {
+  position: relative;
+  overflow: hidden;
+  background: #000;
+}
+
+.vid-hero {
+  aspect-ratio: 16 / 9;
+}
+
+.vid-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vid-layer-video {
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+
+.vid-layer-video.is-on {
+  opacity: 1;
+}
+
+.vid-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* В исходных роликах по краям тонкие чёрные полосы, а внизу по центру чёрный
+   квадрат. Увеличиваем с якорем сверху: нижний край уходит за рамку. Тот же
+   масштаб у постера и видео, чтобы кроссфейд не «прыгал». */
+img.vid-layer,
+.vid-media {
+  transform: scale(1.16);
+  transform-origin: 50% 0;
+}
+
+.vid-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(10, 10, 16, 0.55) 0%, rgba(10, 10, 16, 0) 28%),
+    linear-gradient(0deg, rgba(10, 10, 16, 0.92) 0%, rgba(10, 10, 16, 0.55) 38%, rgba(10, 10, 16, 0) 70%);
+}
+
+/* ── Нейтральный макет hero ──────────────────────────────── */
+.vid-mock {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(14px, 3.2%, 32px) clamp(16px, 4%, 40px) clamp(18px, 5%, 44px);
+  pointer-events: none;
+}
+
+.vid-mock-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vid-mock-brand {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: clamp(0.8rem, 1.7vw, 1.2rem);
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.vid-mock-links {
+  display: flex;
+  gap: clamp(8px, 1.6vw, 18px);
+}
+
+.vid-mock-links i {
+  display: block;
+  width: clamp(24px, 5vw, 52px);
+  height: 5px;
+  border-radius: var(--radius-full);
+  background: rgba(242, 240, 245, 0.4);
+}
+
+.vid-mock-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(10px, 2vw, 22px);
+  max-width: 62%;
+}
+
+.vid-mock-headline {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.1rem, 3.6vw, 2.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.vid-mock-btn {
+  padding: clamp(6px, 1.1vw, 12px) clamp(14px, 2.4vw, 26px);
+  border-radius: var(--radius-full);
+  background: var(--text);
+  color: #0a0a10;
+  font-size: clamp(0.62rem, 1.1vw, 0.85rem);
+  font-weight: 600;
+}
+
+/* ── Телефон поверх правого нижнего угла ─────────────────── */
+.vid-phone {
+  position: absolute;
+  right: -3%;
+  bottom: 0;
+  width: 21%;
+  aspect-ratio: 9 / 18.5;
+  padding: 2.2%;
+  border-radius: clamp(14px, 3.2vw, 30px);
+  border: 2px solid rgba(242, 245, 247, 0.3);
+  background: #0a0a10;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.vid-phone-notch {
+  position: absolute;
+  top: 2.8%;
+  left: 50%;
+  z-index: 2;
+  width: 28%;
+  height: 2.2%;
+  transform: translateX(-50%);
+  border-radius: var(--radius-full);
+  background: #0a0a10;
+}
+
+.vid-phone-screen {
+  width: 100%;
+  height: 100%;
+  border-radius: clamp(10px, 2.4vw, 22px);
+}
+
+/* ── 4 шага: кадр → оживление → обработка → на сайте ───────── */
+.vid-steps {
+  list-style: none;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.vid-step-item {
+  position: relative;
+  display: flex;
+}
+
+.vid-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--accent-2) 25%, transparent);
+  background: color-mix(in srgb, var(--accent-2) 5%, transparent);
+  transition: border-color var(--transition-base), background var(--transition-base), transform var(--transition-base);
+}
+
+.vid-step:hover {
+  border-color: var(--accent-2);
+  background: color-mix(in srgb, var(--accent-2) 10%, transparent);
+  transform: translateY(-2px);
+}
+
+.vid-step-index {
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--text-tertiary);
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.vid-step-title {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.86rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.vid-step-text {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.vid-step-arrow {
+  position: absolute;
+  top: 50%;
+  right: -16px;
+  z-index: 1;
+  transform: translate(50%, -50%);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* ── Статистика: карточки в стиле project-card ───────────── */
+.vid-stats {
+  list-style: none;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.vid-stat {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 28px;
+  border-radius: var(--radius-lg);
+  border: 2px solid rgba(242, 245, 247, 0.25);
+  background: var(--bg);
+}
+
+.vid-stat-value {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.vid-stat-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.vid-cta {
+  margin-top: 8px;
+}
+
+/* ── Адаптив ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .vid-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding-bottom: 0;
+  }
+
+  .vid-browser {
+    width: 100%;
+  }
+
+  /* На узком экране телефон не перекрывает браузер, а идёт под ним. */
+  .vid-phone {
+    position: relative;
+    right: auto;
+    width: min(46vw, 210px);
+    border-radius: 28px;
+  }
+
+  .vid-phone-screen {
+    border-radius: 20px;
+  }
+
+  .vid-steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .vid-step-arrow {
+    display: none;
+  }
+
+  .vid-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .vid-section {
+    padding: 80px 16px;
+  }
+
+  .vid-mock-body {
+    max-width: 80%;
+  }
+
+  .vid-mock-links {
+    display: none;
+  }
+
+  .vid-stat {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .vid-steps {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vid-layer-video,
+  .vid-toggle-btn,
+  .vid-step {
+    transition: none;
+  }
+}

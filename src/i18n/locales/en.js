@@ -122,8 +122,37 @@ export default {
     },
   },
 
+  video: {
+    eyebrow: "04 / AI Video",
+    headingLine1: "A website that",
+    headingLine2: "comes alive on the first screen",
+    text: "A short background video on the first screen holds attention and shows the product in motion. I make it with neural networks and embed it carefully: lightweight, looped, silent, and easy on the page.",
+    toggleLabel: "Demo mode",
+    toggleOff: "No video",
+    toggleOn: "With video",
+    frameLabel: "Example of a website first screen with an AI background video on desktop and phone",
+    mock: {
+      url: "yourbrand.com",
+      brand: "Your brand",
+      headline: "Your product, in motion",
+      button: "Learn more",
+    },
+    steps: {
+      frame: { title: "Frame", text: "A neural network generates the source frame" },
+      motion: { title: "Motion", text: "Image-to-video: the frame becomes a clip" },
+      process: { title: "Processing", text: "Compressed to 3-5 MB, looped, with a poster and a vertical version" },
+      site: { title: "On the site", text: "Autoplay, no sound" },
+    },
+    stats: {
+      size: { value: "3-5 MB", label: "per video" },
+      versions: { value: "2 versions", label: "for desktop and phone" },
+      sound: { value: "0 sound", label: "nothing disturbs the visitor" },
+    },
+    cta: "Order a website video",
+  },
+
   stack: {
-    eyebrow: "04 / Technologies",
+    eyebrow: "05 / Technologies",
     heading: "Technologies",
     legendCore: "Core stack",
     legendTool: "Tooling",
@@ -143,7 +172,7 @@ export default {
   },
 
   projects: {
-    eyebrow: "05 / Projects",
+    eyebrow: "06 / Projects",
     heading: "Projects",
     personalBadge: "Personal project",
     quantix: {
@@ -184,7 +213,7 @@ export default {
   },
 
   contact: {
-    eyebrow: "06 / Contact",
+    eyebrow: "07 / Contact",
     status: "Open to work",
     headingLine1: "Got an idea?",
     headingLine2: "Let's build it.",

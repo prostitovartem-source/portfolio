@@ -122,7 +122,7 @@ export default function ContactSection() {
   return (
     <section ref={rootRef} className="contact" id="contact">
       <span className="section-number" aria-hidden="true">
-        06
+        07
       </span>
 
       <FadeIn delay={0} y={20} className="section-eyebrow">

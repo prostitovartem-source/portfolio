@@ -13,6 +13,7 @@ import MarqueeSection from "./sections/MarqueeSection.jsx";
 import AboutSection from "./sections/AboutSection.jsx";
 import AISection from "./sections/AISection.jsx";
 import ShowcaseSection from "./sections/Showcase/ShowcaseSection.jsx";
+import VideoSection from "./sections/VideoSection.jsx";
 import StackSection from "./sections/StackSection.jsx";
 import ProjectsSection from "./sections/ProjectsSection.jsx";
 import ContactSection from "./sections/ContactSection.jsx";
@@ -31,6 +32,7 @@ export default function App() {
       <AboutSection />
       <AISection />
       <ShowcaseSection />
+      <VideoSection />
       <StackSection />
       <SectionBridge label={t("bridges.archToProduct")} />
       <ProjectsSection />
