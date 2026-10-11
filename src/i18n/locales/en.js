@@ -122,35 +122,26 @@ export default {
     },
   },
 
-  video: {
-    eyebrow: "04 / AI Video",
-    headingLine1: "A website that",
-    headingLine2: "comes alive on the first screen",
-    text: "A short background video on the first screen holds attention and shows the product in motion. I make it with neural networks and embed it carefully: lightweight, looped, silent, and easy on the page.",
-    toggleLabel: "Demo mode",
-    toggleOff: "No video",
-    toggleOn: "With video",
-    frameLabel: "Example of a website first screen with an AI background video on desktop and phone",
-    mock: {
-      url: "yourbrand.com",
-      brand: "Your brand",
-      headline: "Your product, in motion",
-      button: "Learn more",
+  factory: {
+    eyebrow: "04 / Content factory",
+    headingLine1: "A topic goes in,",
+    headingLine2: "a vertical video comes out",
+    text: "A local app for short videos: it writes a script from a topic, voices it and renders a vertical mp4 for TikTok or YouTube Shorts. Finished videos stay in the history together with the publishing texts.",
+    shotsLabel: "App screens: the video creation form and the history of finished videos",
+    shots: {
+      create: "Video creation form: topic, language, platform, length and a first-frame preview",
+      history: "History: a grid of finished vertical videos with topic, duration and cost",
     },
-    steps: {
-      frame: { title: "Frame", text: "A neural network generates the source frame" },
-      motion: { title: "Motion", text: "Image-to-video: the frame becomes a clip" },
-      process: { title: "Processing", text: "Compressed to 3-5 MB, looped, with a poster and a vertical version" },
-      site: { title: "On the site", text: "Autoplay, no sound" },
-    },
-    stats: {
-      size: { value: "3-5 MB", label: "per video" },
-      versions: { value: "2 versions", label: "for desktop and phone" },
-      sound: { value: "0 sound", label: "nothing disturbs the visitor" },
-    },
-    cta: "Order a website video",
+    phoneLabel: "Example of a vertical video on a phone screen",
+    note: "Local project",
+    features: [
+      "Script and voiceover from a topic",
+      "Russian and English",
+      "TikTok and YouTube Shorts",
+      "Vertical mp4 rendering",
+    ],
+    cta: "Discuss a project",
   },
-
   stack: {
     eyebrow: "05 / Technologies",
     heading: "Technologies",

@@ -1,0 +1,225 @@
+/* ══════════════════════ КОНТЕНТ-ЗАВОД ═════════════════════════ */
+.fac-section {
+  position: relative;
+  overflow: hidden;
+  padding: 100px 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.fac-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.fac-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 24px;
+  max-width: 100%;
+}
+
+.fac-heading {
+  font-size: clamp(1.9rem, 5.4vw, 3.5rem);
+}
+
+.fac-text {
+  max-width: 720px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+}
+
+/* ── Сцена: скриншоты слева, телефон справа ──────────────── */
+.fac-stage {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(200px, 260px);
+  align-items: center;
+  gap: clamp(24px, 4vw, 56px);
+}
+
+.fac-shots-fade,
+.fac-phone-fade {
+  min-width: 0;
+}
+
+.fac-shots {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.fac-browser {
+  margin: 0;
+  border-radius: var(--radius-md);
+  border: 2px solid rgba(242, 245, 247, 0.25);
+  background: var(--bg-elevated);
+  overflow: hidden;
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.fac-browser img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.fac-browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-hover);
+}
+
+.fac-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border-strong);
+}
+
+.fac-url {
+  margin-left: 12px;
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--text-tertiary);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+
+/* ── Телефон ─────────────────────────────────────────────── */
+.fac-phone {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 18.5;
+  padding: 2.8%;
+  border-radius: 34px;
+  border: 2px solid rgba(242, 245, 247, 0.3);
+  background: #0a0a10;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.fac-phone-notch {
+  position: absolute;
+  top: 2.4%;
+  left: 50%;
+  z-index: 2;
+  width: 28%;
+  height: 2.2%;
+  transform: translateX(-50%);
+  border-radius: var(--radius-full);
+  background: #0a0a10;
+}
+
+.fac-phone-screen {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #000;
+}
+
+/* В исходном ролике по краям тонкие чёрные полосы: увеличиваем с якорем
+   сверху, чтобы они ушли за рамку. */
+.fac-phone-screen video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.16);
+  transform-origin: 50% 0;
+}
+
+/* ── Возможности ─────────────────────────────────────────── */
+.fac-features {
+  list-style: none;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.fac-feature {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--accent-2) 25%, transparent);
+  background: color-mix(in srgb, var(--accent-2) 5%, transparent);
+}
+
+.fac-feature-index {
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--text-tertiary);
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.fac-feature-label {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.fac-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.fac-note {
+  color: var(--text-tertiary);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── Адаптив ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* На узком экране телефон идёт под скриншотами. */
+  .fac-stage {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+
+  .fac-shots-fade {
+    width: 100%;
+  }
+
+  .fac-phone-fade {
+    width: min(56vw, 240px);
+  }
+
+  .fac-features {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .fac-section {
+    padding: 80px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fac-features {
+    grid-template-columns: 1fr;
+  }
+}
