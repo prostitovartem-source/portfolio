@@ -26,9 +26,9 @@ export default {
   about: {
     eyebrow: "01 / About",
     heading: "About me",
-    ageSuffix: "years old",
-    ageSub: "",
-    text: "I'm Artem, 16. I've been writing code for 2 years: I started with python and now build full-stack products with typescript, react, next.js and node.js. I come up with the idea, design the interface, write the backend and take it all the way to launch. ai is a tool that makes me faster, not one that does the work for me.",
+    ageSuffix: "years",
+    ageSub: "of experience",
+    text: "I'm Artem. I've been writing code for 2 years: I started with python and now build full-stack products with typescript, react, next.js and node.js. I come up with the idea, design the interface, write the backend and take it all the way to launch. ai is a tool that makes me faster, not one that does the work for me.",
     techWords: ["python", "typescript", "react", "next.js", "node.js", "ai", "backend"],
     markers: ["2 years of coding", "TypeScript · React · Next.js", "AI in my workflow and products", "From idea to launch"],
     phases: {

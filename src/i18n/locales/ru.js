@@ -26,9 +26,9 @@ export default {
   about: {
     eyebrow: "01 / Обо мне",
     heading: "Обо мне",
-    ageSuffix: "лет",
-    ageSub: "",
-    text: "Я Артём, мне 16. Программирую два года: начинал с Python, сейчас делаю full-stack продукты на TypeScript, React, Next.js и Node.js. Сам придумываю идею, проектирую интерфейс, пишу backend и довожу проект до запуска. AI для меня - инструмент, который ускоряет работу, но не делает её вместо меня.",
+    ageSuffix: "года",
+    ageSub: "опыта",
+    text: "Я Артём. Программирую два года: начинал с Python, сейчас делаю full-stack продукты на TypeScript, React, Next.js и Node.js. Сам придумываю идею, проектирую интерфейс, пишу backend и довожу проект до запуска. AI для меня - инструмент, который ускоряет работу, но не делает её вместо меня.",
     techWords: ["python", "typescript", "react", "next.js", "node.js", "ai", "backend"],
     markers: ["Два года в разработке", "TypeScript · React · Next.js", "AI в работе и в продуктах", "От идеи до запуска"],
     phases: {

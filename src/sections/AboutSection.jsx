@@ -29,6 +29,9 @@ const PHASES = PHASE_IDS.map((id) => {
 // Геометрия SVG (viewBox 0 0 120 200): хребет слева, узлы-возможности справа.
 const SPINE_X = 26;
 const SAT_X = 84;
+// Стаж в разработке - число в большом счётчике секции.
+const EXPERIENCE_YEARS = 2;
+
 const TOP_Y = 12;
 const STEP = 29.3;
 const nodeY = (i) => TOP_Y + i * STEP;
@@ -97,7 +100,7 @@ export default function AboutSection() {
             gsap.set(q(".about-sat"), { attr: { r: 2.8 }, opacity: 1 });
             gsap.set(q(".about-sat-fullstack"), { attr: { r: 4.2 } });
             gsap.set([ambientRef.current, gridRef.current], { opacity: 0.5 });
-            if (ageRef.current) ageRef.current.textContent = "16";
+            if (ageRef.current) ageRef.current.textContent = String(EXPERIENCE_YEARS);
             gsap.set(ageWrapRef.current, { opacity: 1, y: 0, filter: "blur(0px)" });
             return;
           }
@@ -115,7 +118,7 @@ export default function AboutSection() {
           gsap.set(q(".about-ring"), { attr: { r: 3 }, opacity: 0 });
           gsap.set(q(".about-sat"), { attr: { r: 0 }, opacity: 0 });
 
-          // На мобильном секция НЕ пинится: уместить абзац, «16» и схему в
+          // На мобильном секция НЕ пинится: уместить абзац, счётчик опыта и схему в
           // 100vh можно только ценой нечитаемых подписей. Вместо этого та же
           // история проигрывается, пока секция проходит через экран.
           const tl = gsap.timeline({
@@ -155,12 +158,12 @@ export default function AboutSection() {
           // финала, левая колонка почти весь скролл выглядит незаконченной.
           tl.to([...q(".about-marker"), ...q(".about-cta")], { opacity: 1, y: 0, duration: 0.4, stagger: 0.05 }, 0.55);
 
-          // Счётчик 0 → 16: пишем в DOM напрямую, без React-state на кадр.
+          // Счётчик 0 → EXPERIENCE_YEARS: пишем в DOM напрямую, без React-state на кадр.
           const counter = { v: 0 };
           tl.to(
             counter,
             {
-              v: 16,
+              v: EXPERIENCE_YEARS,
               duration: 0.6,
               ease: "power1.out",
               onUpdate: () => {
