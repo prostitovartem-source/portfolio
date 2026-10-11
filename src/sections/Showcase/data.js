@@ -69,15 +69,17 @@ const CHAPTER_META = [
   },
   {
     id: "web",
-    proof: "ZFINDE",
+    // proof берётся из перевода: название проекта разное в RU и EN.
     accent: "#f0a83a",
     side: "left",
     enter: "spin",
-    link: "https://zfinde.vercel.app/",
-    stack: ["Next.js", "React", "OpenStreetMap", "Vercel"],
+    link: "#project-automation",
+    stack: ["React", "TypeScript", "Vite", "Express", "Remotion"],
+    // Узкие скриншоты веб-интерфейса контент-завода (400 px по ширине),
+    // w/h задают только пропорции кадра в масштабе 1170.
     screens: [
-      { src: "zfinde/form.webp", w: 1170, h: 2532, tap: { x: 26, y: 37.4 } },
-      { src: "zfinde/results-long.webp", w: 1170, h: 9456 },
+      { src: "automation/screen-create.webp", w: 1170, h: 4227, tap: { x: 29.5, y: 82.7 } },
+      { src: "automation/screen-history.webp", w: 1170, h: 2633 },
     ],
   },
   {

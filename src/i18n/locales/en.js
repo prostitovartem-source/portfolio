@@ -18,7 +18,7 @@ export default {
 
   hero: {
     status: "Open to projects",
-    description: "I build web products end to end: interface, backend, database and AI. Three of them are already running in production.",
+    description: "I build web products end to end: interface, backend, database and AI. My projects already work: an AI bot in MAX, SaaS for small shops and a short-video content factory.",
     ctaProjects: "See the work",
     scroll: "Scroll",
   },
@@ -100,12 +100,13 @@ export default {
       web: {
         rail: "Web",
         title: "Web products",
-        lead: "Complete web apps built for a specific job. ZFINDE finds businesses without a website by city and niche, using open data only.",
-        built: ["OpenStreetMap collection", "Duplicate merging", "Lead scoring", "CSV export"],
-        cta: "Open ZFINDE",
+        proof: "Content factory",
+        lead: "Complete web apps built for a specific job. The content factory has its own web interface: a video form, render progress and a history of finished videos.",
+        built: ["React interface", "Express API", "Live render progress", "History without a database"],
+        cta: "See it in projects",
         steps: [
-          "City, niche and how many leads you need. That's it.",
-          "A real search: cafes in Stavropol. 146 found, 77 without a website. Phone numbers are blurred.",
+          "Topic, language, platform and length. A first-frame preview shows right in the form.",
+          "Finished videos pile up in the history: duration, cost and search by topic.",
         ],
       },
       ai: {
