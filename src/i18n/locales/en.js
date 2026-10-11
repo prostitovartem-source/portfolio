@@ -153,26 +153,6 @@ export default {
     cta: "Order a website video",
   },
 
-  factory: {
-    eyebrow: "04 / Content factory",
-    headingLine1: "A topic goes in,",
-    headingLine2: "a vertical video comes out",
-    text: "A local app for short videos: it writes a script from a topic, voices it and renders a vertical mp4 for TikTok or YouTube Shorts. Finished videos stay in the history together with the publishing texts.",
-    shotsLabel: "App screens: the video creation form and the history of finished videos",
-    shots: {
-      create: "Video creation form: topic, language, platform, length and a first-frame preview",
-      history: "History: a grid of finished vertical videos with topic, duration and cost",
-    },
-    phoneLabel: "Example of a vertical video on a phone screen",
-    note: "Local project",
-    features: [
-      "Script and voiceover from a topic",
-      "Russian and English",
-      "TikTok and YouTube Shorts",
-      "Vertical mp4 rendering",
-    ],
-    cta: "Discuss a project",
-  },
   stack: {
     eyebrow: "05 / Technologies",
     heading: "Technologies",
@@ -220,17 +200,19 @@ export default {
       ],
       cta: "Open in MAX",
     },
-    zfinde: {
-      category: "Tool",
+    automation: {
+      category: "Automation",
+      title: "Content factory",
       description:
-        "Built for my own problem: finding businesses that need a website. It collects them from open sources, merges duplicates and keeps the ones with no site.",
-      stats: [
-        { v: "146", l: "found" },
-        { v: "77", l: "no website" },
-        { v: "28", l: "duplicates merged" },
+        "My pipeline for short videos. I give it a topic, it writes a script with a neural network, voices it and renders a vertical video for TikTok or YouTube Shorts. The video next to this text was made by it.",
+      facts: [
+        { k: "Script", v: "a neural network writes it from the topic, editable before voiceover" },
+        { k: "Voiceover", v: "a voice per video language, already voiced lines come from a cache" },
+        { k: "Render", v: "Remotion builds the mp4: scenes, captions and a raccoon host" },
+        { k: "Publishing", v: "a history of videos with texts and upload to YouTube Shorts" },
       ],
-      note: "Real query: cafes, Stavropol",
-      cta: "Open ZFINDE",
+      note: "Local project",
+      videoCaption: "A video made by the factory: «Why ChatGPT lies so confidently» (in Russian). Sound off.",
     },
   },
 

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
@@ -11,7 +11,6 @@ const MEDIA = `${import.meta.env.BASE_URL}media/`;
 const LINKS = {
   quantix: "https://quantix-five.vercel.app/",
   altime: "https://max.ru/se13793521_bot",
-  zfinde: "https://zfinde.vercel.app/",
 };
 
 // Настоящие результаты ALTIME: превью фотосессий из публичного каталога
@@ -148,45 +147,89 @@ function Altime() {
   );
 }
 
-function Zfinde() {
-  const p = t("projects.zfinde");
+// Ролик, который собрал контент-завод: копия из истории, без звука, 720p.
+const AUTOMATION_VIDEO = {
+  src: `${MEDIA}automation/factory-output.mp4`,
+  poster: `${MEDIA}automation/factory-output.webp`,
+};
+
+/** Видео грузится, только когда карточка рядом, и играет, только пока его видно. */
+function OutputVideo() {
+  const ref = useRef(null);
+  const [armed, setArmed] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  // При reduced-motion наблюдатель не ставится: остаётся только постер.
+  useEffect(() => {
+    const video = ref.current;
+    if (!video || shouldReduceMotion()) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setVisible(entry.isIntersecting);
+        if (entry.isIntersecting) setArmed(true);
+      },
+      { threshold: 0.35 }
+    );
+    io.observe(video);
+    return () => io.disconnect();
+  }, []);
+
+  // Старт после того, как src уже подставлен; вне экрана - пауза.
+  useEffect(() => {
+    const video = ref.current;
+    if (!video || !armed) return;
+    // play() может отклониться (энергосбережение) - тогда остаётся постер.
+    if (visible) video.play()?.catch(() => {});
+    else video.pause();
+  }, [armed, visible]);
+
   return (
-    <article className="pj pj-zf" data-project="zfinde">
-      <div className="pj-zf-copy">
+    <video
+      ref={ref}
+      className="pj-au-video"
+      src={armed ? AUTOMATION_VIDEO.src : undefined}
+      poster={AUTOMATION_VIDEO.poster}
+      width="720"
+      height="1280"
+      muted
+      loop
+      playsInline
+      preload="none"
+      aria-hidden="true"
+      tabIndex={-1}
+    />
+  );
+}
+
+function Automation() {
+  const p = t("projects.automation");
+  return (
+    <article className="pj pj-au" id="project-automation" data-project="automation">
+      <div className="pj-au-copy">
         <div className="pj-row">
           <span className="pj-num">03</span>
           <span className="pj-cat">{p.category}</span>
           <Badge />
         </div>
-        <h3 className="pj-zf-title">ZFINDE</h3>
+        <h3 className="pj-au-title">{p.title}</h3>
         <p className="pj-desc">{p.description}</p>
-        <dl className="pj-stats pj-zf-stats">
-          {p.stats.map((s) => (
-            <div key={s.l}>
-              <dt data-count={s.v}>{s.v}</dt>
-              <dd>{s.l}</dd>
-            </div>
+        <ol className="pj-au-facts">
+          {p.facts.map((f) => (
+            <li key={f.k}>
+              <b>{f.k}</b>
+              <span>{f.v}</span>
+            </li>
           ))}
-        </dl>
+        </ol>
         <p className="pj-note">{p.note}</p>
-        <ProjectLink href={LINKS.zfinde} tone="amber">
-          {p.cta}
-        </ProjectLink>
       </div>
 
-      <div className="pj-zf-window" aria-hidden="true">
-        <div className="pj-browser-bar pj-browser-bar-dark">
-          <span className="pj-browser-dots">
-            <i />
-            <i />
-            <i />
-          </span>
-          <span className="pj-browser-url">zfinde.vercel.app</span>
+      <figure className="pj-au-media">
+        <div className="pj-au-frame">
+          <OutputVideo />
         </div>
-        <div className="pj-browser-view pj-zf-view">
-          <img src={`${MEDIA}zfinde/desktop-results-long.webp`} width="2850" height="4452" alt="" loading="lazy" decoding="async" />
-        </div>
-      </div>
+        <figcaption>{p.videoCaption}</figcaption>
+      </figure>
     </article>
   );
 }
@@ -261,47 +304,25 @@ export default function ProjectsSection() {
           .fromTo($$(".pj-alt-copy > :not(.pj-alt-title)"), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, stagger: 0.08, duration: 0.5 }, 1.1)
           .to({}, { duration: 0.6 });
 
-        // ── ZFINDE: окно раскрывается справа, результаты едут внутри,
-        // цифры досчитываются до настоящих значений поиска. ──
-        const zf = $(".pj-zf");
+        // ── Автоматизация: вертикальный кадр поднимается и раскрывается снизу,
+        // текст входит слева. ──
+        const au = $(".pj-au");
         gsap.fromTo(
-          $(".pj-zf-window"),
-          { clipPath: "inset(0 0 0 100% round 1.2rem)", xPercent: 12 },
+          $(".pj-au-frame"),
+          { clipPath: "inset(100% 0 0 0 round 1.6rem)", yPercent: 14, rotation: 4 },
           {
-            clipPath: "inset(0 0 0 0% round 1.2rem)",
-            xPercent: 0,
+            clipPath: "inset(0% 0 0 0 round 1.6rem)",
+            yPercent: 0,
+            rotation: 0,
             ease: "power3.out",
-            scrollTrigger: { trigger: zf, start: "top 75%", end: "top 25%", scrub: 0.6 },
-          }
-        );
-        const zfImg = $(".pj-zf-view img");
-        const zfView = $(".pj-zf-view");
-        gsap.fromTo(
-          zfImg,
-          { y: 0 },
-          {
-            y: () => -(zfImg.offsetHeight - zfView.offsetHeight),
-            ease: "none",
-            scrollTrigger: { trigger: zf, start: "top 40%", end: "bottom top", scrub: 0.6, invalidateOnRefresh: true },
+            scrollTrigger: { trigger: au, start: "top 75%", end: "top 20%", scrub: 0.6 },
           }
         );
         gsap.fromTo(
-          $$(".pj-zf-copy > *"),
+          $$(".pj-au-copy > *, .pj-au-facts li"),
           { autoAlpha: 0, x: -40 },
-          { autoAlpha: 1, x: 0, stagger: 0.07, duration: 0.7, ease: "power3.out", scrollTrigger: { trigger: zf, start: "top 70%" } }
+          { autoAlpha: 1, x: 0, stagger: 0.07, duration: 0.7, ease: "power3.out", scrollTrigger: { trigger: au, start: "top 70%" } }
         );
-        $$(".pj-zf-stats dt").forEach((el) => {
-          const target = Number(el.dataset.count);
-          if (!Number.isFinite(target)) return;
-          const o = { v: 0 };
-          gsap.to(o, {
-            v: target,
-            duration: 1.4,
-            ease: "power2.out",
-            onUpdate: () => (el.textContent = Math.round(o.v)),
-            scrollTrigger: { trigger: el, start: "top 85%" },
-          });
-        });
       });
       return () => mm.revert();
     },
@@ -320,7 +341,7 @@ export default function ProjectsSection() {
 
       <Quantix />
       <Altime />
-      <Zfinde />
+      <Automation />
     </section>
   );
 }
