@@ -122,6 +122,37 @@ export default {
     },
   },
 
+  video: {
+    eyebrow: "04 / AI Video",
+    headingLine1: "A website that",
+    headingLine2: "comes alive on the first screen",
+    text: "A short background video on the first screen holds attention and shows the product in motion. I make it with neural networks and embed it carefully: lightweight, looped, silent, and easy on the page.",
+    frameLabel: "Example of a website first screen with an AI background video",
+    mock: {
+      url: "hero-video.mp4",
+      brand: "Your brand",
+      headline: "Your product, in motion",
+      button: "Learn more",
+    },
+    monitor: {
+      title: "How the first screen comes alive",
+      empty: "No frame yet",
+      step: "Step",
+      of: "of",
+      chips: ["H.264", "1280×720", "no sound", "4.9 MB"],
+      loop: "looped",
+    },
+    steps: {
+      frame: { title: "Frame", action: "Frame", text: "A neural network generates the source frame in the brand's style and colors." },
+      motion: { title: "Motion", action: "Animate", text: "Image-to-video turns the frame into a short clip with camera movement." },
+      compress: { title: "Compression", action: "Compress", text: "Re-encoded to H.264 with no sound: the clip weighs 3-5 MB and keeps the page fast." },
+      loop: { title: "Loop", action: "Loop", text: "The end of the clip meets its start, so it plays in a circle without a jump." },
+      poster: { title: "Poster", action: "Poster", text: "The first frame as webp shows instantly while the video is still loading." },
+      site: { title: "On the site", action: "Publish", text: "The video starts silently when it is in view and pauses once it leaves the screen." },
+    },
+    cta: "Order a website video",
+  },
+
   factory: {
     eyebrow: "04 / Content factory",
     headingLine1: "A topic goes in,",

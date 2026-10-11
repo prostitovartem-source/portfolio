@@ -1,0 +1,764 @@
+/* ══════════════════════ AI-ВИДЕО: ВХОД В МОНИТОР ══════════════════════
+   Десктоп: секция закрепляется (sticky), монитор приближается, пока экран
+   не займёт всё окно. Внутри - «монтажка»: курсор по очереди нажимает
+   кнопки, справа по шагам проявляется путь ролика, в финале тот же ролик
+   становится первым экраном сайта. Цвет акцента - натриевый свет фонарей
+   из самого ролика.
+   Телефоны, узкие окна и reduced-motion получают статичную версию. */
+
+.vm-section {
+  --vm-amber: #ffa245;
+  --vm-amber-soft: rgba(255, 162, 69, 0.14);
+  --vm-panel: #0d0c12;
+  --vm-panel-2: #15141c;
+  --vm-line: rgba(242, 240, 245, 0.08);
+  --vm-ink: #f2f0f5;
+  --vm-dim: #8f8c9c;
+  --vm-rail-w: 208px;
+  --vm-path-w: clamp(320px, 27vw, 420px);
+  --vm-top-h: 52px;
+  --vm-bottom-h: 112px;
+
+  position: relative;
+  background: var(--bg);
+}
+
+/* Высота трека = время сцены: вход, шесть шагов и пауза на финале. */
+.vm-track {
+  position: relative;
+  height: calc(100vh + 8.2 * 62vh);
+}
+
+.vm-stage {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Тёплый отсвет «на столе» под монитором - уходит при входе в экран. */
+.vm-room {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(48% 30% at 66% 96%, rgba(255, 162, 69, 0.1), transparent 70%),
+    radial-gradient(60% 50% at 66% 54%, rgba(255, 162, 69, 0.05), transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Вступление ─────────────────────────────────────────── */
+.vm-intro {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: clamp(1.5rem, 5vw, 5rem);
+  width: min(31vw, 30rem);
+  transform: translateY(-50%);
+}
+
+.vm-heading {
+  margin: 0.9rem 0 1.25rem;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.1rem, 3.3vw, 3.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: var(--vm-ink);
+  text-wrap: balance;
+}
+
+.vm-text {
+  margin: 0;
+  max-width: 34ch;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+/* ── Монитор ────────────────────────────────────────────── */
+/* rig в натуральном размере окна: на финале масштаб 1, текст внутри чёткий. */
+.vm-rig {
+  --vm-radius: 28px;
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+}
+
+.vm-bezel {
+  position: absolute;
+  inset: -2.4vw;
+  border-radius: calc(var(--vm-radius, 28px) + 2.4vw);
+  background: linear-gradient(160deg, #24222c 0%, #121118 45%, #0c0b10 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 60px 120px -40px rgba(0, 0, 0, 0.9);
+}
+
+.vm-stand {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 16vw;
+  height: 13vh;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #08070b 0%, #1b1a22 30%, #121118 100%);
+  clip-path: polygon(18% 0, 82% 0, 92% 100%, 8% 100%);
+}
+
+.vm-stand::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -2.4vh;
+  width: 44vw;
+  height: 2.6vh;
+  transform: translateX(-50%);
+  border-radius: 0.6vh 0.6vh 1.4vh 1.4vh;
+  background: linear-gradient(180deg, #24222c, #0e0d13);
+}
+
+.vm-screen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--vm-radius);
+  background: #07060a;
+  color: var(--vm-ink);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Превью: ролик под панелями, видимая часть - «окно» между ними ── */
+.vm-preview,
+.vm-poster,
+.vm-video,
+.vm-shade,
+.vm-site {
+  position: absolute;
+  inset: 0;
+}
+
+/* Кадр выше экрана на 18%: нижний край исходника (артефакт генерации) уходит за рамку. */
+.vm-poster,
+.vm-video {
+  width: 100%;
+  height: 118%;
+  object-fit: cover;
+  object-position: 50% 0;
+}
+
+.vm-poster {
+  opacity: 0;
+  clip-path: inset(0 0 100% 0);
+  transition:
+    opacity 0.5s ease,
+    clip-path 1s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.vm-video {
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.vm-empty {
+  position: absolute;
+  top: var(--vm-top-h);
+  left: var(--vm-rail-w);
+  right: var(--vm-path-w);
+  bottom: var(--vm-bottom-h);
+  display: grid;
+  place-items: center;
+  color: var(--vm-dim);
+  font-size: 0.95rem;
+  background:
+    linear-gradient(var(--vm-line) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, var(--vm-line) 1px, transparent 1px) 0 0 / 48px 48px;
+  transition: opacity 0.4s ease;
+}
+
+.vm-shade {
+  background: linear-gradient(180deg, rgba(7, 6, 10, 0) 45%, rgba(7, 6, 10, 0.9) 100%);
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.vm-screen.is-s1 .vm-poster {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+}
+
+.vm-screen.is-s1 .vm-empty {
+  opacity: 0;
+}
+
+.vm-screen.is-s2 .vm-video {
+  opacity: 1;
+}
+
+/* Постер отдельным файлом «отлетает» в угол окна. */
+.vm-thumb {
+  position: absolute;
+  right: calc(var(--vm-path-w) + 20px);
+  bottom: calc(var(--vm-bottom-h) + 20px);
+  display: grid;
+  gap: 6px;
+  width: 168px;
+  padding: 6px 6px 8px;
+  border-radius: 12px;
+  background: var(--vm-panel-2);
+  border: 1px solid var(--vm-line);
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transform: translate(-40%, -60%) scale(1.6);
+  transition:
+    opacity 0.4s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.vm-thumb img {
+  width: 100%;
+  aspect-ratio: 16 / 8;
+  object-fit: cover;
+  object-position: 50% 0;
+  border-radius: 7px;
+}
+
+.vm-thumb b {
+  padding-left: 2px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--vm-dim);
+}
+
+.vm-screen.is-s5 .vm-thumb {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Финал: первый экран сайта ─────────────────────────── */
+.vm-site {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.2rem clamp(2rem, 5vw, 5rem) clamp(3rem, 9vh, 6rem);
+  opacity: 0;
+  transition: opacity 0.6s ease 0.35s;
+}
+
+.vm-site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vm-site-brand {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.vm-site-links {
+  display: flex;
+  gap: 1.6rem;
+}
+
+.vm-site-links i {
+  width: 64px;
+  height: 7px;
+  border-radius: 4px;
+  background: rgba(242, 240, 245, 0.35);
+}
+
+.vm-site-headline {
+  margin: 0 0 1.6rem;
+  max-width: 12ch;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.6rem, 5.6vw, 5.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+
+.vm-site-btn {
+  display: inline-block;
+  padding: 0.95rem 1.6rem;
+  border-radius: 999px;
+  background: var(--vm-ink);
+  color: #07060a;
+  font-weight: 600;
+}
+
+.vm-screen.is-final .vm-site,
+.vm-screen.is-final .vm-shade {
+  opacity: 1;
+}
+
+.vm-screen.is-final .vm-thumb {
+  opacity: 0;
+}
+
+/* ── Панели «монтажки» ──────────────────────────────────── */
+.vm-topbar,
+.vm-rail,
+.vm-path,
+.vm-timeline {
+  position: absolute;
+  background: var(--vm-panel);
+  transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.vm-topbar {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--vm-top-h);
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0 1.25rem;
+  border-bottom: 1px solid var(--vm-line);
+  font-size: 0.85rem;
+}
+
+.vm-dots {
+  display: flex;
+  gap: 7px;
+}
+
+.vm-dots i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #2a2833;
+}
+
+.vm-file {
+  color: var(--vm-ink);
+  font-weight: 500;
+}
+
+.vm-status {
+  margin-left: auto;
+  color: var(--vm-amber);
+}
+
+.vm-rail {
+  top: var(--vm-top-h);
+  left: 0;
+  bottom: 0;
+  width: var(--vm-rail-w);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 16px;
+  border-right: 1px solid var(--vm-line);
+}
+
+.vm-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 46px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--vm-line);
+  background: var(--vm-panel-2);
+  color: var(--vm-dim);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition:
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.vm-btn-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2f2d38;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.vm-btn[data-state="active"] {
+  color: var(--vm-ink);
+  background: var(--vm-amber-soft);
+  border-color: rgba(255, 162, 69, 0.55);
+  animation: vm-press 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.vm-btn[data-state="active"] .vm-btn-led {
+  background: var(--vm-amber);
+  box-shadow: 0 0 0 4px rgba(255, 162, 69, 0.18);
+}
+
+.vm-btn[data-state="done"] {
+  color: rgba(242, 240, 245, 0.75);
+}
+
+.vm-btn[data-state="done"] .vm-btn-led {
+  background: rgba(255, 162, 69, 0.55);
+}
+
+@keyframes vm-press {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 162, 69, 0.45);
+  }
+  30% {
+    transform: scale(0.94);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 14px rgba(255, 162, 69, 0);
+  }
+}
+
+/* ── Путь ролика: текст шагов ───────────────────────────── */
+.vm-path {
+  top: var(--vm-top-h);
+  right: 0;
+  bottom: 0;
+  width: var(--vm-path-w);
+  padding: 30px 28px;
+  border-left: 1px solid var(--vm-line);
+  overflow: hidden;
+}
+
+.vm-path-title {
+  margin: 0 0 1.6rem;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.vm-path-list,
+.vm-static-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+
+.vm-path-list {
+  gap: clamp(0.6rem, 1.8vh, 1.15rem);
+}
+
+.vm-path-item,
+.vm-static-steps li {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.vm-path-n {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--vm-line);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--vm-dim);
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.vm-path-body {
+  display: grid;
+  gap: 4px;
+  padding-top: 3px;
+}
+
+.vm-path-body b {
+  font-size: 1rem;
+  font-weight: 600;
+  transition: opacity 0.3s ease;
+}
+
+.vm-path-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.vm-path-item[data-state="idle"] .vm-path-body b {
+  opacity: 0.35;
+}
+
+/* Описание шага не занимает места, пока до него не дошли. */
+.vm-path-item[data-state="idle"] .vm-path-text {
+  display: none;
+}
+
+.vm-word {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0;
+  transform: translateY(0.45em);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+.vm-path-item[data-state="active"] .vm-word {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--w) * 45ms + 0.1s);
+}
+
+.vm-path-item[data-state="done"] .vm-word {
+  opacity: 0.6;
+  transform: none;
+}
+
+.vm-path-item[data-state="active"] .vm-path-n {
+  background: var(--vm-amber);
+  border-color: var(--vm-amber);
+  color: #1a1206;
+}
+
+.vm-path-item[data-state="done"] .vm-path-n {
+  border-color: rgba(255, 162, 69, 0.5);
+  color: var(--vm-amber);
+}
+
+/* ── Таймлайн ───────────────────────────────────────────── */
+.vm-timeline {
+  left: var(--vm-rail-w);
+  right: var(--vm-path-w);
+  bottom: 0;
+  height: var(--vm-bottom-h);
+  display: grid;
+  align-content: center;
+  gap: 12px;
+  padding: 0 22px;
+  border-top: 1px solid var(--vm-line);
+}
+
+.vm-clip {
+  position: relative;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--vm-line);
+  background: var(--vm-panel-2);
+  overflow: hidden;
+}
+
+.vm-clip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--poster) 0 0 / auto 118% repeat-x;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.vm-screen.is-s1 .vm-clip::before {
+  opacity: 0.55;
+}
+
+/* Слой во всю ширину клипа едет на свою ширину, линия - его левый край. */
+.vm-playhead {
+  position: absolute;
+  inset: 0;
+  border-left: 2px solid var(--vm-amber);
+  opacity: 0;
+  animation: vm-playhead 8.375s linear infinite paused;
+}
+
+.vm-screen.is-s2 .vm-playhead {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+@keyframes vm-playhead {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.vm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 26px;
+}
+
+.vm-chip {
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--vm-line);
+  font-size: 0.78rem;
+  color: var(--vm-ink);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+.vm-screen.is-s3 .vm-chip:not(.vm-chip-loop),
+.vm-screen.is-s4 .vm-chip-loop {
+  opacity: 1;
+  transform: none;
+}
+
+.vm-screen.is-s3 .vm-chip:nth-child(2) {
+  transition-delay: 0.08s;
+}
+.vm-screen.is-s3 .vm-chip:nth-child(3) {
+  transition-delay: 0.16s;
+}
+.vm-screen.is-s3 .vm-chip:nth-child(4) {
+  transition-delay: 0.24s;
+  border-color: rgba(255, 162, 69, 0.55);
+  color: var(--vm-amber);
+}
+
+.vm-chip-loop {
+  border-color: rgba(255, 162, 69, 0.55);
+  color: var(--vm-amber);
+}
+
+/* На финале интерфейс разъезжается, остаётся сайт. */
+.vm-screen.is-final .vm-topbar {
+  transform: translateY(-101%);
+}
+.vm-screen.is-final .vm-rail {
+  transform: translateX(-101%);
+}
+.vm-screen.is-final .vm-path {
+  transform: translateX(101%);
+}
+.vm-screen.is-final .vm-timeline {
+  transform: translateY(101%);
+}
+
+/* ── Курсор, который «нажимает» кнопки ─────────────────── */
+.vm-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 26px;
+  height: 26px;
+  margin: -4px 0 0 -6px;
+  transform: translate(50vw, 50vh);
+  transform-origin: 6px 4px;
+}
+
+.vm-cursor svg {
+  width: 100%;
+  height: 100%;
+  fill: var(--vm-ink);
+  stroke: #07060a;
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+}
+
+/* Пока экран развёрнут, навигация сайта не перекрывает монитор. */
+:root.vm-immersive .site-nav {
+  opacity: 0 !important;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    visibility 0s linear 0.3s;
+}
+
+.vm-outro {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  padding: 4.5rem 1.5rem 6rem;
+}
+
+/* ══════════════════════ СТАТИЧНАЯ ВЕРСИЯ ═══════════════════ */
+.vm-static {
+  position: relative;
+  z-index: 1;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 100px 24px;
+  display: grid;
+  gap: 2rem;
+  justify-items: start;
+}
+
+.vm-intro-static {
+  position: static;
+  width: auto;
+  transform: none;
+}
+
+.vm-static-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid var(--vm-line);
+  background: #07060a;
+}
+
+/* Нижний край исходника срезан: там артефакт генерации. */
+.vm-static-frame img {
+  display: block;
+  width: 100%;
+  height: 118%;
+  object-fit: cover;
+  object-position: 50% 0;
+}
+
+.vm-static-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(7, 6, 10, 0.7));
+}
+
+.vm-static-steps {
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 2rem;
+}
+
+.vm-static-steps .vm-path-body span {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.vm-static-steps .vm-path-n {
+  color: var(--vm-amber);
+  border-color: rgba(255, 162, 69, 0.45);
+}
+
+@media (max-width: 640px) {
+  .vm-static {
+    padding: 72px 16px;
+  }
+
+  .vm-static-frame {
+    aspect-ratio: 4 / 3;
+  }
+
+  .vm-static-steps {
+    grid-template-columns: 1fr;
+  }
+}
