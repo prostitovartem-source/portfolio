@@ -684,7 +684,9 @@ body.has-custom-cursor button {
   align-items: center;
   justify-content: center;
   gap: clamp(1.5rem, 5vw, 4.5rem);
-  padding: 0 clamp(1.25rem, 5vw, 4rem);
+  /* Сверху - место под фиксированный навбар, иначе на ноутбуках с
+     невысоким экраном метка секции уезжает под него во время пина. */
+  padding: 5.5rem clamp(1.25rem, 5vw, 4rem) 1rem;
   overflow: hidden;
 }
 
@@ -742,63 +744,76 @@ body.has-custom-cursor button {
   text-align: left;
 }
 
-/* ── «16» - главный типографический акцент секции ─────────────────── */
-.about-age {
+/* ── Счётчик опыта: число и подпись - два элемента на общей базовой линии ── */
+.about-exp {
   display: flex;
   align-items: baseline;
-  gap: 0.875rem;
+  flex-wrap: wrap;
+  column-gap: clamp(0.875rem, 1.4vw, 1.25rem);
+  row-gap: 0.25rem;
+  margin: 0.25rem 0 0.125rem;
 }
 
-.about-age-value {
+.about-exp-value {
   font-family: "Space Grotesk", sans-serif;
   font-weight: 700;
-  font-size: clamp(4rem, 11vw, 8.5rem);
-  line-height: 0.85;
+  font-size: clamp(4.5rem, 8.5vw, 7.25rem);
+  line-height: 0.8;
   letter-spacing: -0.04em;
   background: linear-gradient(170deg, var(--text) 10%, var(--accent) 95%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  /* Цифры одной ширины: при счёте 0 → 2 подпись не дёргается. */
   font-variant-numeric: tabular-nums;
 }
 
-.about-age-label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  color: var(--text-secondary);
-  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
-  font-weight: 600;
-}
-
-.about-age-sub {
-  color: var(--text-tertiary);
-  font-size: 0.76rem;
+.about-exp-label {
+  font-family: "Space Grotesk", sans-serif;
   font-weight: 500;
-  letter-spacing: 0.04em;
+  font-size: clamp(1.15rem, 1.7vw, 1.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--text-secondary);
 }
 
 .about-text {
-  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 46ch;
+  font-size: clamp(0.98rem, 1.25vw, 1.1rem);
   font-weight: 500;
-  line-height: 1.7;
-  max-width: 52ch;
-  font-size: clamp(0.95rem, 1.3vw, 1.08rem);
+  line-height: 1.65;
+  color: var(--text-secondary);
 }
 
-/* Слово анимируется как блок, но пробелы остаются обычными текстовыми
-   узлами - иначе на переносе строки они схлопываются и текст слипается. */
-.about-word {
-  display: inline-block;
+/* Первый абзац - кто я и на чём пишу, остальные - как работаю. */
+.about-para:first-child {
+  color: var(--text);
 }
 
-/* Технологии внутри текста - «сигналы» системы, не бейджи. */
+/* Технологии внутри текста - «сигналы» системы, не бейджи. Подсветка
+   только через opacity/translate - без перерисовки цвета и box-shadow. */
 .about-tech {
   position: relative;
+  display: inline-block;
   color: var(--text);
   font-weight: 600;
   cursor: default;
-  transition: color var(--transition-fast), transform var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+  transition: translate var(--transition-fast);
+}
+
+.about-tech::before {
+  content: "";
+  position: absolute;
+  inset: -0.05em -0.3em;
+  z-index: -1;
+  border-radius: 0.35em;
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
 }
 
 .about-tech::after {
@@ -808,39 +823,132 @@ body.has-custom-cursor button {
   right: 0;
   bottom: -2px;
   height: 1px;
-  background: color-mix(in srgb, var(--accent) 55%, transparent);
-  transform: scaleX(0.999);
-  transform-origin: left;
-  transition: background var(--transition-fast), box-shadow var(--transition-base);
-}
-
-.about-tech:hover,
-.about-tech:focus-visible {
-  color: var(--accent);
-  transform: translateY(-1px);
-}
-
-.about-tech:hover::after,
-.about-tech:focus-visible::after {
   background: var(--accent);
-  box-shadow: 0 0 0.625rem var(--violet-glow);
+  opacity: 0.5;
+  transition: opacity var(--transition-fast);
 }
 
-.about-markers {
+.about-tech.is-linked {
+  translate: 0 -1px;
+}
+
+.about-tech.is-linked::before,
+.about-tech.is-linked::after {
+  opacity: 1;
+}
+
+.about-tech:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0.2rem;
+  border-radius: 0.2rem;
+}
+
+/* ── Стек: откуда начинал → на чём пишу сейчас ───────────────────── */
+.about-stack {
+  --chip-h: 2.25rem;
+  --cap-h: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.about-stack-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.about-stack-now {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.about-stack-caption {
+  font-size: 0.8rem;
+  line-height: var(--cap-h);
+  font-weight: 500;
+  color: var(--text-tertiary);
+}
+
+/* Линия перехода стоит ровно по центру первого ряда чипов. */
+.about-stack-link {
+  flex: 0 0 2.25rem;
+  height: 1px;
+  margin-top: calc(var(--cap-h) + 0.5rem + var(--chip-h) / 2);
+  background: linear-gradient(90deg, var(--border-strong), var(--accent));
+}
+
+.about-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.625rem;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.about-marker {
-  padding: 0.5rem 1rem;
+/* GSAP при появлении двигает transform, поэтому ховер живёт на отдельных
+   свойствах translate/scale - они складываются и не спорят друг с другом. */
+.about-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: var(--chip-h);
+  padding: 0 1rem;
   border-radius: var(--radius-full);
   border: 1px solid var(--border);
   background: var(--surface);
-  color: var(--text-secondary);
-  font-size: 0.8rem;
+  color: var(--text);
+  font-size: 0.85rem;
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: translate var(--transition-fast), scale var(--transition-fast);
+}
+
+/* Слой подсветки: рамка, заливка и свечение появляются через opacity. */
+.about-chip::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  box-shadow: 0 0.5rem 1.5rem -0.75rem var(--violet-glow), 0 0 1.25rem -0.25rem var(--violet-glow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-base);
+}
+
+.about-chip.is-linked {
+  translate: 0 -2px;
+}
+
+.about-chip.is-linked::before {
+  opacity: 1;
+}
+
+/* Тач: короткое «нажатие» вместо ховера. */
+.about-chip:active {
+  scale: 0.96;
+}
+
+.about-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0.1875rem;
+}
+
+/* Python - стартовая точка: тот же чип, но приглушённый. */
+.about-stack-from .about-chip {
+  color: var(--text-secondary);
+  border-style: dashed;
+}
+
+.about-stack-from .about-chip.is-linked {
+  color: var(--text);
 }
 
 /* ── Визуальная система: хребет времени + узлы возможностей ───────── */
@@ -957,20 +1065,40 @@ body.has-custom-cursor button {
   .about-copy {
     flex: 0 0 auto;
     width: 100%;
-    gap: 0.625rem;
+    gap: 1rem;
   }
 
   .about-heading {
     font-size: clamp(2rem, 9.5vw, 2.6rem);
   }
 
-  .about-age-value {
-    font-size: clamp(3rem, 17vw, 4.2rem);
+  .about-exp-value {
+    font-size: clamp(3.5rem, 18vw, 4.5rem);
+  }
+
+  .about-exp-label {
+    font-size: 1.1rem;
   }
 
   .about-text {
-    font-size: 0.86rem;
-    line-height: 1.55;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    gap: 0.625rem;
+  }
+
+  /* Узкий экран: группы стека друг под другом, подписи сами объясняют
+     переход, горизонтальная линия здесь лишняя. */
+  .about-stack {
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .about-stack-link {
+    display: none;
+  }
+
+  .about-chip {
+    padding: 0 0.8rem;
   }
 
   .about-net {
@@ -1705,9 +1833,9 @@ html.motion-reduced .contact-status-dot {
     padding-right: 1.375rem;
   }
 
-  .about-marker {
-    font-size: 0.72rem;
-    padding: 0.375rem 0.75rem;
+  .about-chip {
+    font-size: 0.8rem;
+    padding: 0 0.8125rem;
   }
 }
 

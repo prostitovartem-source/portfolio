@@ -3,9 +3,9 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { shouldReduceMotion } from "../hooks/useMotionPreference.js";
 import ContactButton from "../components/ContactButton.jsx";
-import { t } from "../i18n/index.js";
+import { locale, t } from "../i18n/index.js";
 
-const ABOUT_TEXT = t("about.text");
+const ABOUT_PARAGRAPHS = t("about.text");
 
 // Слова стека внутри параграфа подсвечиваются и реагируют на курсор -
 // они же служат «сигналами» системы, а не декоративными бейджами. Список
@@ -13,7 +13,24 @@ const ABOUT_TEXT = t("about.text");
 // это разные токены (например "backend-логики" против "backend").
 const TECH_WORDS = new Set(t("about.techWords"));
 
-const ABOUT_MARKERS = t("about.markers");
+// Стаж в разработке - число в большом счётчике секции.
+const EXPERIENCE_YEARS = 2;
+// Подпись согласуется с числом по правилам языка: 2 → «года опыта», 5 → «лет опыта».
+const EXPERIENCE_FORMS = t("about.experience");
+const PLURAL_RULES = new Intl.PluralRules(locale);
+const experienceLabel = (n) => EXPERIENCE_FORMS[PLURAL_RULES.select(n)] ?? EXPERIENCE_FORMS.other;
+const EXPERIENCE_LABEL = experienceLabel(EXPERIENCE_YEARS);
+
+// Чипы стека: id совпадает со словом в тексте, по нему чип подсвечивает
+// своё упоминание в абзаце. Python - стартовая точка, остальное - текущий стек
+// (ровно так, как сказано в самом тексте).
+const STACK_FROM = [{ id: "python", label: "Python" }];
+const STACK_NOW = [
+  { id: "typescript", label: "TypeScript" },
+  { id: "react", label: "React" },
+  { id: "next.js", label: "Next.js" },
+  { id: "node.js", label: "Node.js" },
+];
 
 /**
  * Семь фаз эволюции. Каждая веха на «хребте» таймлайна открывает свой
@@ -29,8 +46,6 @@ const PHASES = PHASE_IDS.map((id) => {
 // Геометрия SVG (viewBox 0 0 120 200): хребет слева, узлы-возможности справа.
 const SPINE_X = 26;
 const SAT_X = 84;
-// Стаж в разработке - число в большом счётчике секции.
-const EXPERIENCE_YEARS = 2;
 
 const TOP_Y = 12;
 const STEP = 29.3;
@@ -40,21 +55,72 @@ const satY = (i) => nodeY(i) - 5;
 // узлов и читались бы как вторая прямая линия, а не как связи.
 const convergePath = (i, lastI) => `M ${SAT_X} ${satY(i)} Q ${SAT_X + 22} ${(satY(i) + satY(lastI)) / 2} ${SAT_X} ${satY(lastI)}`;
 
-function splitWords(text) {
-  return text.split(" ").map((word, i) => {
+/**
+ * Абзац → куски: обычный текст остаётся строкой, слово стека - отдельный
+ * кусок с id. Пунктуацию отрезаем от слова, чтобы подчёркивание не
+ * захватывало запятую.
+ */
+function splitParagraph(text) {
+  const parts = [];
+  let plain = "";
+  text.split(" ").forEach((word, i) => {
+    const sep = i > 0 ? " " : "";
     // Знаки препинания по краям слова, но не точка внутри (next.js, node.js).
-    const clean = word.toLowerCase().replace(/^[«(]+|[»),:;.!?]+$/g, "");
-    return { word, isTech: TECH_WORDS.has(clean), key: `${clean}-${i}` };
+    const m = word.match(/^([«(]*)(.*?)([»),:;.!?]*)$/);
+    const id = m[2].toLowerCase();
+    if (!TECH_WORDS.has(id)) {
+      plain += sep + word;
+      return;
+    }
+    parts.push(plain + sep + m[1]);
+    parts.push({ id, word: m[2] });
+    plain = m[3];
+  });
+  parts.push(plain);
+  return parts;
+}
+
+const PARAGRAPHS = ABOUT_PARAGRAPHS.map(splitParagraph);
+
+/** Подсветка чипа и его упоминаний в тексте - прямо в DOM, без ре-рендера. */
+function highlightTech(root, id) {
+  if (!root) return;
+  root.querySelectorAll("[data-tech]").forEach((el) => {
+    el.classList.toggle("is-linked", id !== null && el.dataset.tech === id);
   });
 }
 
-const WORDS = splitWords(ABOUT_TEXT);
+/**
+ * Общие обработчики для чипа и слова в тексте: наведение на одно
+ * подсвечивает второе. Мышь - hover; тач и клавиатура - фокус (тап держит
+ * подсветку, пока не тапнешь в другое место).
+ */
+function linkProps(id) {
+  // Корень ищем от элемента события: ref в рендере сюда не передаём.
+  const rootOf = (e) => e.currentTarget.closest(".about-copy");
+  const show = (e, techId) => highlightTech(rootOf(e), techId);
+  // После ухода мыши возвращаем подсветку элементу в фокусе, если он есть.
+  const restore = (e) => {
+    const focused = document.activeElement;
+    show(e, rootOf(e)?.contains(focused) ? (focused.dataset.tech ?? null) : null);
+  };
+  return {
+    "data-tech": id,
+    tabIndex: 0,
+    onPointerEnter: (e) => e.pointerType === "mouse" && show(e, id),
+    onPointerLeave: (e) => e.pointerType === "mouse" && restore(e),
+    onFocus: (e) => show(e, id),
+    onBlur: (e) => show(e, null),
+    onClick: (e) => show(e, id),
+  };
+}
 
 export default function AboutSection() {
   const trackRef = useRef(null);
   const stageRef = useRef(null);
-  const ageRef = useRef(null);
-  const ageWrapRef = useRef(null);
+  const expRef = useRef(null);
+  const expValueRef = useRef(null);
+  const expLabelRef = useRef(null);
   const ambientRef = useRef(null);
   const gridRef = useRef(null);
   const netRef = useRef(null);
@@ -89,28 +155,69 @@ export default function AboutSection() {
 
           if (reduced) {
             // Всё видно сразу, структура сохранена, скролл-механики нет.
+            // Счётчик сразу с итоговым значением - на случай, если настройку
+            // переключили посреди анимации счёта.
+            if (expValueRef.current) expValueRef.current.textContent = String(EXPERIENCE_YEARS);
+            if (expLabelRef.current) expLabelRef.current.textContent = EXPERIENCE_LABEL;
             dashed.forEach((el) => el && (el.style.strokeDashoffset = 0));
-            gsap.set([...q(".about-word"), ...q(".about-node"), ...q(".about-sat"), ...q(".about-marker"), ...q(".about-cta")], {
-              opacity: 1,
-              y: 0,
-              filter: "blur(0px)",
-            });
+            gsap.set([...q(".about-node"), ...q(".about-sat")], { opacity: 1 });
             gsap.set(q(".about-node-dot"), { attr: { r: 2.6 }, opacity: 0.75 });
             gsap.set(q(".about-ring"), { opacity: 0 });
             gsap.set(q(".about-sat"), { attr: { r: 2.8 }, opacity: 1 });
             gsap.set(q(".about-sat-fullstack"), { attr: { r: 4.2 } });
             gsap.set([ambientRef.current, gridRef.current], { opacity: 0.5 });
-            if (ageRef.current) ageRef.current.textContent = String(EXPERIENCE_YEARS);
-            gsap.set(ageWrapRef.current, { opacity: 1, y: 0, filter: "blur(0px)" });
             return;
           }
 
           const k = isMobile ? 0.6 : 1;
 
+          // ── ЛЕВАЯ КОЛОНКА: одно однократное появление при входе в экран ──
+          // Не привязано к scrub: текст, счётчик и чипы проигрываются один
+          // раз и дальше просто стоят. Только transform и opacity.
+          const reveal = gsap.timeline({
+            defaults: { ease: "expo.out", duration: 0.9 },
+            scrollTrigger: { trigger: copyRef.current, start: "top 80%", once: true },
+          });
+          gsap.set(q(".about-eyebrow-line"), { scaleX: 0, transformOrigin: "left" });
+          gsap.set([expRef.current, ...q(".about-para"), ...q(".about-stack-group"), ...q(".about-cta")], {
+            opacity: 0,
+            y: 22 * k,
+          });
+          gsap.set(q(".about-chip"), { opacity: 0, y: 10 * k, scale: 0.92 });
+          gsap.set(q(".about-stack-link"), { scaleX: 0, transformOrigin: "left" });
+          // Число и подпись меняются вместе: «0 лет» → «1 год» → «2 года».
+          let shown = null;
+          const renderCount = (n) => {
+            if (n === shown || !expValueRef.current || !expLabelRef.current) return;
+            shown = n;
+            expValueRef.current.textContent = String(n);
+            expLabelRef.current.textContent = experienceLabel(n);
+          };
+          renderCount(0);
+
+          reveal.to(q(".about-eyebrow-line"), { scaleX: 1, duration: 0.8 }, 0);
+          reveal.to(expRef.current, { opacity: 1, y: 0 }, 0.05);
+          // Счётчик 0 → EXPERIENCE_YEARS: пишем в DOM напрямую, без React-state на кадр.
+          const counter = { v: 0 };
+          reveal.to(
+            counter,
+            {
+              v: EXPERIENCE_YEARS,
+              duration: 1.1,
+              ease: "power2.out",
+              onUpdate: () => {
+                renderCount(Math.round(counter.v));
+              },
+            },
+            0.15
+          );
+          reveal.to(q(".about-para"), { opacity: 1, y: 0, stagger: 0.12 }, 0.2);
+          reveal.to(q(".about-stack-group"), { opacity: 1, y: 0, duration: 0.6, stagger: 0.1 }, 0.5);
+          reveal.to(q(".about-chip"), { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.06 }, 0.55);
+          reveal.to(q(".about-stack-link"), { scaleX: 1, duration: 0.7, ease: "power2.inOut" }, 0.6);
+          reveal.to(q(".about-cta"), { opacity: 1, y: 0 }, 0.85);
+
           gsap.set([ambientRef.current, gridRef.current], { opacity: 0 });
-          gsap.set(ageWrapRef.current, { opacity: 0, y: 26 * k, filter: "blur(10px)" });
-          gsap.set(q(".about-word"), { opacity: 0, y: 14 * k, filter: "blur(6px)" });
-          gsap.set([...q(".about-marker"), ...q(".about-cta")], { opacity: 0, y: 16 * k });
           gsap.set(q(".about-node"), { opacity: 0 });
           // Радиус вместо scale: у SVG-кругов GSAP добавляет собственную
           // компенсацию transform-origin, которая смещает элемент.
@@ -145,33 +252,6 @@ export default function AboutSection() {
           // ── ВХОД: сцена «просыпается» слоями, а не одним fade ──────────
           tl.to(ambientRef.current, { opacity: 1, duration: 0.5 }, 0);
           tl.to(gridRef.current, { opacity: 1, duration: 0.5 }, 0.1);
-          tl.fromTo(
-            q(".about-eyebrow-line"),
-            { scaleX: 0, transformOrigin: "left" },
-            { scaleX: 1, duration: 0.4 },
-            0.15
-          );
-          tl.to(q(".about-word"), { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, stagger: 0.012 }, 0.25);
-          tl.to(ageWrapRef.current, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5 }, 0.3);
-
-          // Маркеры и кнопка - часть вводного блока: если придержать их до
-          // финала, левая колонка почти весь скролл выглядит незаконченной.
-          tl.to([...q(".about-marker"), ...q(".about-cta")], { opacity: 1, y: 0, duration: 0.4, stagger: 0.05 }, 0.55);
-
-          // Счётчик 0 → EXPERIENCE_YEARS: пишем в DOM напрямую, без React-state на кадр.
-          const counter = { v: 0 };
-          tl.to(
-            counter,
-            {
-              v: EXPERIENCE_YEARS,
-              duration: 0.6,
-              ease: "power1.out",
-              onUpdate: () => {
-                if (ageRef.current) ageRef.current.textContent = String(Math.round(counter.v));
-              },
-            },
-            0.35
-          );
 
           // ── ФАЗЫ: хребет чертится, вехи оживают, система усложняется ──
           const PHASE_START = 1;
@@ -283,36 +363,58 @@ export default function AboutSection() {
 
             <h2 className="hero-heading about-heading">{t("about.heading")}</h2>
 
-            <div ref={ageWrapRef} className="about-age">
-              <span ref={ageRef} className="about-age-value">
-                0
+            {/* Число и подпись - два отдельных элемента на общей базовой
+                линии. Скринридер читает одну фразу без анимации счёта. */}
+            <p ref={expRef} className="about-exp">
+              <span ref={expValueRef} className="about-exp-value" aria-hidden="true">
+                {EXPERIENCE_YEARS}
               </span>
-              <span className="about-age-label">
-                {t("about.ageSuffix")}
-                <span className="about-age-sub">{t("about.ageSub")}</span>
+              <span ref={expLabelRef} className="about-exp-label" aria-hidden="true">
+                {EXPERIENCE_LABEL}
               </span>
-            </div>
-
-            <p className="about-text">
-              {WORDS.map(({ word, isTech, key }, i) => (
-                <span key={key}>
-                  <span
-                    className={`about-word${isTech ? " about-tech" : ""}`}
-                    tabIndex={isTech ? 0 : undefined}
-                  >
-                    {word}
-                  </span>
-                  {i < WORDS.length - 1 ? " " : ""}
-                </span>
-              ))}
+              <span className="sr-only">{`${EXPERIENCE_YEARS} ${EXPERIENCE_LABEL}`}</span>
             </p>
 
-            <div className="about-markers">
-              {ABOUT_MARKERS.map((m) => (
-                <span key={m} className="about-marker">
-                  {m}
-                </span>
+            <div className="about-text">
+              {PARAGRAPHS.map((parts, pi) => (
+                <p key={pi} className="about-para">
+                  {parts.map((part, i) =>
+                    typeof part === "string" ? (
+                      part
+                    ) : (
+                      <span key={i} className="about-tech" {...linkProps(part.id)}>
+                        {part.word}
+                      </span>
+                    )
+                  )}
+                </p>
               ))}
+            </div>
+
+            {/* Python - откуда начинал, справа - текущий стек; линия между
+                группами показывает переход, а не иерархию. */}
+            <div className="about-stack">
+              <div className="about-stack-group about-stack-from">
+                <span className="about-stack-caption">{t("about.stackFrom")}</span>
+                <ul className="about-chips">
+                  {STACK_FROM.map((s) => (
+                    <li key={s.id} className="about-chip" data-cursor="" {...linkProps(s.id)}>
+                      {s.label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <span className="about-stack-link" aria-hidden="true" />
+              <div className="about-stack-group about-stack-now">
+                <span className="about-stack-caption">{t("about.stackNow")}</span>
+                <ul className="about-chips">
+                  {STACK_NOW.map((s) => (
+                    <li key={s.id} className="about-chip" data-cursor="" {...linkProps(s.id)}>
+                      {s.label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
             <div className="about-cta">
